@@ -6,13 +6,13 @@ const auth = require('./middleware/auth');
 const Client = require('../models/client');
 
 /* GET home page. */
-router.get('/home', function(req, res, next) {
+router.get('/home',auth.isAuthenticated, function(req, res, next) {
   res.render('home', { title: 'Home' });
 });
-router.get('/homemaster', function(req, res, next) {
+router.get('/homemaster',auth.isAuthenticated, function(req, res, next) {
   res.render('homemaster', { title: 'Home' });
 });
-router.get('/signup', function(req, res, next) {
+router.get('/signup',auth.isAuthenticated, function(req, res, next) {
   res.render('signup', { title: 'Cadastro' });
 });
 /*POST signup*/
@@ -33,7 +33,7 @@ router.post('/signup',(req,res) => {
 router.get('/login', function(req, res, next) {
   res.render('index', { title: 'Login' });
 });
-router.get('/novoaluguel', function(req, res, next) {
+router.get('/novoaluguel', auth.isAuthenticated,function(req, res, next) {
   res.render('novoaluguel', { title: 'Novo Aluguel' });
 });
 router.post('/novoaluguel', function(req, res, next) {
@@ -71,25 +71,25 @@ router.post('/login', function(req, res, next) {
 router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
   res.render('acompanhamento', { title: 'Acompanhamento Matriz',layout: 'layout' });
 });
-router.get('/acompmaster', function(req, res, next) {
+router.get('/acompmaster', auth.isAuthenticated,function(req, res, next) {
   res.render('acompmaster', { title: 'Acompanhamento Matriz' });
 });
-router.get('/acompmirante', function(req, res, next) {
+router.get('/acompmirante',auth.isAuthenticated, function(req, res, next) {
   res.render('acompmirante', { title: 'Acompanhamento Mirante',layout: 'layout' });
 });
-router.get('/acompmirantemaster', function(req, res, next) {
+router.get('/acompmirantemaster', auth.isAuthenticated,function(req, res, next) {
   res.render('acompmirantemaster', { title: 'Acompanhamento Mirante',layout: 'layout' });
 });
-router.get('/acompvila', function(req, res, next) {
+router.get('/acompvila',auth.isAuthenticated, function(req, res, next) {
   res.render('acompvila', { title: 'Acompanhamento Vila',layout: 'layout' });
 });
-router.get('/acompvilamaster', function(req, res, next) {
+router.get('/acompvilamaster', auth.isAuthenticated,function(req, res, next) {
   res.render('acompvilamaster', { title: 'Acompanhamento Vila',layout: 'layout' });
 });
-router.get('/relatoriomensal', function(req, res, next) {
+router.get('/relatoriomensal', auth.isAuthenticated,function(req, res, next) {
   res.render('relatoriomensal', { title: 'Relatório Mensal',layout: 'layout' });
 });
-router.get('/relatoriodiario', function(req, res, next) {
+router.get('/relatoriodiario',auth.isAuthenticated, function(req, res, next) {
   res.render('relatoriodiario', { title: 'Relatório Diário',layout: 'layout' });
 });
 module.exports = router;
