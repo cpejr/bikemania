@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Novo Aluguel</title>
+    <link rel='stylesheet' href='/stylesheets/style.css'>
+    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <nav id="sidebar">
+        <div class="sidebar-header text-center">
+          <a class="navbar-brand" href="/">
+            <img src="/images/bikelogo.png" >
+          </a>
+        </div>
+      </nav>
+    <br>
+      <div class="texto-centro">
+        <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" >
+      Novo Aluguel
+      </FONT>
+      </div>
+      <div class="box">
+        <form action="/novoaluguel" method="post">
+          <div class="novoaluguel">
+            <div class="texto-centro">
+              <label for="InputCpf" ><FONT size="4" face="Swis721 LtEx BT" color="black" > CPF</FONT></label>
+            </div>
+            <input type="text" class="form-control" id="InputCpf"  placeholder="XXXXXXXXXXX" name="client[name]"  >
+          <div class="cadastro">
+            <div class="texto-centro">
+              <label for="InputHorário" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Horário</FONT></label>
+            </div>
+            <input type="text" class="form-control" id="InputHorario"  placeholder="00:00" name="client[address]">
+        </div>
+        <div class="cadastro">
+          <div class="texto-centro">
+            <label for="InputNumerodepessoas" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Pessoas </FONT></label>
+          </div>
+          <input type="number" class="form-control" id="InputNumerodepessoas"  placeholder="X" name="client[CPF]">
+       </div>
+
+         <div class="cadastro">
+           <div class="texto-centro">
+             <label for="InputEquipamento" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Equipamento</FONT></label>
+           </div>
+         <input type="text" class="form-control" id="InputEquipamento"  placeholder="Equipamento" name="client[RG]">
+      </div>
+
+       </div>
+       <div class="form-group form-check">
+           <input type="checkbox" class="form-check-input"  id="exampleCheck1">
+           <label class="form-check-label"  for="exampleCheck1"><FONT size="3" face="Swis721 LtEx BT" color="black" > Acessório</FONT></label>
+         </div>
+
+       <br>
+          <div class="texto-centro">
+            <button type="submit" class="btncadastrar">Alugar</button>
+
+          </div>
+        </form>
+      </div>
+
+
+  </body>
+</html>

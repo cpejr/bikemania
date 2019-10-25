@@ -7,10 +7,10 @@ const Client = require('../models/client');
 
 /* GET home page. */
 router.get('/home',auth.isAuthenticated, function(req, res, next) {
-  res.render('home', { title: 'Home' });
+  res.render('home', { title: 'Home' , ...req.session});
 });
 router.get('/homemaster',auth.isAuthenticated, function(req, res, next) {
-  res.render('homemaster', { title: 'Home' });
+  res.render('homemaster', { title: 'Home', ...req.session });
 });
 router.get('/signup',auth.isAuthenticated, function(req, res, next) {
   res.render('signup', { title: 'Cadastro' });
@@ -37,25 +37,24 @@ router.get('/novoaluguel', auth.isAuthenticated,function(req, res, next) {
   res.render('novoaluguel', { title: 'Novo Aluguel' });
 });
 router.post('/novoaluguel', function(req, res, next) {
-  if(tipo==1){
-      res.redirect('/acompmaster');
-}
+
+  if(req.session.logado.type=='Master'){
+    res.redirect('/acompmaster');
+  }
   else{
     res.redirect('/acompanhamento')
   }
-});
-var tipo;
+ });
 router.post('/login', function(req, res, next) {
   const user=req.body.user;
   firebase.auth().signInWithEmailAndPassword(user.username, user.password).then((userF)=>{
     mongo.getByUid(userF.user.uid).then((result)=> {
-      if(result.type=='Master'){
-      tipo=1;
-        res.redirect('/acompmaster');
+      req.session.logado=result;
+      if(req.session.logado.type=='Master'){
+          res.redirect('/homemaster')
       }
       else{
-        tipo=0;
-        res.redirect('/acompanhamento');
+        res.redirect('/home')
       }
     }).catch((error)=>{
       console.log(error);
@@ -69,10 +68,10 @@ router.post('/login', function(req, res, next) {
 
 
 router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
-  res.render('acompanhamento', { title: 'Acompanhamento Matriz',layout: 'layout' });
+  res.render('acompanhamento', { title: 'Acompanhamento', ...req.session });
 });
 router.get('/acompmaster', auth.isAuthenticated,function(req, res, next) {
-  res.render('acompmaster', { title: 'Acompanhamento Matriz' });
+  res.render('acompmaster', { title: 'Acompanhamento Master', ...req.session });
 });
 router.get('/acompmirante',auth.isAuthenticated, function(req, res, next) {
   res.render('acompmirante', { title: 'Acompanhamento Mirante',layout: 'layout' });
