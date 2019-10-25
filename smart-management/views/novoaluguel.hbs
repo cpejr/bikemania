@@ -29,32 +29,36 @@
             <div class="texto-centro">
               <label for="InputCpf" ><FONT size="4" face="Swis721 LtEx BT" color="black" > CPF</FONT></label>
             </div>
-            <input type="text" class="form-control" id="InputCpf"  placeholder="XXXXXXXXXXX" name="client[name]"  >
+            <input type="number" maxlength="11" class="form-control "  id="InputCpf"  placeholder="XXXXXXXXXXX" name="aluguel[cpf]"  >
           <div class="cadastro">
             <div class="texto-centro">
               <label for="InputHorário" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Horário</FONT></label>
             </div>
-            <input type="text" class="form-control" id="InputHorario"  placeholder="00:00" name="client[address]">
+            <input  <input type="time"   class="form-control" id="InputHorario"  placeholder="00:00" name="aluguel[horario_chegada]">
         </div>
         <div class="cadastro">
           <div class="texto-centro">
             <label for="InputNumerodepessoas" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Pessoas </FONT></label>
           </div>
-          <input type="number" class="form-control" id="InputNumerodepessoas"  placeholder="X" name="client[CPF]">
+          <input type="number" class="form-control" id="InputNumerodepessoas"  placeholder="X" name="aluguel[pessoas]">
        </div>
 
          <div class="cadastro">
            <div class="texto-centro">
              <label for="InputEquipamento" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Equipamento</FONT></label>
            </div>
-         <input type="text" class="form-control" id="InputEquipamento"  placeholder="Equipamento" name="client[RG]">
+         <input type="text"  class="form-control" id="InputEquipamento"  placeholder="Equipamento" name="aluguel[equipamento]">
       </div>
 
        </div>
        <div class="form-group form-check">
-           <input type="checkbox" class="form-check-input"  id="exampleCheck1">
-           <label class="form-check-label"  for="exampleCheck1"><FONT size="3" face="Swis721 LtEx BT" color="black" > Acessório</FONT></label>
+           <input type="radio" class="form-check-input"  id="exampleCheck1" value="1" name="aluguel[acessorio]" >
+           <label class="form-check-label"  for="exampleCheck1"><FONT size="3" face="Swis721 LtEx BT" color="black" > Com Acessório</FONT></label>
          </div>
+         <div class="form-group form-check">
+             <input type="radio" class="form-check-input"  id="exampleCheck1" value="0" name="aluguel[acessorio]" >
+             <label class="form-check-label"  for="exampleCheck1"><FONT size="3" face="Swis721 LtEx BT" color="black" >Sem Acessório</FONT></label>
+           </div>
 
        <br>
           <div class="texto-centro">

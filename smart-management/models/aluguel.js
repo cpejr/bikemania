@@ -2,25 +2,33 @@ const mongoose = require('mongoose');
 
 const aluguelSchema = new mongoose.Schema({
 
-  horario_retirada: Time,
+  horario_retirada: String,
   equipamento: String,
-  horario_chegada: Hour,
+  horario_chegada: String,
+  /*horario_chegada:{
+    hora:Number,
+    minuto:Number
+  },*/
   cpf: Number,
-  nome: String,
-  acessorio: Number, //tem ou nao tem
+  local_saida: String,
+  //nome: String,
+  acessorio:{
+    type:Boolean,
+    default: 0
+  }  //tem ou nao tem
 
 
 }, { timestamps: true, static: false });
-const AluguelModel = mongoose.model('Aluguel', clientSchema);
+const AluguelModel = mongoose.model('Aluguel', aluguelSchema);
 
 class Aluguel {
   /**
-   * Get all Users from database
+   * Get all Aluguel from database
    * @returns {Array} Array of Users
    */
   static getAll() {
     return new Promise((resolve, reject) => {
-      ClientModel.find({}).exec().then((results) => {
+      AluguelModel.find({}).exec().then((results) => {
         resolve(results);
       }).catch((err) => {
         reject(err);
@@ -35,7 +43,7 @@ class Aluguel {
    */
   static getById(id) {
     return new Promise((resolve, reject) => {
-      ClientModel.findById(id).exec().then((result) => {
+      AluguelModel.findById(id).exec().then((result) => {
         resolve(result);
       }).catch((err) => {
         reject(err);
@@ -45,12 +53,12 @@ class Aluguel {
 
   /**
    * Create a new User
-   * @param {Object} client - User Document Data
+   * @param {Object} aluguel - User Document Data
    * @returns {string} - New User Id
    */
-  static create(client) {
+  static create(aluguel) {
     return new Promise((resolve, reject) => {
-      ClientModel.create(client).then((result) => {
+      AluguelModel.create(aluguel).then((result) => {
         resolve(result._id);
       }).catch((err) => {
         reject(err);
@@ -59,14 +67,14 @@ class Aluguel {
   }
 
   /**
-   * Update a User
-   * @param {string} id - User Id
-   * @param {Object} Client - User Document Data
+   * Update a Aluguel
+   * @param {string} id - Aluguel Id
+   * @param {Object} Aluguel - Aluguel Document Data
    * @returns {null}
    */
-  static update(id, user) {
+  static update(id, aluguel) {
     return new Promise((resolve, reject) => {
-      UserModel.findByIdAndUpdate(id, client).then(() => {
+      AluguelModel.findByIdAndUpdate(id, aluguel).then(() => {
         resolve();
       }).catch((err) => {
         reject(err);
@@ -82,7 +90,7 @@ class Aluguel {
 
   static delete(id) {
     return new Promise((resolve, reject) => {
-      UserModel.findOneAndDelete({_id: id}).then(() => {
+      AluguelModel.findOneAndDelete({_id: id}).then(() => {
         resolve();
       }).catch((err) => {
         reject(err);

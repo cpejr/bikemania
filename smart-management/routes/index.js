@@ -2,15 +2,11 @@ var express = require('express');
 var router = express.Router();
 var firebase = require('firebase');
 const mongo = require('../models/user');
-const auth = require('./middleware/auth');
 const Client = require('../models/client');
-
+const Aluguel = require('../models/aluguel');
 /* GET home page. */
 router.get('/home', function(req, res, next) {
   res.render('home', { title: 'Home' });
-});
-router.get('/homemaster', function(req, res, next) {
-  res.render('homemaster', { title: 'Home' });
 });
 router.get('/signup', function(req, res, next) {
   res.render('signup', { title: 'Cadastro' });
@@ -37,6 +33,15 @@ router.get('/novoaluguel', function(req, res, next) {
   res.render('novoaluguel', { title: 'Novo Aluguel' });
 });
 router.post('/novoaluguel', function(req, res, next) {
+  const  aluguel  = req.body.aluguel;
+    Aluguel.create(aluguel).then((aluguel_id) => {
+      console.log("entrou");
+      console.log(aluguel_id);
+      console.log(aluguel);
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('error');
+    });
   if(tipo==1){
       res.redirect('/acompmaster');
 }
@@ -68,28 +73,13 @@ router.post('/login', function(req, res, next) {
   });
 
 
-router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
-  res.render('acompanhamento', { title: 'Acompanhamento Matriz',layout: 'layout' });
+router.get('/acompanhamento', function(req, res, next) {
+  res.render('acompanhamento', { title: 'Acompanhamento',layout: 'layout' });
 });
 router.get('/acompmaster', function(req, res, next) {
-  res.render('acompmaster', { title: 'Acompanhamento Matriz' });
+  res.render('acompmaster', { title: 'Acompanhamento' });
 });
-router.get('/acompmirante', function(req, res, next) {
-  res.render('acompmirante', { title: 'Acompanhamento Mirante',layout: 'layout' });
-});
-router.get('/acompmirantemaster', function(req, res, next) {
-  res.render('acompmirantemaster', { title: 'Acompanhamento Mirante',layout: 'layout' });
-});
-router.get('/acompvila', function(req, res, next) {
-  res.render('acompvila', { title: 'Acompanhamento Vila',layout: 'layout' });
-});
-router.get('/acompvilamaster', function(req, res, next) {
-  res.render('acompvilamaster', { title: 'Acompanhamento Vila',layout: 'layout' });
-});
-router.get('/relatoriomensal', function(req, res, next) {
-  res.render('relatoriomensal', { title: 'Relatório Mensal',layout: 'layout' });
-});
-router.get('/relatoriodiario', function(req, res, next) {
-  res.render('relatoriodiario', { title: 'Relatório Diário',layout: 'layout' });
-});
+
+
+
 module.exports = router;
