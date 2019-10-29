@@ -66,7 +66,7 @@ class Client {
    */
   static update(id, user) {
     return new Promise((resolve, reject) => {
-      UserModel.findByIdAndUpdate(id, client).then(() => {
+      ClientModel.findByIdAndUpdate(id, client).then(() => {
         resolve();
       }).catch((err) => {
         reject(err);
@@ -82,7 +82,7 @@ class Client {
 
   static delete(id) {
     return new Promise((resolve, reject) => {
-      UserModel.findOneAndDelete({_id: id}).then(() => {
+      AluguelModel.findOneAndDelete({_id: id}).then(() => {
         resolve();
       }).catch((err) => {
         reject(err);
