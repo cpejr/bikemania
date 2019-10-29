@@ -4,6 +4,7 @@ var firebase = require('firebase');
 const mongo = require('../models/user');
 const auth = require('./middleware/auth');
 const Client = require('../models/client');
+const Unidade = require('../models/unidade');
 
 /* GET home page. */
 router.get('/home',auth.isAuthenticated, function(req, res, next) {
@@ -45,13 +46,36 @@ router.post('/novoaluguel', function(req, res, next) {
     res.redirect('/acompanhamento')
   }
  });
+ router.post('/acompmirante', function(req, res, next) {
+   // const  unidade  = "Mirante";
+   //   Unidade.getById("5db8a9261c9d4400008a877a").then((result) => {
+   //    console.log(result);
+   //    console.log("oooi")
+   //    req.session.unidade=result.uni;
+   req.session.unidade="Mirante";
+   console.log(req.session.unidade);
+       res.redirect(`/acompanhamento`);
+     });
+
+router.post('/acompmatriz', function(req, res, next) {
+  req.session.unidade="Matriz";
+  console.log(req.session.unidade);
+  res.redirect(`/acompanhamento`);
+         });
+
+router.post('/acompvila', function(req, res, next) {
+  req.session.unidade="Vila";
+  console.log(req.session.unidade);
+  res.redirect(`/acompanhamento`);
+          });
+
 router.post('/login', function(req, res, next) {
   const user=req.body.user;
   firebase.auth().signInWithEmailAndPassword(user.username, user.password).then((userF)=>{
     mongo.getByUid(userF.user.uid).then((result)=> {
       req.session.logado=result;
       if(req.session.logado.type=='Master'){
-          res.redirect('/homemaster')
+        res.redirect('/home')
       }
       else{
         res.redirect('/home')
@@ -68,6 +92,7 @@ router.post('/login', function(req, res, next) {
 
 
 router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
+
   res.render('acompanhamento', { title: 'Acompanhamento', ...req.session });
 });
 router.get('/acompmaster', auth.isAuthenticated,function(req, res, next) {
