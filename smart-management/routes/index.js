@@ -4,7 +4,6 @@ var firebase = require('firebase');
 const mongo = require('../models/user');
 const auth = require('./middleware/auth');
 const Client = require('../models/client');
-const Unidade = require('../models/unidade');
 
 /* GET home page. */
 router.get('/home',auth.isAuthenticated, function(req, res, next) {
@@ -56,7 +55,12 @@ router.post('/novoaluguel', function(req, res, next) {
    console.log(req.session.unidade);
        res.redirect(`/acompanhamento`);
      });
+     router.post('/deslog', function(req, res, next) {
+       user = null;
+       req.session.logado= null;
 
+       res.redirect(`/login`);
+              });
 router.post('/acompmatriz', function(req, res, next) {
   req.session.unidade="Matriz";
   console.log(req.session.unidade);
@@ -75,7 +79,7 @@ router.post('/login', function(req, res, next) {
     mongo.getByUid(userF.user.uid).then((result)=> {
       req.session.logado=result;
       if(req.session.logado.type=='Master'){
-        res.redirect('/home')
+          res.redirect('/homemaster')
       }
       else{
         res.redirect('/home')
@@ -92,7 +96,6 @@ router.post('/login', function(req, res, next) {
 
 
 router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
-
   res.render('acompanhamento', { title: 'Acompanhamento', ...req.session });
 });
 router.get('/acompmaster', auth.isAuthenticated,function(req, res, next) {
