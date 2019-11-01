@@ -1,14 +1,15 @@
 var express = require('express');
 var router = express.Router();
 var firebase = require('firebase');
+const auth = require('./middleware/auth');
 const mongo = require('../models/user');
 const Client = require('../models/client');
 const Aluguel = require('../models/aluguel');
 /* GET home page. */
-router.get('/home', function(req, res, next) {
-  res.render('home', { title: 'Home' });
+router.get('/home',auth.isAuthenticated, function(req, res, next) {
+    res.render('home', { title: 'Home' , ...req.session});
 });
-router.get('/signup', function(req, res, next) {
+router.get('/signup',auth.isAuthenticated, function(req, res, next) {
   res.render('signup', { title: 'Cadastro' });
 });
 /*POST signup*/
@@ -25,11 +26,13 @@ router.post('/signup',(req,res) => {
     });
 
 });
-
+router.get('/homemaster',auth.isAuthenticated, function(req, res, next) {
+    res.render('homemaster', { title: 'Home', ...req.session });
+});
 router.get('/login', function(req, res, next) {
   res.render('index', { title: 'Login' });
 });
-router.get('/novoaluguel', function(req, res, next) {
+router.get('/novoaluguel',auth.isAuthenticated, function(req, res, next) {
   res.render('novoaluguel', { title: 'Novo Aluguel' });
 });
 router.post('/novoaluguel', function(req, res, next) {
@@ -42,25 +45,24 @@ router.post('/novoaluguel', function(req, res, next) {
       console.log(error);
       res.redirect('error');
     });
-  if(tipo==1){
+    if(req.session.logado.type=='Master'){
       res.redirect('/acompmaster');
-}
+    }
   else{
     res.redirect('/acompanhamento')
   }
 });
-var tipo;
+
 router.post('/login', function(req, res, next) {
   const user=req.body.user;
   firebase.auth().signInWithEmailAndPassword(user.username, user.password).then((userF)=>{
     mongo.getByUid(userF.user.uid).then((result)=> {
-      if(result.type=='Master'){
-      tipo=1;
-        res.redirect('/acompmaster');
+      req.session.logado=result;
+    if(req.session.logado.type=='Master'){
+        res.redirect('/homemaster')
       }
       else{
-        tipo=0;
-        res.redirect('/acompanhamento');
+         res.redirect('/home')
       }
     }).catch((error)=>{
       console.log(error);
@@ -73,13 +75,41 @@ router.post('/login', function(req, res, next) {
   });
 
 
-router.get('/acompanhamento', function(req, res, next) {
-  res.render('acompanhamento', { title: 'Acompanhamento',layout: 'layout' });
+router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
+  res.render('acompanhamento', { title: 'Acompanhamento', ...req.session });
 });
-router.get('/acompmaster', function(req, res, next) {
-  res.render('acompmaster', { title: 'Acompanhamento' });
+router.get('/acompmaster',auth.isAuthenticated, function(req, res, next) {
+  res.render('acompmaster', { title: 'Acompanhamento Master', ...req.session });
 });
+router.post('/acompmirante', function(req, res, next) {
+   // const  unidade  = "Mirante";
+   //   Unidade.getById("5db8a9261c9d4400008a877a").then((result) => {
+   //    console.log(result);
+   //    console.log("oooi")
+   //    req.session.unidade=result.uni;
+   req.session.unidade="Mirante";
+   console.log(req.session.unidade);
+       res.redirect(`/acompanhamento`);
+     });
 
+router.post('/acompmatriz', function(req, res, next) {
+  req.session.unidade="Matriz";
+  console.log(req.session.unidade);
+  res.redirect(`/acompanhamento`);
+         });
+
+router.post('/acompvila', function(req, res, next) {
+  req.session.unidade="Vila";
+  console.log(req.session.unidade);
+  res.redirect(`/acompanhamento`);
+          });
+
+          router.post('/deslog', function(req, res, next) {
+              user = null;
+              req.session.logado= null;
+
+              res.redirect(`/login`);
+                     });
 
 
 module.exports = router;

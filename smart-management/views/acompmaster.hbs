@@ -1,9 +1,38 @@
 <nav class="navbar navbar-light bg-light" id="logobike">
-  <button class="novocliente"> Novo Cliente </button>
+   <button class="botaovoltar" onclick="location.href='/homemaster'" class="btn btn-primary" ><img src="/images/seta.png" widht="20px" height="50px"> </button>
+   <form action="/deslog" method="post">
+     <button class="novocliente" > Deslogar </button>
+   </form> 
+    <button class="novocliente" onclick="location.href='/signup'"> Novo Cliente </button>
 </nav>
 
 <!-- <a class="unidade">Unidade: Matriz</a> -->
 <div class="row">
 <button class="btn btn-default" onclick="location.href='/novoaluguel'"> <i class="fa fa-plus-circle fa-5x" aria-hidden="true"></i> </button>
-<button class="botaobike">Cliente 1<img src="/images/agrvai.png" widht="20px" height="50px"> </button>
+<button class="botaobike" onclick="myFunction()"class="btn btn-primary" data-toggle="modal" data-target="#stimulus">Cliente 1<img src="/images/agrvai.png" widht="20px" height="50px"> </button>
+</div>
+<div class="modal fade"  id="stimulus" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+     <div class="modal-content">
+       <div>
+       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+         <div class="fundo"></div>
+         <span aria-hidden="true">&times;</span>
+       </button>
+       </div>
+       <div class="modal-body">
+
+
+
+         <FONT size="5" face="Segoe UI Symbol" color="black" >
+   Cliente 1<br>
+   Preço:<br>
+   Tempo:<br>
+   Equipamento:
+    </FONT>
+
+
+       </div>
+  </div>
+</div>
 </div>
