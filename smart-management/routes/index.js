@@ -78,7 +78,19 @@ router.post('/login', function(req, res, next) {
 
 
 router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
-  res.render('acompanhamento', { title: 'Acompanhamento', ...req.session });
+  new Array locais[1000000];
+  Aluguel.getAll().then((alugueis) => {
+    var j=0;
+for(var i=0;i<alugueis.length,i++){
+  if(alugueis.local_saida == req.session.unidade){
+    locais[j]=alugueis[i];
+  }
+}
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('error');
+  });
+  res.render('acompanhamento', { title: 'Acompanhamento', ...req.session,alugueis });
 });
 router.get('/acompmaster',auth.isAuthenticated, function(req, res, next) {
   res.render('acompmaster', { title: 'Acompanhamento Master', ...req.session });
