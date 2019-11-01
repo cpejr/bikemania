@@ -56,7 +56,12 @@ router.post('/novoaluguel', function(req, res, next) {
    console.log(req.session.unidade);
        res.redirect(`/acompanhamento`);
      });
+     router.post('/deslog', function(req, res, next) {
+       user = null;
+       req.session.logado= null;
 
+       res.redirect(`/login`);
+              });
 router.post('/acompmatriz', function(req, res, next) {
   req.session.unidade="Matriz";
   console.log(req.session.unidade);
