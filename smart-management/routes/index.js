@@ -105,9 +105,9 @@ router.post('/acompvila', function(req, res, next) {
           });
 
           router.post('/deslog', function(req, res, next) {
+            firebase.auth().signOut().then(function(){});
               user = null;
               req.session.logado= null;
-
               res.redirect(`/login`);
                      });
 
