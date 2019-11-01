@@ -33,11 +33,13 @@ router.get('/login', function(req, res, next) {
   res.render('index', { title: 'Login' });
 });
 router.get('/novoaluguel',auth.isAuthenticated, function(req, res, next) {
-  res.render('novoaluguel', { title: 'Novo Aluguel' });
+  res.render('novoaluguel', { title: 'Novo Aluguel', ...req.session });
 });
 router.post('/novoaluguel', function(req, res, next) {
   const  aluguel  = req.body.aluguel;
+  aluguel.local_saida=req.session.unidade;
     Aluguel.create(aluguel).then((aluguel_id) => {
+
       console.log("entrou");
       console.log(aluguel_id);
       console.log(aluguel);
@@ -105,9 +107,9 @@ router.post('/acompvila', function(req, res, next) {
           });
 
           router.post('/deslog', function(req, res, next) {
+            firebase.auth().signOut().then(function(){});
               user = null;
               req.session.logado= null;
-
               res.redirect(`/login`);
                      });
 
