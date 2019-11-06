@@ -79,26 +79,37 @@ router.post('/login', function(req, res, next) {
 
 router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
   var locais= new Array;
+  const teste = [];
   var logado = req.session.unidade;
   var nome = new Array;
   Aluguel.getAll().then((alugueis) => {
     var j=0;
+
   for(var i = 0; i < alugueis.length; i++) {
-    if(alugueis[i].local_saida == logado){
-      locais[j] = alugueis[i];
-      Aluguel.getByCpf(locais[j].cpf).then((clients)=>{
-          nome[i]=clients;
-          console.log(nome[i]);
-      });
-      j++;
-      console.log(locais[i]);
-    }
-    else{
-      console.log("nadinha");
+    const locaisInfo = {
+      id: String,
+      horarioretirada: String,
+      eq: String,
+      horario_chegada: String,
+      _cpf: Number,
+      localsaida: String,
+      acess: String
     }
 
+    if(alugueis[i].local_saida == logado){
+    locaisInfo.id = alugueis[i]._id;
+    locaisInfo.horarioretirada = alugueis[i].horario_retirada;
+    locaisInfo.eq= alugueis[i].equipamento;
+    locaisInfo._cpf = alugueis[i].cpf;
+    locaisInfo.localsaida = alugueis[i].local_saida;
+    locaisInfo.acess = alugueis[i].acessorio;
+    teste.push(locaisInfo);
   }
-  res.render('acompanhamento', { title: 'Acompanhamento', ...req.session,locais,nome });
+
+  }
+  console.log('--------------');
+  console.log(teste);
+  res.render('acompanhamento', { title: 'Acompanhamento', ...req.session,teste,nome });
   });
 });
 
@@ -106,11 +117,6 @@ router.get('/acompmaster',auth.isAuthenticated, function(req, res, next) {
   res.render('acompmaster', { title: 'Acompanhamento Master', ...req.session });
 });
 router.post('/acompmirante', function(req, res, next) {
-   // const  unidade  = "Mirante";
-   //   Unidade.getById("5db8a9261c9d4400008a877a").then((result) => {
-   //    console.log(result);
-   //    console.log("oooi")
-   //    req.session.unidade=result.uni;
    req.session.unidade="Mirante";
    console.log(req.session.unidade);
        res.redirect(`/acompanhamento`);
@@ -118,8 +124,13 @@ router.post('/acompmirante', function(req, res, next) {
 
 router.post('/acompmatriz', function(req, res, next) {
   req.session.unidade="Matriz";
-  console.log(req.session.unidade);
   res.redirect(`/acompanhamento`);
+         });
+
+ router.post('/encerrar1/:locais_id', function(req, res, next) {
+const locais = req.params.locais_id;
+Aluguel.delete(locais);
+res.redirect(`/acompanhamento`);
          });
 
 router.post('/acompvila', function(req, res, next) {
