@@ -121,7 +121,11 @@ router.post('/acompmatriz', function(req, res, next) {
   console.log(req.session.unidade);
   res.redirect(`/acompanhamento`);
          });
-
+router.post('/encerrar', function(req, res, next) {
+  req.session.unidade="Matriz";
+  console.log(req.session.unidade);
+  res.redirect(`/acompanhamento  `);
+                  });
 router.post('/acompvila', function(req, res, next) {
   req.session.unidade="Vila";
   console.log(req.session.unidade);
