@@ -80,19 +80,25 @@ router.post('/login', function(req, res, next) {
 router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
   var locais= new Array;
   var logado = req.session.unidade;
+  var nome = new Array;
   Aluguel.getAll().then((alugueis) => {
     var j=0;
   for(var i = 0; i < alugueis.length; i++) {
     if(alugueis[i].local_saida == logado){
       locais[j] = alugueis[i];
+      Aluguel.getByCpf(locais[j].cpf).then((clients)=>{
+          nome[i]=clients;
+          console.log(nome[i]);
+      });
       j++;
       console.log(locais[i]);
     }
     else{
       console.log("nadinha");
     }
+
   }
-  res.render('acompanhamento', { title: 'Acompanhamento', ...req.session,locais });
+  res.render('acompanhamento', { title: 'Acompanhamento', ...req.session,locais,nome });
   });
 });
 

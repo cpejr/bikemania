@@ -7172,4 +7172,26 @@ a {
   border-radius: 40px;
   border: 10px; }
 
+.encerrar {
+  font: "Swis721 LtEx BT";
+  color: "black";
+  background-color: #3CB1FE;
+  width: 20%;
+  border-radius: 5px;
+  border: 10px;
+  justify-content: flex-start;
+  margin-top: 2%;
+  font-size: 18px; }
+
+.btn_acomp_master {
+  font: "Swis721 LtEx BT";
+  color: "black";
+  background-color: #3CB1FE;
+  width: 20%;
+  border-radius: 5px;
+  border: 10px;
+  justify-content: flex-end;
+  margin-top: 2%;
+  font-size: 18px; }
+
 /*# sourceMappingURL=style.css.map */
