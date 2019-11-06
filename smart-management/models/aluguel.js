@@ -98,6 +98,21 @@ class Aluguel {
    });
  }
 
+ /**
+  * Get a User by it's id
+  * @param {string} id - User Id
+  * @returns {Object} - User Document Data
+  */
+ static getByCpf(cpf) {
+   return new Promise((resolve, reject) => {
+     AluguelModel.findByCpf(cpf).exec().then((result) => {
+       resolve(result);
+     }).catch((err) => {
+       reject(err);
+     });
+   });
+ }
+
 
   }
   module.exports = Aluguel;
