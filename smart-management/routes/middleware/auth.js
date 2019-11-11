@@ -14,4 +14,13 @@ module.exports = {
       res.redirect('/login');
     }
   },
+  isMaster: (req, res, next) => {
+   const type = req.session.logado.type;
+   if(type === 'Master'){
+     next();
+   }
+   else {
+     res.redirect('/login');
+   }
+ },
 }

@@ -5,6 +5,14 @@ const auth = require('./middleware/auth');
 const mongo = require('../models/user');
 const Client = require('../models/client');
 const Aluguel = require('../models/aluguel');
+// var dd= String(today.getDate()).pad.Start(2,'0');
+// var mm= String(today.getMonth()+ 1).pad.Start(2,'0');
+// var yyyy = today.getFullYear();
+// var today= new Date();
+// var hours = today.getHours();
+// var minutes = today.getMinutes();
+// var scnds = today.getSeconds();
+
 /* GET home page. */
 router.get('/home',auth.isAuthenticated, function(req, res, next) {
     res.render('home', { title: 'Home' , ...req.session});
@@ -34,6 +42,19 @@ router.get('/login', function(req, res, next) {
 });
 router.get('/novoaluguel',auth.isAuthenticated, function(req, res, next) {
   res.render('novoaluguel', { title: 'Novo Aluguel', ...req.session });
+});
+router.get('/relatoriodiario',auth.isAuthenticated,auth.isMaster, function(req, res, next) {
+  var today = new Date();
+  var dd= String(today.getDate());
+  var mm= String(today.getMonth()+1);
+  var yyyy = today.getFullYear();
+  console.log("hhhhhhhhhhh");
+  console.log(reldia);
+  console.log("hhhhhhhhhhhh");
+  res.render('relatoriodiario', { title: 'Relatorio Diário', ...req.session, reldia, dd, mm, yyyy });
+});
+router.get('/relatoriomensal',auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  res.render('relatoriomensal', { title: 'Relatorio Mensal', ...req.session });
 });
 router.post('/novoaluguel', function(req, res, next) {
   const  aluguel  = req.body.aluguel;
@@ -78,7 +99,6 @@ router.post('/login', function(req, res, next) {
 
 
 router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
-  var locais= new Array;
   const teste = [];
   var logado = req.session.unidade;
   var nome = new Array;
@@ -113,25 +133,84 @@ router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
   });
 });
 
-router.get('/acompmaster',auth.isAuthenticated, function(req, res, next) {
-  res.render('acompmaster', { title: 'Acompanhamento Master', ...req.session });
+router.get('/acompmaster', auth.isAuthenticated, function(req, res, next) {
+  const teste = [];
+  var logado = req.session.unidade;
+  var nome = new Array;
+  Aluguel.getAll().then((alugueis) => {
+    var j=0;
+
+  for(var i = 0; i < alugueis.length; i++) {
+    const locaisInfo = {
+      id: String,
+      horarioretirada: String,
+      eq: String,
+      horario_chegada: String,
+      _cpf: Number,
+      localsaida: String,
+      acess: String
+    }
+
+    if(alugueis[i].local_saida == logado){
+    locaisInfo.id = alugueis[i]._id;
+    locaisInfo.horarioretirada = alugueis[i].horario_retirada;
+    locaisInfo.eq= alugueis[i].equipamento;
+    locaisInfo._cpf = alugueis[i].cpf;
+    locaisInfo.localsaida = alugueis[i].local_saida;
+    locaisInfo.acess = alugueis[i].acessorio;
+    teste.push(locaisInfo);
+  }
+
+  }
+  console.log('--------------');
+  console.log(teste);
+  res.render('acompmaster', { title: 'Acompanhamento Master', ...req.session,teste,nome });
+  });
 });
 router.post('/acompmirante', function(req, res, next) {
    req.session.unidade="Mirante";
    console.log(req.session.unidade);
+   if(req.session.logado == "Master"){
+       res.redirect(`/acompmaster`);
+     }
+     else{
        res.redirect(`/acompanhamento`);
+     }
      });
 
 router.post('/acompmatriz', function(req, res, next) {
   req.session.unidade="Matriz";
-  res.redirect(`/acompanhamento`);
+  if(req.session.logado.type == "Master"){
+      res.redirect(`/acompmaster`);
+    }
+    else{
+      res.redirect(`/acompanhamento`);
+    }
          });
 
  router.post('/cancelar/:locais_id', function(req, res, next) {
 const locais = req.params.locais_id;
 Aluguel.delete(locais);
-res.redirect(`/acompanhamento`);
+res.redirect(`/acompmaster`);
          });
+var reldia = [];
+router.post('/encerrar/:locais_id', function(req, res, next) {
+    const locais = req.params.locais_id;
+    Aluguel.getById(locais).then((result) => {
+    reldia.push(result);
+    console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeey");
+    console.log(reldia);
+    console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeey");
+    });
+
+    Aluguel.delete(locais);
+    if(req.session.logado.type == "Master"){
+    res.redirect(`/acompmaster`);
+  }
+  else{
+      res.redirect(`/acompanhamento`);
+  }
+            });
 
 router.post('/acompvila', function(req, res, next) {
   req.session.unidade="Vila";

@@ -23,39 +23,30 @@
          <div class="modal-body">
 
            <FONT size="5" face="Segoe UI Symbol" color="black" >
-                 {{nome}}<br>
+                 {{_cpf}}<br>
                  Preço:<br>
                  Tempo:<br>
                  Equipamento:
                   </FONT>
 
-                    <form action="/encerrar1/{{id}}" method="post">
-                    <button type="submit" class="encerrar" >Cancelar</button>
-                  </form>
-
-
-   <FONT size="5" face="Segoe UI Symbol" color="black" >
-   Cliente 1<br>
-   Preço:<br>
-   Tempo:<br>
-   Equipamento:
-   </FONT>
-   <div class="btn_popup">
-
-      <div class="btntest col-4" >
-        <button type="submit" class="btn_acomp_master" >Encerrar</button>
-      </div>
-      <div class="btntest col-4" >
-        <button type="submit" class="btn_acomp_master" >Alterar</button>
-      </div>
-      <div class="btntest col-4" >
-        <button type="submit" class="btn_acomp_master" >Cancelar</button>
-      </div>
-
-
+<div class="btn_popup">
+  <form action="/encerrar/{{id}}" method="post">
+   <div class="btntest col-4">
+     <button type="submit" class="btn_acomp_master" >Encerrar</button> </div>
+   </form>
+     <div class="btntest col-4">
+  <button type="submit" class="btn_acomp_master" >Alterar</button>
+</div>
+ <form action="/cancelar/{{id}}" method="post">
+   <div class="btntest col-4" >
+      <button type="submit" class="btn_acomp_master" >Cancelar</button>
+     </div>
+    </form>
+  </div>
+ </div>
          </div>
     </div>
   </div>
-  </div>
+
 {{/each}}
 </div>
