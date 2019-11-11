@@ -127,7 +127,7 @@ router.post('/acompmatriz', function(req, res, next) {
   res.redirect(`/acompanhamento`);
          });
 
- router.post('/encerrar1/:locais_id', function(req, res, next) {
+ router.post('/cancelar/:locais_id', function(req, res, next) {
 const locais = req.params.locais_id;
 Aluguel.delete(locais);
 res.redirect(`/acompanhamento`);
