@@ -205,10 +205,10 @@ router.post('/encerrar/:locais_id', function(req, res, next) {
 
     Aluguel.delete(locais);
     if(req.session.logado.type == "Master"){
-    res.redirect(`/acompmaster`);
+        res.render('acompmaster', { title: 'Acompanhamento Master', ...reldia });
   }
   else{
-      res.redirect(`/acompanhamento`);
+      res.render('acompanhamento', { title: 'Acompanhamento', ...reldia});
   }
             });
 
@@ -217,13 +217,24 @@ router.post('/acompvila', function(req, res, next) {
   console.log(req.session.unidade);
   res.redirect(`/acompanhamento`);
           });
-
+router.post('/voltar', function(req, res, next) {
+    if(req.session.logado.type == "Master"){
+        res.render('homemaster', { title: 'Home Master', ...req.session, reldia });
+    }
+    else{
+        res.render('home', { title: 'Home', ...req.session, reldia });
+    }
+    res.redirect(`/acompanhamento`);
+          });
           router.post('/deslog', function(req, res, next) {
             firebase.auth().signOut().then(function(){});
               user = null;
               req.session.logado= null;
               res.redirect(`/login`);
                      });
-
+router.post('/botaoreldi:alugados', function(req, res, next) {
+  const alu = req.params.alugados;
+  res.render('relatoriodiario', { title: 'Relatorio Diário', ...req.session, alu });
+       });
 
 module.exports = router;
