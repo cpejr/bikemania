@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 
 const alugadoSchema = new mongoose.Schema({
-
+  dia: Number,
+  mes: Number,
+  ano: Number,
+  tempo: Number,
+  preço: Number,
   horarioretirada: String,
   eq: String,
   horariochegada: String,
@@ -76,6 +80,15 @@ class Alugado {
     return new Promise((resolve, reject) => {
       AlugadoModel.findByIdAndUpdate(id, aluguel).then(() => {
         resolve();
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+  static getAllByDay(dia,mes,ano) {
+    return new Promise((resolve, reject) => {
+      AlugadoModel.find({ dia: dia, mes: mes, ano:ano }).then((result) => {
+        resolve(result);
       }).catch((err) => {
         reject(err);
       });

@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const aluguelSchema = new mongoose.Schema({
-
+  tempo: Number,
+  preço: Number,
   horario_retirada: String,
   equipamento: String,
   horario_chegada: String,
@@ -15,6 +16,7 @@ const aluguelSchema = new mongoose.Schema({
   acessorio:{
     type:Boolean,
     default: 0
+
   }  //tem ou nao tem
 
 
