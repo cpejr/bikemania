@@ -5,6 +5,7 @@ const auth = require('./middleware/auth');
 const mongo = require('../models/user');
 const Client = require('../models/client');
 const Aluguel = require('../models/aluguel');
+const Alugado = require('../models/alugado');
 // var dd= String(today.getDate()).pad.Start(2,'0');
 // var mm= String(today.getMonth()+ 1).pad.Start(2,'0');
 // var yyyy = today.getFullYear();
@@ -44,21 +45,73 @@ router.get('/novoaluguel',auth.isAuthenticated, function(req, res, next) {
   res.render('novoaluguel', { title: 'Novo Aluguel', ...req.session });
 });
 router.get('/relatoriodiario',auth.isAuthenticated,auth.isMaster, function(req, res, next) {
+  var precott=0;
+  var tempott=0;
   var today = new Date();
   var dd= String(today.getDate());
   var mm= String(today.getMonth()+1);
   var yyyy = today.getFullYear();
-  console.log("hhhhhhhhhhh");
-  console.log(reldia);
-  console.log("hhhhhhhhhhhh");
-  res.render('relatoriodiario', { title: 'Relatorio Diário', ...req.session, reldia, dd, mm, yyyy });
+  const reldia = [];
+  // if(yd == dd){
+  Alugado.getAllByDay(dd,mm,yyyy).then((alugados) => {
+
+  for(var i = 0; i < alugados.length; i++) {
+    const alugadim = {
+      id: String,
+      horarioretirada: String,
+      eq: String,
+      horario_chegada: String,
+      _cpf: Number,
+      localsaida: String,
+      acess: String,
+      tempo: Number,
+      preço: Number
+    }
+
+
+    alugadim.id = alugados[i].id;
+    alugadim.horarioretirada = alugados[i].horarioretirada;
+    alugadim.eq= alugados[i].eq;
+    alugadim._cpf = alugados[i]._cpf;
+    alugadim.localsaida = alugados[i].localsaida;
+    alugadim.acess = alugados[i].acess;
+    alugadim.preço = alugados[i].preço;
+    alugadim.tempo = alugados[i].tempo;
+    reldia.push(alugadim);
+    precott=precott+alugadim.preço;
+    tempott=tempott+alugadim.tempo;
+  }
+    console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+    console.log(reldia);
+    console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+    console.log(reldia[0].localsaida);
+    console.log("ooooooooooooooooooooooooo");
+
+console.log(precott);
+  res.render('relatoriodiario', { title: 'Relatorio Diário', ...req.session,reldia , dd, mm, yyyy, precott, tempott });
+
 });
+
+//}
+
+//   else{
+//       Alugado.getAll().then((apagando) => {
+//         for(var i = 0; i < apagando.length; i++) {
+//           Alugado.delete(apagando[i]._id);
+//         }
+//       });
+//         res.render('relatoriodiario', { title: 'Relatorio Diário', ...req.session,reldia , dd, mm, yyyy });
+// }
+});
+
+
 router.get('/relatoriomensal',auth.isAuthenticated, auth.isMaster, function(req, res, next) {
   res.render('relatoriomensal', { title: 'Relatorio Mensal', ...req.session });
 });
 router.post('/novoaluguel', function(req, res, next) {
   const  aluguel  = req.body.aluguel;
   aluguel.local_saida=req.session.unidade;
+
     Aluguel.create(aluguel).then((aluguel_id) => {
 
       console.log("entrou");
@@ -197,18 +250,56 @@ var reldia = [];
 router.post('/encerrar/:locais_id', function(req, res, next) {
     const locais = req.params.locais_id;
     Aluguel.getById(locais).then((result) => {
-    reldia.push(result);
-    console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeey");
-    console.log(reldia);
-    console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeey");
+      console.log("ooooooooooooo");
+      console.log(result);
+      const alugados = {
+        id: String,
+        horarioretirada: String,
+        eq: String,
+        horariochegada: String,
+        _cpf: Number,
+        localsaida: String,
+        acess: String,
+        tempo: Number,
+        preço: Number,
+        dia: Number,
+        mes: Number,
+        ano: Number
+
+      }
+        var today = new Date();
+      var dd= String(today.getDate());
+      var mm= String(today.getMonth()+1);
+      var yyyy = today.getFullYear();
+      alugados.horarioretirada = result.horario_retirada;
+      alugados.horariochegada= result.horario_chegada;
+      alugados.eq= result.equipamento;
+      alugados._cpf = result.cpf;
+      alugados.localsaida = result.local_saida;
+      alugados.acess = result.acessorio;
+      alugados.preço = result.preço;
+      alugados.tempo = result.tempo;
+      alugados.dia = dd;
+      alugados.mes = mm;
+      alugados.ano = yyyy;
+      console.log("kkkkkkkkkkkk");
+      console.log(alugados);
+      Alugado.create(alugados).then((alugado_id) => {
+        console.log("eeeeeeeeeeeeeeeee");
+        console.log(alugado_id);
+      });
+    // reldia.push(result);
+    // console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeey");
+    // console.log(reldia);
+    // console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeey");
     });
 
     Aluguel.delete(locais);
     if(req.session.logado.type == "Master"){
-    res.redirect(`/acompmaster`);
+        res.redirect('/acompmaster');
   }
   else{
-      res.redirect(`/acompanhamento`);
+      res.redirect('/acompanhamento');
   }
             });
 
@@ -217,7 +308,15 @@ router.post('/acompvila', function(req, res, next) {
   console.log(req.session.unidade);
   res.redirect(`/acompanhamento`);
           });
-
+router.post('/voltar', function(req, res, next) {
+    if(req.session.logado.type == "Master"){
+        res.render('homemaster', { title: 'Home Master', ...req.session, reldia });
+    }
+    else{
+        res.render('home', { title: 'Home', ...req.session, reldia });
+    }
+    res.redirect(`/acompanhamento`);
+          });
           router.post('/deslog', function(req, res, next) {
             firebase.auth().signOut().then(function(){});
               user = null;

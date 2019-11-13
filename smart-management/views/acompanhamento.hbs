@@ -1,5 +1,7 @@
 <nav class="navbar navbar-light bg-light" id="logobike">
-  <button class="botaovoltar" onclick="location.href='/home'"class="btn btn-primary" ><img src="/images/seta.png" widht="20px" height="50px"> </button>
+
+  <button class="botaovoltar" class="btn btn-primary" onclick="location.href='/home'"><img src="/images/seta.png" widht="20px" height="50px"> </button>
+
   <form action="/deslog" method="post">
     <button class="novocliente" > Deslogar </button>
   </form>
@@ -10,7 +12,7 @@
 <div class="row">
 <button class="btn btn-default" onclick="location.href='/novoaluguel'"> <i class="fa fa-plus-circle fa-5x" aria-hidden="true"></i> </button>
 {{#each teste}}
-  <button class="botaobike" onclick="myFunction()"class="btn btn-primary" data-toggle="modal" data-target="#stimulus">Cliente 1<img src="/images/agrvai.png" widht="20px" height="50px"> </button>
+<button class="botaobike" onclick="myFunction()"class="btn btn-primary" data-toggle="modal" data-target="#stimulus">Cliente 1<img src="/images/agrvai.png" widht="20px" height="50px"> </button>
   <div class="modal fade"  id="stimulus" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
        <div class="modal-content">

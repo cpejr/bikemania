@@ -1,36 +1,38 @@
 const mongoose = require('mongoose');
 
-const aluguelSchema = new mongoose.Schema({
+const alugadoSchema = new mongoose.Schema({
+  dia: Number,
+  mes: Number,
+  ano: Number,
   tempo: Number,
   preço: Number,
-  horario_retirada: String,
-  equipamento: String,
-  horario_chegada: String,
+  horarioretirada: String,
+  eq: String,
+  horariochegada: String,
   /*horario_chegada:{
     hora:Number,
     minuto:Number
   },*/
-  cpf: Number,
-  local_saida: String,
+  _cpf: Number,
+  localsaida: String,
   //nome: String,
-  acessorio:{
+  acess:{
     type:Boolean,
     default: 0
-
   }  //tem ou nao tem
 
 
 }, { timestamps: true, static: false });
-const AluguelModel = mongoose.model('Aluguel', aluguelSchema);
+const AlugadoModel = mongoose.model('Alugado', alugadoSchema);
 
-class Aluguel {
+class Alugado {
   /**
    * Get all Aluguel from database
    * @returns {Array} Array of Users
    */
   static getAll() {
     return new Promise((resolve, reject) => {
-      AluguelModel.find({}).exec().then((results) => {
+      AlugadoModel.find({}).exec().then((results) => {
         resolve(results);
       }).catch((err) => {
         reject(err);
@@ -45,7 +47,7 @@ class Aluguel {
    */
   static getById(id) {
     return new Promise((resolve, reject) => {
-      AluguelModel.findById(id).exec().then((result) => {
+      AlugadoModel.findById(id).exec().then((result) => {
         resolve(result);
       }).catch((err) => {
         reject(err);
@@ -60,7 +62,7 @@ class Aluguel {
    */
   static create(aluguel) {
     return new Promise((resolve, reject) => {
-      AluguelModel.create(aluguel).then((result) => {
+      AlugadoModel.create(aluguel).then((result) => {
         resolve(result._id);
       }).catch((err) => {
         reject(err);
@@ -76,8 +78,17 @@ class Aluguel {
    */
   static update(id, aluguel) {
     return new Promise((resolve, reject) => {
-      AluguelModel.findByIdAndUpdate(id, aluguel).then(() => {
+      AlugadoModel.findByIdAndUpdate(id, aluguel).then(() => {
         resolve();
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+  static getAllByDay(dia,mes,ano) {
+    return new Promise((resolve, reject) => {
+      AlugadoModel.find({ dia: dia, mes: mes, ano:ano }).then((result) => {
+        resolve(result);
       }).catch((err) => {
         reject(err);
       });
@@ -92,7 +103,7 @@ class Aluguel {
 
   static delete(id) {
     return new Promise((resolve, reject) => {
-      AluguelModel.findOneAndDelete({_id: id}).then(() => {
+      AlugadoModel.findOneAndDelete({_id: id}).then(() => {
         resolve();
       }).catch((err) => {
         reject(err);
@@ -107,7 +118,7 @@ class Aluguel {
   */
  static getByCpf(cpf) {
    return new Promise((resolve, reject) => {
-     AluguelModel.findByCpf(cpf).exec().then((result) => {
+     AlugadoModel.findByCpf(cpf).exec().then((result) => {
        resolve(result);
      }).catch((err) => {
        reject(err);
@@ -117,4 +128,4 @@ class Aluguel {
 
 
   }
-  module.exports = Aluguel;
+  module.exports = Alugado;
