@@ -59,6 +59,9 @@ router.get('/relatoriomensal',auth.isAuthenticated, auth.isMaster, function(req,
 router.post('/novoaluguel', function(req, res, next) {
   const  aluguel  = req.body.aluguel;
   aluguel.local_saida=req.session.unidade;
+
+  //Client.getByCpf(aluguel.cpf).then((client) => {
+  //aluguel.client = client;
     Aluguel.create(aluguel).then((aluguel_id) => {
 
       console.log("entrou");

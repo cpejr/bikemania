@@ -18,6 +18,7 @@ const aluguelSchema = new mongoose.Schema({
   }  //tem ou nao tem
 
 
+
 }, { timestamps: true, static: false });
 const AluguelModel = mongoose.model('Aluguel', aluguelSchema);
 
@@ -105,7 +106,7 @@ class Aluguel {
   */
  static getByCpf(cpf) {
    return new Promise((resolve, reject) => {
-     AluguelModel.findByCpf(cpf).exec().then((result) => {
+   AluguelModel.findOne({cpf: cpf}).exec().then((result) => {
        resolve(result);
      }).catch((err) => {
        reject(err);
