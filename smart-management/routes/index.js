@@ -5,6 +5,7 @@ const auth = require('./middleware/auth');
 const mongo = require('../models/user');
 const Client = require('../models/client');
 const Aluguel = require('../models/aluguel');
+const Alugado = require('../models/alugado');
 // var dd= String(today.getDate()).pad.Start(2,'0');
 // var mm= String(today.getMonth()+ 1).pad.Start(2,'0');
 // var yyyy = today.getFullYear();
@@ -48,10 +49,36 @@ router.get('/relatoriodiario',auth.isAuthenticated,auth.isMaster, function(req, 
   var dd= String(today.getDate());
   var mm= String(today.getMonth()+1);
   var yyyy = today.getFullYear();
-  console.log("hhhhhhhhhhh");
-  console.log(reldia);
-  console.log("hhhhhhhhhhhh");
-  res.render('relatoriodiario', { title: 'Relatorio Diário', ...req.session, reldia, dd, mm, yyyy });
+  const reldia = [];
+  Alugado.getAll().then((alugados) => {
+
+  for(var i = 0; i < alugados.length; i++) {
+    const alugadim = {
+      id: String,
+      horarioretirada: String,
+      eq: String,
+      horario_chegada: String,
+      _cpf: Number,
+      localsaida: String,
+      acess: String
+    }
+
+
+    alugadim.id = alugados[i].id;
+    alugadim.horarioretirada = alugados[i].horarioretirada;
+    alugadim.eq= alugados[i].eq;
+    alugadim._cpf = alugados[i]._cpf;
+    alugadim.localsaida = alugados[i].localsaida;
+    alugadim.acess = alugados[i].acess;
+    reldia.push(alugadim);
+    console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+    console.log(reldia);
+    console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+console.log(reldia[0].localsaida);
+  res.render('relatoriodiario', { title: 'Relatorio Diário', ...req.session,reldia , dd, mm, yyyy });
+}
+});
+  
 });
 router.get('/relatoriomensal',auth.isAuthenticated, auth.isMaster, function(req, res, next) {
   res.render('relatoriomensal', { title: 'Relatorio Mensal', ...req.session });
@@ -197,18 +224,41 @@ var reldia = [];
 router.post('/encerrar/:locais_id', function(req, res, next) {
     const locais = req.params.locais_id;
     Aluguel.getById(locais).then((result) => {
-    reldia.push(result);
-    console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeey");
-    console.log(reldia);
-    console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeey");
+      console.log("ooooooooooooo");
+      console.log(result);
+      const alugados = {
+        id: String,
+        horarioretirada: String,
+        eq: String,
+        horariochegada: String,
+        _cpf: Number,
+        localsaida: String,
+        acess: String
+      }
+      alugados.horarioretirada = result.horario_retirada;
+      alugados.horariochegada= result.horario_chegada;
+      alugados.eq= result.equipamento;
+      alugados._cpf = result.cpf;
+      alugados.localsaida = result.local_saida;
+      alugados.acess = result.acessorio;
+      console.log("kkkkkkkkkkkk");
+      console.log(alugados);
+      Alugado.create(alugados).then((alugado_id) => {
+        console.log("eeeeeeeeeeeeeeeee");
+        console.log(alugado_id);
+      });
+    // reldia.push(result);
+    // console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeey");
+    // console.log(reldia);
+    // console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeey");
     });
 
     Aluguel.delete(locais);
     if(req.session.logado.type == "Master"){
-        res.render('acompmaster', { title: 'Acompanhamento Master', ...reldia });
+        res.redirect('/acompmaster');
   }
   else{
-      res.render('acompanhamento', { title: 'Acompanhamento', ...reldia});
+      res.redirect('/acompanhamento');
   }
             });
 
