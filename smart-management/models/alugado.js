@@ -99,6 +99,16 @@ class Alugado {
     });
   }
 
+  static getAllByMonth(mes,ano) {
+    return new Promise((resolve, reject) => {
+      AlugadoModel.find({ mes: mes, ano:ano }).then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
   /**
   * Delete a User
   * @param {string} id - User Id

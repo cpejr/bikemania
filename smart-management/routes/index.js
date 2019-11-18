@@ -101,20 +101,45 @@ console.log(precott);
 
 });
 
-//}
-
-//   else{
-//       Alugado.getAll().then((apagando) => {
-//         for(var i = 0; i < apagando.length; i++) {
-//           Alugado.delete(apagando[i]._id);
-//         }
-//       });
-//         res.render('relatoriodiario', { title: 'Relatorio Diário', ...req.session,reldia , dd, mm, yyyy });
-// }
 });
 
 
 router.get('/relatoriomensal',auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  var today = new Date();
+  var mm= String(today.getMonth()+1);
+  var yyyy = today.getFullYear();
+  const relmes = [];
+  Alugado.getAllByMonth(mm,yyyy).then((alugados) => {
+    for(var i = 0; i < alugados.length; i++) {
+    for(var j = 1; j < 32; j++){
+    Alugado.getAllByDay(j,mm,yyyy).then((alugadosdia) => {
+      for(var i = 0; i < alugadosdia.length; i++) {
+      const alugadim = {
+        id: String,
+        horarioretirada: String,
+        eq: String,
+        horario_chegada: String,
+        _cpf: Number,
+        localsaida: String,
+        acess: String,
+        tempo: Number,
+        preço: Number,
+        pagamento: String
+      }
+
+
+      alugadim.id = alugados[i].id;
+      alugadim.horarioretirada = alugados[i].horarioretirada;
+      alugadim.eq= alugados[i].eq;
+      alugadim._cpf = alugados[i]._cpf;
+      alugadim.localsaida = alugados[i].localsaida;
+      alugadim.acess = alugados[i].acess;
+      alugadim.preço = alugados[i].preço;
+      alugadim.tempo = alugados[i].tempo;
+      alugadim.pagamento = alugados[i].pagamento;
+      reldia.push(alugadim);
+    }
+
   res.render('relatoriomensal', { title: 'Relatorio Mensal', ...req.session });
 });
 router.post('/novoaluguel', function(req, res, next) {

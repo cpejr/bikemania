@@ -1,29 +1,33 @@
 <table class="table table-hover">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
+      <th scope="col">{{mm}}/{{yyyy}}</th>
+      <th scope="col">Tempo</th>
+      <th scope="col">Preço</th>
+      <th scope="col">Pagamento</th>
+
     </tr>
   </thead>
   <tbody>
+    {{#each reldia}}
     <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+      <th scope="row">{{quantidade}}</th>
+      <td>{{tempo}}</td>
+      <td>{{preço}}</td>
+      <td>{{pagamento}}</td>
+
     </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
-    </tr>
+    {{/each}}
+<tr>
+  <th scope="row"> {{reldia.length}}</th>
+  <td>--</td>
+  <td>--</td>
+  <td>--</td>
+  <td>{{tempott}}</td>
+  <td>{{precott}}</td>
+  <td>Cartão:{{cartao}} <br> Dinheiro:{{dinheiro}}</td>
+
+</tr>
+
   </tbody>
 </table>
