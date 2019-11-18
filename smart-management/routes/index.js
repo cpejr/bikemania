@@ -54,7 +54,8 @@ router.get('/relatoriodiario',auth.isAuthenticated,auth.isMaster, function(req, 
   const reldia = [];
   // if(yd == dd){
   Alugado.getAllByDay(dd,mm,yyyy).then((alugados) => {
-
+var cartao=0;
+var dinheiro=0;
   for(var i = 0; i < alugados.length; i++) {
     const alugadim = {
       id: String,
@@ -65,7 +66,8 @@ router.get('/relatoriodiario',auth.isAuthenticated,auth.isMaster, function(req, 
       localsaida: String,
       acess: String,
       tempo: Number,
-      preço: Number
+      preço: Number,
+      pagamento: String
     }
 
 
@@ -77,18 +79,25 @@ router.get('/relatoriodiario',auth.isAuthenticated,auth.isMaster, function(req, 
     alugadim.acess = alugados[i].acess;
     alugadim.preço = alugados[i].preço;
     alugadim.tempo = alugados[i].tempo;
+    alugadim.pagamento = alugados[i].pagamento;
     reldia.push(alugadim);
+    if(alugadim.pagamento == "Cartao"){
+      cartao++;
+    }
+    else{
+      dinheiro++;
+    }
     precott=precott+alugadim.preço;
     tempott=tempott+alugadim.tempo;
   }
     console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
     console.log(reldia);
     console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-    console.log(reldia[0].localsaida);
+    // console.log(reldia[0].localsaida);
     console.log("ooooooooooooooooooooooooo");
 
 console.log(precott);
-  res.render('relatoriodiario', { title: 'Relatorio Diário', ...req.session,reldia , dd, mm, yyyy, precott, tempott });
+  res.render('relatoriodiario', { title: 'Relatorio Diário', ...req.session,reldia , dd, mm, yyyy, precott, tempott, cartao, dinheiro });
 
 });
 

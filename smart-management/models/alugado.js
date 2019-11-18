@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const alugadoSchema = new mongoose.Schema({
+  pagamento: {
+    pagamento: String,
+    enum:['Cartao','Dinheiro']
+  },
   dia: Number,
   mes: Number,
   ano: Number,
