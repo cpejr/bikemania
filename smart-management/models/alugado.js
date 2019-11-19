@@ -101,11 +101,80 @@ class Alugado {
 
   static getAllByMonth(mes,ano) {
     return new Promise((resolve, reject) => {
-      AlugadoModel.find({ mes: mes, ano:ano }).then((result) => {
-        resolve(result);
-      }).catch((err) => {
-        reject(err);
-      });
+      var relmes = [];
+      var cartao=0;
+      var dinheiro=0;
+      var precott=0;
+      var tempott=0;
+      var quant = 0;
+      var dia = 0;
+        for(let m = 1; m < 32; m++){
+
+        Alugado.getAllByDay(m,mes,ano).then((alugados) => {
+      //    console.log(m);
+
+          for(var i = 0; i < alugados.length; i++) {
+
+          const alugadim = {
+            dia: Number,
+            tempo: Number,
+            preço: Number,
+            pagamento: String
+          }
+
+          alugadim.dia = alugados[i].dia;
+          alugadim.preço = alugados[i].preço;
+          alugadim.tempo = alugados[i].tempo;
+          alugadim.pagamento = alugados[i].pagamento;
+    //console.log(alugadim);
+          if(alugadim.pagamento == "Cartao"){
+            cartao++;
+          }
+          else{
+            dinheiro++;
+          }
+          precott=precott+alugadim.preço;
+          tempott=tempott+alugadim.tempo;
+
+
+        }
+        quant = alugados.length;
+
+      //  dia = alugadim.dia;
+      //  console.log(quant);
+
+      const dia = {
+        day: Number,
+        tempo: Number,
+        preço: Number,
+        cartao: Number,
+        quantidade: Number,
+        dinheiro: Number
+      }
+      dia.quantidade = quant;
+      dia.day = m;
+      dia.tempo = tempott;
+      dia.preço = precott;
+      dia.cartao = cartao;
+      dia.dinheiro = dinheiro;
+     //console.log(dia);
+    //  console.log(dia.day);
+    //  console.log(dia.preço);
+    //  console.log(dia.quantidade);
+      relmes.push(dia);
+      tempott = 0;
+      precott=0;
+      cartao=0;
+      dinheiro=0;
+     //console.log(relmes[j].quantidade);
+     //console.log(relmes);
+
+    });
+    }
+    console.log("kkkkkkkkkkkkkkkk");
+    console.log(relmes);
+        resolve(relmes);
+
     });
   }
 

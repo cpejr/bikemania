@@ -108,76 +108,14 @@ router.get('/relatoriomensal',auth.isAuthenticated, auth.isMaster, function(req,
   var today = new Date();
   var mm= String(today.getMonth()+1);
   var yyyy = today.getFullYear();
-  const relmes = [];
-  var cartao=0;
-  var dinheiro=0;
-  var precott=0;
-  var tempott=0;
-  var quant = 0;
-  var dia = 0;
-  var aux= 0 ;
+Alugado.getAllByMonth(mm,yyyy).then((result) => {
+  console.log("oooooooooo");
+  console.log(result);
+  res.render('relatoriomensal', { title: 'Relatorio Mensal', ...req.session, result, mm, yyyy });
 
-    for(var j = 0;j<31;j++){
-//console.log(j);
-    //  console.log(aux);
-    Alugado.getAllByDay(j,mm,yyyy).then((alugados) => {
 
-      for(var i = 0; i < alugados.length; i++) {
-      const alugadim = {
-
-        tempo: Number,
-        preço: Number,
-        pagamento: String
-      }
-      alugadim.dia = alugados[i].dia;
-      alugadim.preço = alugados[i].preço;
-      alugadim.tempo = alugados[i].tempo;
-      alugadim.pagamento = alugados[i].pagamento;
-
-      if(alugadim.pagamento == "Cartao"){
-        cartao++;
-      }
-      else{
-        dinheiro++;
-      }
-      precott=precott+alugadim.preço;
-      tempott=tempott+alugadim.tempo;
-
-    }
-    quant = alugados.length;
-  //  dia = alugadim.dia;
-  //  console.log(quant);
-
-  const dia = {
-    day: Number,
-    tempo: Number,
-    preço: Number,
-    cartao: Number,
-    quantidade: Number,
-    dinheiro: Number
-  }
-  dia.quantidade = quant;
-  dia.day = dia;
-  dia.tempo = tempott;
-  dia.preço = precott;
-  dia.cartao = cartao;
-  dia.dinheiro = dinheiro;
-//  console.log(dia.day);
-//  console.log(dia.preço);
-//  console.log(dia.quantidade);
-  relmes.push(dia);
-  tempott = 0;
-  precott=0;
-  cartao=0;
-  dinheiro=0;
- //console.log(relmes[j].quantidade);
 });
 
-}
-console.log("lllllllllllllll");
-console.log(relmes);
-
-  res.render('relatoriomensal', { title: 'Relatorio Mensal', ...req.session, relmes, mm, yyyy });
 });
 router.post('/novoaluguel', function(req, res, next) {
   const  aluguel  = req.body.aluguel;
