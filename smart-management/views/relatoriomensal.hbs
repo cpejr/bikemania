@@ -2,32 +2,28 @@
   <thead>
     <tr>
       <th scope="col">{{mm}}/{{yyyy}}</th>
+      <th scope="col">Quantidade</th>
       <th scope="col">Tempo</th>
       <th scope="col">Preço</th>
-      <th scope="col">Pagamento</th>
+      <th scope="col">Cartão</th>
+      <th scope="col">Dinheiro</th>
 
     </tr>
   </thead>
   <tbody>
-    {{#each reldia}}
+    {{#each relmes}}
     <tr>
-      <th scope="row">{{quantidade}}</th>
+      <th scope="row">{{day}}</th>
+      <td>{{quantidade}}</td>
       <td>{{tempo}}</td>
       <td>{{preço}}</td>
-      <td>{{pagamento}}</td>
+      <td>{{cartao}}</td>
+      <td>{{dinheiro}}</td>
+
 
     </tr>
     {{/each}}
-<tr>
-  <th scope="row"> {{reldia.length}}</th>
-  <td>--</td>
-  <td>--</td>
-  <td>--</td>
-  <td>{{tempott}}</td>
-  <td>{{precott}}</td>
-  <td>Cartão:{{cartao}} <br> Dinheiro:{{dinheiro}}</td>
 
-</tr>
 
   </tbody>
 </table>
