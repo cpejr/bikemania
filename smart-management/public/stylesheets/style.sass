@@ -1,4 +1,7 @@
 @import ../bootstrap/scss/bootstrap.scss
+@import ../bootstrap/scss/typeaheadjs.scss
+@import ../bootstrap/scss/social-media.scss
+@import ../fontawesome/css/all.css
 body
  padding: 50px
 a
@@ -183,3 +186,307 @@ td
   margin: 0px
   margin-top: 5%
   display: flex
+
+
+
+
+
+
+
+
+
+  // Daqui para baixo copiado do ponto
+$CPE-yellow: #EFDB30
+$CPE-black: #000000
+$CPE-gray: #020202
+$light-gray: #E5E7E9
+$light-gray-2: #CACCD1
+$light-green: #A9F183
+$light-green-2: #D0FDD1
+$light-red: #FF7D60
+$light-red-2: #FFAB98
+$light-yellow: #FEF24E
+$light-yellow-2: #FDFD96
+
+@font-face
+  font-family: 'open-sans-bold'
+  src: url("../fonts/openSans/OpenSans-Bold.ttf") format("opentype")
+
+@font-face
+  font-family: 'open-sans-light'
+  src: url("../fonts/openSans/OpenSans-Light.ttf") format("opentype")
+
+@font-face
+  font-family: 'open-sans-regular'
+  src: url("../fonts/openSans/OpenSans-Regular.ttf") format("opentype")
+
+body
+  font-family: 'open-sans-regular'
+
+.text-light-gray-2
+  color: $light-gray-2
+
+.text-CPE-black
+  color: $CPE-black
+
+.text-CPE-yellow
+  color: $CPE-yellow
+
+.bg-CPE-black
+  background-color: $CPE-black
+  padding-bottom: 0.04em
+
+.bg-light-green
+  background-color: $light-green
+
+.bg-light-green-2
+  background-color: $light-green-2
+
+.bg-light-red
+  background-color: $light-red
+
+.bg-light-red-2
+  background-color: $light-red-2
+
+.bg-light-yellow
+  background-color: $light-yellow
+
+.bg-light-yellow-2
+  background-color: $light-yellow-2
+
+.thead-CPE-black th
+  background-color: $CPE-black
+  color: #fff
+  border-color: #32383e
+
+.cursor-pointer
+  cursor: pointer
+
+.badge-CPE
+  background-color: #68A35F
+
+.full-screen
+  min-height: 91.5vh
+  left: 0
+  top: 0
+  background-color: #f5f5f5
+
+.CPE-alert
+  position: fixed
+  top: 10px
+  right: 10px
+  margin-left: 10px
+
+.vertical-center
+  display: flex
+  flex-wrap: wrap
+  align-items: center
+  justify-content: center
+  vertical-align: middle
+
+.vl
+  border-left: 0.1em solid $CPE-black
+
+.menu-logo
+  width: 10.59em
+  height: 3.65em
+
+.form-login
+  max-width: 30em
+  padding: 1em
+  margin: 0 auto
+
+.black-button
+  color: #FFF
+  background-color: $CPE-black
+  border-color: $CPE-gray
+  transition: ease all 0.6s
+
+.black-button:hover
+  color: $CPE-black
+  background-color: $CPE-yellow
+  border-color: $CPE-yellow
+
+.login-button-position
+  position: relative
+  top: 1.5em
+  right: 8em
+
+.user-input
+	position: relative
+
+.user-input .input-text:invalid
+	box-shadow: none !important
+
+.user-input .input-text:focus
+	border-color: black
+	border-width: 1px
+
+.user-input .floating-label
+	position: absolute
+	pointer-events: none
+	top: 0.4em
+	left: 0.4em
+	transition: 0.2s ease all
+
+.user-input input:focus ~ .floating-label,
+.user-input input:not(:focus):valid ~ .floating-label
+	top: -1.5em
+	left: 0.4em
+	font-size: 1em
+  opacity: 1
+
+.new-shadow
+	box-shadow: none !important
+
+.new-shadow:focus
+  border-color: black
+  border-width: medium medium 2px
+
+.user-input textarea:focus ~ .floating-label,
+.user-input textarea:not(:focus):valid ~ .floating-label
+	top: -1.5em
+	left: 0.4em
+	font-size: 1em
+  opacity: 1
+
+.wrapper
+  display: flex
+  align-items: stretch
+  perspective: 1500px
+
+#sidebar
+  min-width: 250px
+  max-width: 250px
+  min-height: 100vh
+  background: $CPE-black
+  color: $CPE-yellow
+  transition: all 0.6s cubic-bezier(0.945, 0.020, 0.270, 0.665)
+  transform-origin: center left
+  z-index: 15
+
+#sidebar.active
+  margin-left: -250px
+  transform: rotateY(100deg)
+
+a[data-toggle="collapse"]
+  position: relative
+
+.dropdown-toggle::after
+  display: block
+  position: absolute
+  top: 50%
+  right: 20px
+  transform: translateY(-50%)
+
+@media (max-width: 768px)
+  #sidebar
+    margin-left: -250px
+    transform: rotateY(100deg)
+
+  #sidebar.active
+    margin-left: 0
+    transform: none
+
+  #sidebarCollapse span:first-of-type,
+  #sidebarCollapse span:nth-of-type(2),
+  #sidebarCollapse span:last-of-type
+    transform: none
+    opacity: 1
+    margin: 5px auto
+
+  #sidebarCollapse.active span
+    margin: 0 auto
+
+  #sidebarCollapse.active span:first-of-type
+    transform: rotate(45deg) translate(0.095em, 0.095em)
+
+  #sidebarCollapse.active span:nth-of-type(2)
+    opacity: 0
+
+  #sidebarCollapse.active span:last-of-type
+    transform: rotate(-45deg) translate(0.095em, -0.095em)
+
+  .wrapper
+    height: 90vh
+
+@media (max-width: 576px)
+  .font-small
+    font-size: 3.25vmin
+
+a, a:hover, a:focus
+  color: inherit
+  text-decoration: none
+  transition: all 0.3s
+
+#sidebar .sidebar-header
+  padding: 20px
+  background: $CPE-black
+
+#sidebar ul.components
+  padding: 20px 0
+
+#sidebar ul li
+  border-bottom: 1px solid $CPE-yellow
+
+#sidebar ul p
+  color: #fff
+  padding: 10px
+
+#sidebar ul li a
+  padding: 10px
+  font-size: 1.1em
+  display: block
+
+#sidebar ul li a:hover
+  color: $CPE-black
+  background: $CPE-yellow
+
+#sidebar ul li.active > a, a[aria-expanded="true"]
+  color: $CPE-black
+  background: $CPE-yellow
+
+#sidebarCollapse
+  width: 40px
+  height: 40px
+  z-index: 20
+
+#sidebarCollapse span
+  width: 80%
+  height: 2px
+  margin: 0 auto
+  display: block
+  background: $CPE-yellow
+  transition: all 0.8s cubic-bezier(0.810, -0.330, 0.345, 1.375)
+
+@media (min-width: 769px)
+  #sidebarCollapse span:first-of-type
+    transform: rotate(45deg) translate(2px, 2px)
+
+  #sidebarCollapse span:nth-of-type(2)
+    opacity: 0
+
+  #sidebarCollapse span:last-of-type
+    transform: rotate(-45deg) translate(1px, -1px)
+
+  #sidebarCollapse.active span
+    transform: none
+    opacity: 1
+    margin: 5px auto
+
+ul ul a
+  font-size: 0.9em !important
+  padding-left: 30px !important
+  background: $CPE-yellow
+  color: $CPE-black
+
+#content
+  width: 100vw
+
+.navbar-btn
+  background: $CPE-black
+  border-color: $CPE-yellow
+  box-shadow: none !important
+
+.p-alert
+  margin-bottom: 0 !important

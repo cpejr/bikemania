@@ -1,52 +1,75 @@
-<nav class="navbar navbar-light bg-light" id="logobike">
-  <button class="botaovoltar" onclick="location.href='/home'"class="btn btn-primary" ><img src="/images/seta.png" widht="20px" height="50px"> </button>
-  <form action="/deslog" method="post">
-    <button class="novocliente" > Deslogar </button>
-  </form>
-  <button class="novocliente" onclick="location.href='/signup'"> Novo Cliente </button>
-</nav>
-
-<!-- <a class="unidade">Unidade: Matriz</a> -->
-<div class="row">
-<button class="btn btn-default" onclick="location.href='/novoaluguel'"> <i class="fa fa-plus-circle fa-5x" aria-hidden="true"></i> </button>
-{{#each teste}}
-  <button class="botaobike" onclick="myFunction()"class="btn btn-primary" data-toggle="modal" data-target="#stimulus">Cliente 1<img src="/images/agrvai.png" widht="20px" height="50px"> </button>
-  <div class="modal fade"  id="stimulus" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-       <div class="modal-content">
-         <div>
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-           <div class="fundo"></div>
-           <span aria-hidden="true">&times;</span>
-         </button>
-         </div>
-         <div class="modal-body">
-
-           <FONT size="5" face="Segoe UI Symbol" color="black" >
-                 {{_cpf}}<br>
-                 Preço:<br>
-                 Tempo:<br>
-                 Equipamento:
-                  </FONT>
-
-<div class="btn_popup">
-  <form action="/encerrar/{{id}}" method="post">
-   <div class="btntest col-4">
-     <button type="submit" class="btn_acomp_master" >Encerrar</button> </div>
-   </form>
-     <div class="btntest col-4">
-  <button type="submit" class="btn_acomp_master" >Alterar</button>
-</div>
- <form action="/cancelar/{{id}}" method="post">
-   <div class="btntest col-4" >
-      <button type="submit" class="btn_acomp_master" >Cancelar</button>
-     </div>
-    </form>
-  </div>
- </div>
-         </div>
+<main class="full-screen">
+  <article class="justify-content-center mx-0">
+    <div class="text-center bg-CPE-black">
+      <h3 class="text-CPE-yellow">Membros logados</h3>
     </div>
-  </div>
+  </article>
+  <article class="mt-3">
+    <section class="row col-12 d-block d-sm-flex justify-content-between mx-auto">
+      <div class="col-6 d-none d-sm-block">
+        <p>Pesquise por um aluguel:</p>
+        <input type="text" id="search" class="form-control" placeholder="Nome do membro">
+      </div>
+      <div class="text-center">
+        <form action="yellow-beach" method="post" id="yellow-beach-form">
+          <button type="button" id="yellow-beach-btn" class="btn black-button btn-lg mt-4">Novo Cliente</button>
+        </form>
+      </div>
+      <div class="text-center">
+        <button onclick="location.href = '/login'" class="btn black-button btn-lg mt-4">Deslogar</button>
+      </div>
+    </section>
+    <br>
+    <section class="container">
+      <table class="table table-responsive-sm">
+        <caption>Lista de membros logados</caption>
+        <thead class="thead-CPE-black">
+          <tr>
+            <th class="text-center">Nome</th>
+            <th colspan="6" class="text-center d-none d-lg-table-cell"></th>
+            <th class="text-center">Tempo</th>
+            <th class="text-center">Equipamento</th>
+            <th class="text-center">Preco</th>
+            <th class="text-center">Opcoes</th>
+          </tr>
+        </thead>
+        <tbody id="table">
+          {{#each teste}}
+          <tr>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{_cpf}}</td>
+            <td scope="row" class="text-center d-none d-lg-table-cell"></td>
+            <td scope="row" class="text-center d-none d-lg-table-cell"></td>
+            <td scope="row" class="text-center d-none d-lg-table-cell"></td>
+            <td scope="row" class="text-center d-none d-lg-table-cell"></td>
+            <td scope="row" class="text-center d-none d-lg-table-cell"></td>
+            <td scope="row" class="text-center d-none d-lg-table-cell"></td>
+            <td scope="row" class="text-center d-none">{{arriveISO}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold"></td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{eq}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold"></td>
+            <td scope="row" class="text-center">
+              <form action="/logout" method="POST">
+                <input type="hidden" name="user[name]" value="{{name}}">
+                <button class="btn text-white black-button" type="submit">Encerrar</button>
+              </form>
+              <form action="/logout" method="POST">
+                <input type="hidden" name="user[name]" value="{{name}}">
+                <button class="btn text-white black-button" type="submit">Cancelar</button>
+              </form>
+              <form action="/logout" method="POST">
+                <input type="hidden" name="user[name]" value="{{name}}">
+                <button class="btn text-white black-button" type="submit">Alterar</button>
+              </form>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </section>
+  </article>
+</main>
 
-{{/each}}
-</div>
+
+<script src="/javascripts/moment-with-locales.min.js"></script>
+<script src="/javascripts/search-table.js"></script>
+<script src="/javascripts/index.js"></script>

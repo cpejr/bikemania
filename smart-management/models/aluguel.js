@@ -104,15 +104,7 @@ class Aluguel {
   * @param {string} id - User Id
   * @returns {Object} - User Document Data
   */
- static getByCpf(cpf) {
-   return new Promise((resolve, reject) => {
-   AluguelModel.findOne({cpf: cpf}).exec().then((result) => {
-       resolve(result);
-     }).catch((err) => {
-       reject(err);
-     });
-   });
- }
+ 
 
 
   }
