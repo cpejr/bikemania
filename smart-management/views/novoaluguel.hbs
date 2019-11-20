@@ -47,18 +47,38 @@
            <div class="texto-centro">
              <label for="InputEquipamento" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Equipamento</FONT></label>
            </div>
-         <input type="text"  class="form-control" id="InputEquipamento"  placeholder="Equipamento" name="aluguel[equipamento]">
-      </div>
+         </div>
+           <div class="texto-centro">
 
+                <select id="productCode" class="drowdownoptions" name="aluguel[equipamento]" required = "required">
+                 <option value disabled selected> Tipo</option>
+                 <option value="Bicicleta aro 26">Bicicleta aro 26</option>
+                 <option value="Triciclo">Triciclo</option>
+                 <option value="Bicicleta Freeride">Bicicleta Freeride</option>
+                 <option value="Bicicleta Dupla">Bicicleta Dupla</option>
+                 <option value="Bicicleta comum">Bicicleta comum</option>
+                 <option value="Skate">Skate</option>
+                 <option value="Patinete">Patinete</option>
+                 <option value="Patins">Patins</option>
+                 <option value="Carrinho de rolimã">Carrinho de rolimã</option>
+                 <option value="Bicicleta Tripla">Bicicleta Tripla</option>
+                 <option value="Bicicleta com marcha aro 29">Bicicleta com marcha aro 29</option>
+                 <option value="Bicicleta Triciclo Família">Bicicleta Triciclo Família</option>
+                 <option value="Bicicleta Chopper">Bicicleta Chopper</option>
+                 <option value="MycoSep Trich">Triciclo trenzinho</option>
+                 <option>Outro</option>
+                </select>
+          </div>
        </div>
+
        <div class="form-group form-check">
            <input type="radio" class="form-check-input"  id="exampleCheck1" value="1" name="aluguel[acessorio]" >
            <label class="form-check-label"  for="exampleCheck1"><FONT size="3" face="Swis721 LtEx BT" color="black" > Com Acessório</FONT></label>
          </div>
-         <div class="form-group form-check">
-             <input type="radio" class="form-check-input"  id="exampleCheck1" value="0" name="aluguel[acessorio]" >
-             <label class="form-check-label"  for="exampleCheck1"><FONT size="3" face="Swis721 LtEx BT" color="black" >Sem Acessório</FONT></label>
-           </div>
+       <div class="form-group form-check">
+           <input type="radio" class="form-check-input"  id="exampleCheck1" value="0" name="aluguel[acessorio]" >
+           <label class="form-check-label"  for="exampleCheck1"><FONT size="3" face="Swis721 LtEx BT" color="black" >Sem Acessório</FONT></label>
+         </div>
 
        <br>
           <div class="texto-centro">

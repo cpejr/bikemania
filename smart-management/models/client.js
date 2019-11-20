@@ -82,7 +82,7 @@ class Client {
 
   static delete(id) {
     return new Promise((resolve, reject) => {
-      AluguelModel.findOneAndDelete({_id: id}).then(() => {
+      ClientModel.findOneAndDelete({_id: id}).then(() => {
         resolve();
       }).catch((err) => {
         reject(err);
@@ -90,6 +90,15 @@ class Client {
    });
  }
 
+ static getByCpf(cpf) {
+   return new Promise((resolve, reject) => {
+   ClientModel.findOne({cpf: cpf}).exec().then((result) => {
+       resolve(result);
+     }).catch((err) => {
+       reject(err);
+     });
+   });
+ }
 
   }
   module.exports = Client;

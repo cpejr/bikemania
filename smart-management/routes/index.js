@@ -18,6 +18,9 @@ const Alugado = require('../models/alugado');
 router.get('/home',auth.isAuthenticated, function(req, res, next) {
     res.render('home', { title: 'Home' , ...req.session});
 });
+router.get('/login2', function(req, res, next) {
+  res.render('acmpteste', { title: 'Login' });
+});
 router.get('/signup',auth.isAuthenticated, function(req, res, next) {
   res.render('signup', { title: 'Cadastro' });
 });
@@ -121,20 +124,37 @@ router.post('/novoaluguel', function(req, res, next) {
   const  aluguel  = req.body.aluguel;
   aluguel.local_saida=req.session.unidade;
 
+  var nome  ;
+
+console.log(nome);
+
     Aluguel.create(aluguel).then((aluguel_id) => {
 
       console.log("entrou");
       console.log(aluguel_id);
+      console.log("-------------------------------------------------------------");
       console.log(aluguel);
+
     }).catch((error) => {
       console.log(error);
       res.redirect('error');
     });
+    Client.getByCpf(aluguel.cpf).then((client) => {
+      aluguel.client = client;
+      console.log("entrouprimeirosgdh");
+
+      console.log(client.name);
+      nome= client.name;
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('error');
+    });
+
     if(req.session.logado.type=='Master'){
-      res.redirect('/acompmaster');
+      res.render('acompmaster', { title: 'master' , ...nome});
     }
   else{
-    res.redirect('/acompanhamento')
+    res.render('acompanhamento', { title: 'normal' , ...nome});
   }
 });
 
