@@ -7,7 +7,7 @@
       <th scope="col">Equipamento</th>
       <th scope="col">Tempo</th>
       <th scope="col">Preço</th>
-
+      <th scope="col">Pagamento</th>
     </tr>
   </thead>
   <tbody>
@@ -15,11 +15,24 @@
     <tr>
       <th scope="row">1</th>
       <td>oi</td>
-      <td>{{local_saida}}</td>
-      <td>{{equipamento}}</td>
+      <td>{{localsaida}}</td>
+      <td>{{eq}}</td>
+      <td>{{tempo}}</td>
+      <td>{{preço}}</td>
+      <td>{{pagamento}}</td>
 
     </tr>
     {{/each}}
-  
+<tr>
+  <th scope="row"> {{reldia.length}}</th>
+  <td>--</td>
+  <td>--</td>
+  <td>--</td>
+  <td>{{tempott}}</td>
+  <td>{{precott}}</td>
+  <td>Cartão:{{cartao}} <br> Dinheiro:{{dinheiro}}</td>
+
+</tr>
+
   </tbody>
 </table>
