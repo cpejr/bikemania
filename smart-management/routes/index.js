@@ -118,6 +118,7 @@ Alugado.getAllByMonth(mm,yyyy).then((result) => {
 
 
 });
+router
 
 });
 router.post('/novoaluguel', function(req, res, next) {
@@ -276,6 +277,13 @@ Aluguel.delete(locais);
 res.redirect(`/acompmaster`);
          });
 var reldia = [];
+router.get('/pagamento/:aluguelid' , function(req, res, next){
+    const aluguel = req.params.aluguelid;
+Aluguel.getById(aluguel).then((result) => {
+
+      res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
+});
+});
 router.post('/encerrar/:locais_id', function(req, res, next) {
     const locais = req.params.locais_id;
     Aluguel.getById(locais).then((result) => {
@@ -324,12 +332,12 @@ router.post('/encerrar/:locais_id', function(req, res, next) {
     });
 
     Aluguel.delete(locais);
-    if(req.session.logado.type == "Master"){
-        res.redirect('/acompmaster');
-  }
-  else{
-      res.redirect('/acompanhamento');
-  }
+if(req.session.logado.type == "Master"){
+  res.redirect('/acompmaster');
+}
+else{
+  res.redirect('/acompanhamento');
+}
             });
 
 router.post('/acompvila', function(req, res, next) {

@@ -48,8 +48,7 @@
             <td scope="row" class="text-center align-middle font-weight-bold">{{eq}}</td>
             <td scope="row" class="text-center align-middle font-weight-bold"></td>
             <td scope="row" class="text-center">
-              <form action="/logout" method="POST">
-                <input type="hidden" name="user[name]" value="{{name}}">
+                <form action="/pagamento/{{id}}" method="get">
                 <button class="btn text-white black-button" type="submit">Encerrar</button>
               </form>
               <form action="/logout" method="POST">
@@ -73,4 +72,3 @@
 <script src="/javascripts/moment-with-locales.min.js"></script>
 <script src="/javascripts/search-table.js"></script>
 <script src="/javascripts/index.js"></script>
-
