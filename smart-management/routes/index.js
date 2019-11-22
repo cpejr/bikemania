@@ -111,16 +111,27 @@ router.get('/relatoriomensal',auth.isAuthenticated, auth.isMaster, function(req,
   var today = new Date();
   var mm= String(today.getMonth()+1);
   var yyyy = today.getFullYear();
+  var quanttt=0;
+  var tempottm=0;
+  var precottm=0;
+  var dimtt=0;
+  var cartt=0;
 Alugado.getAllByMonth(mm,yyyy).then((result) => {
   console.log("oooooooooo");
   console.log(result);
-  res.render('relatoriomensal', { title: 'Relatorio Mensal', ...req.session, result, mm, yyyy });
+  for(var i=0;i<result.length;i++){
+  quanttt = quanttt + result[i].quantidade;
+    tempottm = tempottm + result[i].tempo;
+    precottm = precottm + result[i].preço;
+  dimtt =  dimtt + result[i].dinheiro;
+  cartt = cartt + result[i].cartao;
+  }
+  res.render('relatoriomensal', { title: 'Relatorio Mensal', ...req.session, result, mm, yyyy, quanttt, tempottm, dimtt, cartt });
 
 
 });
-router
-
 });
+
 router.post('/novoaluguel', function(req, res, next) {
   const  aluguel  = req.body.aluguel;
   aluguel.local_saida=req.session.unidade;
