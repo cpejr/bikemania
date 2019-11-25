@@ -8512,6 +8512,16 @@ td {
   color: "black";
   justify-content: flex-end; }
 
+.pagamento {
+  font-family: "Swis721 LtEx BT";
+  font-size: 18px;
+  color: "black"; }
+
+.pagamentotitulo {
+  font-family: "Segoe UI Symbol";
+  font-size: 30px;
+  color: #3CB1FE; }
+
 .botaovoltar {
   font-family: "Swis721 LtEx BT";
   font-size: 18px;
@@ -8541,6 +8551,16 @@ td {
   justify-content: flex-end;
   margin-top: 2%;
   font-size: 90%; }
+
+.btn_encerrar {
+  font: "Swis721 LtEx BT";
+  color: "black";
+  background-color: #3CB1FE;
+  border-radius: 5px;
+  justify-content: flex-end;
+  font-size: 90%;
+  align-items: center  !important;
+  border: 10px; }
 
 .btn_popup {
   margin: 0px;
