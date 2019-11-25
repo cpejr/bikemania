@@ -4,6 +4,14 @@
 <h3 class="text-CPE-yellow">TEMPO: {{result.tempo}}</h3>
 
 <form action="/encerrar/{{aluguel}}" method="post">
+  <div class="form-group form-check">
+      <input type="radio" class="form-check-input"  id="exampleCheck1" value="Cartao" name="alugado[pagamento]" >
+      <label class="form-check-label"  for="exampleCheck1"><FONT size="3" face="Swis721 LtEx BT" color="black" > Cartão</FONT></label>
+    </div>
+  <div class="form-group form-check">
+      <input type="radio" class="form-check-input"  id="exampleCheck1" value="Dinheiro" name="alugado[pagamento]" >
+      <label class="form-check-label"  for="exampleCheck1"><FONT size="3" face="Swis721 LtEx BT" color="black" >Dinheiro</FONT></label>
+    </div>
  <div class="btntest col-4">
    <button type="submit" class="btn_acomp_master" >Encerrar</button> </div>
  </form>

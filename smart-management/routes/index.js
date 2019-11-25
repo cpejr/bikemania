@@ -70,10 +70,11 @@ var dinheiro=0;
       acess: String,
       tempo: Number,
       preço: Number,
-      pagamento: String
+      pagamento: String,
+      nome: String
     }
 
-
+    alugadim.nome = alugados[i].nome;
     alugadim.id = alugados[i].id;
     alugadim.horarioretirada = alugados[i].horarioretirada;
     alugadim.eq= alugados[i].eq;
@@ -126,7 +127,9 @@ Alugado.getAllByMonth(mm,yyyy).then((result) => {
   dimtt =  dimtt + result[i].dinheiro;
   cartt = cartt + result[i].cartao;
   }
-  res.render('relatoriomensal', { title: 'Relatorio Mensal', ...req.session, result, mm, yyyy, quanttt, tempottm, dimtt, cartt });
+  console.log("kkkkkkkkkkk");
+  console.log(precottm);
+  res.render('relatoriomensal', { title: 'Relatorio Mensal', ...req.session, result, mm, yyyy, quanttt, tempottm, dimtt, cartt, precottm });
 
 
 });
@@ -139,34 +142,35 @@ router.post('/novoaluguel', function(req, res, next) {
   var nome  ;
 
 console.log(nome);
+Client.getByCpf(aluguel.cpf).then((client) => {
+  // aluguel.client = client;
+  // console.log("entrouprimeirosgdh");
+  aluguel.nome = client.name;
+  Aluguel.create(aluguel).then((aluguel_id) => {
 
-    Aluguel.create(aluguel).then((aluguel_id) => {
+    console.log("entrou");
+    console.log(aluguel_id);
+    console.log("-------------------------------------------------------------");
+    console.log(aluguel);
 
-      console.log("entrou");
-      console.log(aluguel_id);
-      console.log("-------------------------------------------------------------");
-      console.log(aluguel);
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('error');
+  });
+}).catch((error) => {
+  console.log(error);
+  res.redirect('error');
+});
 
-    }).catch((error) => {
-      console.log(error);
-      res.redirect('error');
-    });
-    Client.getByCpf(aluguel.cpf).then((client) => {
-      aluguel.client = client;
-      console.log("entrouprimeirosgdh");
 
-      console.log(client.name);
-      nome= client.name;
-    }).catch((error) => {
-      console.log(error);
-      res.redirect('error');
-    });
 
     if(req.session.logado.type=='Master'){
-      res.render('acompmaster', { title: 'master' , ...nome});
+      res.redirect('/acompmaster');
+  //    res.render('acompmaster', { title: 'master' , ...nome});
     }
   else{
-    res.render('acompanhamento', { title: 'normal' , ...nome});
+    res.redirect('/acompanhamento');
+    //res.render('acompanhamento', { title: 'normal' , ...nome});
   }
 });
 
@@ -207,10 +211,12 @@ router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
       horario_chegada: String,
       _cpf: Number,
       localsaida: String,
-      acess: String
+      acess: String,
+      nome: String
     }
 
     if(alugueis[i].local_saida == logado){
+    locaisInfo.nome = alugueis[i].nome;
     locaisInfo.id = alugueis[i]._id;
     locaisInfo.horarioretirada = alugueis[i].horario_retirada;
     locaisInfo.eq= alugueis[i].equipamento;
@@ -242,10 +248,12 @@ router.get('/acompmaster', auth.isAuthenticated, function(req, res, next) {
       horario_chegada: String,
       _cpf: Number,
       localsaida: String,
-      acess: String
+      acess: String,
+      nome: String
     }
 
     if(alugueis[i].local_saida == logado){
+    locaisInfo.nome = alugueis[i].nome;
     locaisInfo.id = alugueis[i]._id;
     locaisInfo.horarioretirada = alugueis[i].horario_retirada;
     locaisInfo.eq= alugueis[i].equipamento;
@@ -297,6 +305,9 @@ Aluguel.getById(aluguel).then((result) => {
 });
 router.post('/encerrar/:locais_id', function(req, res, next) {
     const locais = req.params.locais_id;
+    const  alugado  = req.body.alugado;
+    console.log("rrrrrrrrrrrr");
+console.log(alugado);
     Aluguel.getById(locais).then((result) => {
       console.log("ooooooooooooo");
       console.log(result);
@@ -312,13 +323,17 @@ router.post('/encerrar/:locais_id', function(req, res, next) {
         preço: Number,
         dia: Number,
         mes: Number,
-        ano: Number
+        ano: Number,
+        nome: String,
+        pagamento: String
 
       }
+
         var today = new Date();
       var dd= String(today.getDate());
       var mm= String(today.getMonth()+1);
       var yyyy = today.getFullYear();
+      alugados.pagamento = req.body.alugado.pagamento;
       alugados.horarioretirada = result.horario_retirada;
       alugados.horariochegada= result.horario_chegada;
       alugados.eq= result.equipamento;
@@ -327,6 +342,7 @@ router.post('/encerrar/:locais_id', function(req, res, next) {
       alugados.acess = result.acessorio;
       alugados.preço = result.preço;
       alugados.tempo = result.tempo;
+      alugados.nome = result.nome;
       alugados.dia = dd;
       alugados.mes = mm;
       alugados.ano = yyyy;

@@ -1,10 +1,7 @@
 const mongoose = require('mongoose');
 
 const alugadoSchema = new mongoose.Schema({
-  pagamento: {
-    pagamento: String,
-    enum:['Cartao','Dinheiro']
-  },
+  pagamento: String,
   dia: Number,
   mes: Number,
   ano: Number,
@@ -12,6 +9,7 @@ const alugadoSchema = new mongoose.Schema({
   preço: Number,
   horarioretirada: String,
   eq: String,
+  nome: String,
   horariochegada: String,
   /*horario_chegada:{
     hora:Number,
