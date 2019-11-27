@@ -272,7 +272,7 @@ router.get('/acompmaster', auth.isAuthenticated, function(req, res, next) {
 router.post('/acompmirante', function(req, res, next) {
    req.session.unidade="Mirante";
    console.log(req.session.unidade);
-   if(req.session.logado == "Master"){
+   if(req.session.logado.type == "Master"){
        res.redirect(`/acompmaster`);
      }
      else{
@@ -370,7 +370,12 @@ else{
 router.post('/acompvila', function(req, res, next) {
   req.session.unidade="Vila";
   console.log(req.session.unidade);
-  res.redirect(`/acompanhamento`);
+  if(req.session.logado.type == "Master"){
+      res.redirect(`/acompmaster`);
+    }
+    else{
+      res.redirect(`/acompanhamento`);
+    }
           });
 router.post('/voltar', function(req, res, next) {
     if(req.session.logado.type == "Master"){
