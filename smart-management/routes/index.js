@@ -3,9 +3,15 @@ var router = express.Router();
 var firebase = require('firebase');
 const auth = require('./middleware/auth');
 const mongo = require('../models/user');
+// var datetime = require('node-datetime');
+const { DateTime } = require('luxon');
+const { Interval } = require('luxon');
 const Client = require('../models/client');
 const Aluguel = require('../models/aluguel');
 const Alugado = require('../models/alugado');
+const Preco = require('../models/preco');
+
+// var Timer  = require('lib/easytimer/dist/easytimer.min.js');
 // var dd= String(today.getDate()).pad.Start(2,'0');
 // var mm= String(today.getMonth()+ 1).pad.Start(2,'0');
 // var yyyy = today.getFullYear();
@@ -138,9 +144,10 @@ Alugado.getAllByMonth(mm,yyyy).then((result) => {
 router.post('/novoaluguel', function(req, res, next) {
   const  aluguel  = req.body.aluguel;
   aluguel.local_saida=req.session.unidade;
-
   var nome  ;
-
+  var saida= DateTime.local();
+ aluguel.horario_retirada = saida;
+ console.log(aluguel.horario_retirada);
 console.log(nome);
 Client.getByCpf(aluguel.cpf).then((client) => {
   // aluguel.client = client;
@@ -200,6 +207,8 @@ router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
   const teste = [];
   var logado = req.session.unidade;
   var nome = new Array;
+  // var now= DateTime.local();
+
   Aluguel.getAll().then((alugueis) => {
     var j=0;
 
@@ -223,6 +232,8 @@ router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
     locaisInfo._cpf = alugueis[i].cpf;
     locaisInfo.localsaida = alugueis[i].local_saida;
     locaisInfo.acess = alugueis[i].acessorio;
+    // locaisInfo.tempo = Interval.fromDateTimes(now, alugueis[i].horario_retirada);
+    // console.log(locaisInfo.tempo);
     teste.push(locaisInfo);
   }
 
