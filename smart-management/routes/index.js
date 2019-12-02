@@ -6,6 +6,7 @@ const mongo = require('../models/user');
 const Client = require('../models/client');
 const Aluguel = require('../models/aluguel');
 const Alugado = require('../models/alugado');
+const Preco = require('../models/preco');
 // var dd= String(today.getDate()).pad.Start(2,'0');
 // var mm= String(today.getMonth()+ 1).pad.Start(2,'0');
 // var yyyy = today.getFullYear();

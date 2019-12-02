@@ -3,16 +3,17 @@ const mongoose = require('mongoose');
 const precoSchema = new mongoose.Schema({
 
   nome: String,
-  preco: Number,
-  
+  preco: Number
 
 }, { timestamps: true, static: false });
+
+
 const PrecoModel = mongoose.model('Preco', precoSchema);
 
 class Preco {
   /**
-   * Get all Users from database
-   * @returns {Array} Array of Users
+   * Get all Precos from database
+   * @returns {Array} Array of Precos
    */
   static getAll() {
     return new Promise((resolve, reject) => {
@@ -25,9 +26,9 @@ class Preco {
   }
 
   /**
-   * Get a User by it's id
-   * @param {string} id - User Id
-   * @returns {Object} - User Document Data
+   * Get a Preco by it's id
+   * @param {string} id - Preco Id
+   * @returns {Object} - Preco Document Data
    */
   static getById(id) {
     return new Promise((resolve, reject) => {
@@ -40,13 +41,13 @@ class Preco {
   }
 
   /**
-   * Create a new User
-   * @param {Object} client - User Document Data
-   * @returns {string} - New User Id
+   * Create a new Preco
+   * @param {Object} Preco - Preco Document Data
+   * @returns {string} - New Preco Id
    */
-  static create(client) {
+  static create(Preco) {
     return new Promise((resolve, reject) => {
-      PrecoModel.create(client).then((result) => {
+      PrecoModel.create(Preco).then((result) => {
         resolve(result._id);
       }).catch((err) => {
         reject(err);
@@ -55,14 +56,14 @@ class Preco {
   }
 
   /**
-   * Update a User
-   * @param {string} id - User Id
-   * @param {Object} Client - User Document Data
+   * Update a Preco
+   * @param {string} id - Preco Id
+   * @param {Object} Preco - Preco Document Data
    * @returns {null}
    */
-  static update(id, user) {
+  static update(id, Preco) {
     return new Promise((resolve, reject) => {
-      PrecoModel.findByIdAndUpdate(id, client).then(() => {
+      PrecoModel.findByIdAndUpdate(id, Preco).then(() => {
         resolve();
       }).catch((err) => {
         reject(err);
@@ -71,8 +72,8 @@ class Preco {
   }
 
   /**
-  * Delete a User
-  * @param {string} id - User Id
+  * Delete a Preco
+  * @param {string} id - Preco Id
   * @returns {null}
   */
 
@@ -86,4 +87,23 @@ class Preco {
    });
  }
 
- module.exports = Preco;
+  /**
+   * Get a Preco by it's uid
+   * @param {string} id - Preco Uid
+   * @returns {Object} - Preco Document Data
+   */
+  static getByUid(id) {
+    return new Promise((resolve, reject) => {
+      PrecoModel.findOne({ uid: id }).exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+
+  }
+
+
+module.exports = Preco;
