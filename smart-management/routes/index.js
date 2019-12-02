@@ -7,6 +7,8 @@ const Client = require('../models/client');
 const Aluguel = require('../models/aluguel');
 const Alugado = require('../models/alugado');
 const Preco = require('../models/preco');
+
+// var Timer  = require('lib/easytimer/dist/easytimer.min.js');
 // var dd= String(today.getDate()).pad.Start(2,'0');
 // var mm= String(today.getMonth()+ 1).pad.Start(2,'0');
 // var yyyy = today.getFullYear();
@@ -139,9 +141,10 @@ Alugado.getAllByMonth(mm,yyyy).then((result) => {
 router.post('/novoaluguel', function(req, res, next) {
   const  aluguel  = req.body.aluguel;
   aluguel.local_saida=req.session.unidade;
-
   var nome  ;
-
+  // var saida= DateTime.local();
+  // aluguel.horario_retirada = saida;
+  // console.log(aluguel.horario_retirada);
 console.log(nome);
 Client.getByCpf(aluguel.cpf).then((client) => {
   // aluguel.client = client;
