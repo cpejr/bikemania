@@ -8367,6 +8367,11 @@ a {
 .texto-centro {
   text-align: center; }
 
+.texto-central {
+  background-position: center !important;
+  text-align: center;
+  position: center; }
+
 .box {
   width: 30%;
   left: 50%;
@@ -8656,6 +8661,8 @@ body {
   align-items: center;
   justify-content: center;
   vertical-align: middle; }
+  .vertical-center .alinha {
+    display: flex; }
 
 .vl {
   border-left: 0.1em solid #000000; }
