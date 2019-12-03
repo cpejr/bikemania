@@ -8687,6 +8687,18 @@ body {
   background-color: #EFDB30;
   border-color: #EFDB30; }
 
+.orange-button {
+  color: #FFF;
+  background-color: #fd7e14;
+  border-color: #020202;
+  transition: ease all 0.6s; }
+
+.orange-button:hover {
+  color: #FFF;
+  background-color: #007bff;
+  border-color: #020202; }
+
+
 .login-button-position {
   position: relative;
   top: 1.5em;
