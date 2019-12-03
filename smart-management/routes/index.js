@@ -207,7 +207,7 @@ router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
   const teste = [];
   var logado = req.session.unidade;
   var nome = new Array;
-  // var now= DateTime.local();
+   // var now= DateTime.local();
 
   Aluguel.getAll().then((alugueis) => {
     var j=0;
@@ -232,8 +232,25 @@ router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
     locaisInfo._cpf = alugueis[i].cpf;
     locaisInfo.localsaida = alugueis[i].local_saida;
     locaisInfo.acess = alugueis[i].acessorio;
-    // locaisInfo.tempo = Interval.fromDateTimes(now, alugueis[i].horario_retirada);
-    // console.log(locaisInfo.tempo);
+    var now= DateTime.local();
+  console.log("kkkkkkkkkkkkkkkkkkkkkkkkk");
+console.log(now);
+console.log("wwwwwwwwwwwwwwwwwwww");
+var string = alugueis[i].horario_retirada;
+var resultado1 = string.substring(0,10);
+// var resultado2 = string.substring()
+var ola = new Date(string);
+console.log(ola);
+console.log(resultado1);
+console.log("lllllllllll");
+// var intervalo=Interval.fromDateTimes(ola, now);
+
+// locaisInfo.tempo = intervalo.toString();
+let minutes =  0;
+  minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
+  console.log(minutes);
+  locaisInfo.tempo = minutes;
+   console.log(locaisInfo.tempo);
     teste.push(locaisInfo);
   }
 
