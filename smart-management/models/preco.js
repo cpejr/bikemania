@@ -25,6 +25,16 @@ class Preco {
     });
   }
 
+  static getByEq(nome) {
+    return new Promise((resolve, reject) => {
+    PrecoModel.findOne({nome: nome}).exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
   /**
    * Get a Preco by it's id
    * @param {string} id - Preco Id
