@@ -353,6 +353,7 @@ router.post('/acompmatriz', function(req, res, next) {
         var ola = new Date(string);
         // console.log(ola);
         // console.log(resultado1);
+        result.horario_chegada = now;
         let minutes =  0;
          minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
          result.tempo = minutes;
