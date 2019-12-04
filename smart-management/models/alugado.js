@@ -6,7 +6,7 @@ const alugadoSchema = new mongoose.Schema({
   mes: Number,
   ano: Number,
   tempo: Number,
-  preço: Number,
+  preco: Number,
   horarioretirada: String,
   eq: String,
   nome: String,

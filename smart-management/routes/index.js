@@ -75,7 +75,7 @@ var dinheiro=0;
       localsaida: String,
       acess: String,
       tempo: Number,
-      preço: Number,
+      preco: Number,
       pagamento: String,
       nome: String
     }
@@ -87,7 +87,7 @@ var dinheiro=0;
     alugadim._cpf = alugados[i]._cpf;
     alugadim.localsaida = alugados[i].localsaida;
     alugadim.acess = alugados[i].acess;
-    alugadim.preço = alugados[i].preço;
+    alugadim.preco = alugados[i].preco;
     alugadim.tempo = alugados[i].tempo;
     alugadim.pagamento = alugados[i].pagamento;
     reldia.push(alugadim);
@@ -97,7 +97,7 @@ var dinheiro=0;
     else{
       dinheiro++;
     }
-    precott=precott+alugadim.preço;
+    precott=precott+alugadim.preco;
     tempott=tempott+alugadim.tempo;
   }
     console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
@@ -129,7 +129,7 @@ Alugado.getAllByMonth(mm,yyyy).then((result) => {
   for(var i=0;i<result.length;i++){
   quanttt = quanttt + result[i].quantidade;
     tempottm = tempottm + result[i].tempo;
-    precottm = precottm + result[i].preço;
+    precottm = precottm + result[i].preco;
   dimtt =  dimtt + result[i].dinheiro;
   cartt = cartt + result[i].cartao;
   }
@@ -221,7 +221,8 @@ router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
       _cpf: Number,
       localsaida: String,
       acess: String,
-      nome: String
+      nome: String,
+      preco: Number
     }
 
     if(alugueis[i].local_saida == logado){
@@ -244,13 +245,13 @@ console.log(ola);
 
 // var intervalo=Interval.fromDateTimes(ola, now);
 
-// locaisInfo.tempo = intervalo.toString();
 let minutes =  0;
   minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
   console.log(minutes);
   locaisInfo.tempo = minutes;
    console.log(locaisInfo.tempo);
     teste.push(locaisInfo);
+
   }
 
   }
@@ -357,9 +358,22 @@ router.post('/acompmatriz', function(req, res, next) {
         let minutes =  0;
          minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
          result.tempo = minutes;
-        Aluguel.update(aluguel,result);
-          res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
-    });
+         console.log("rrrrrrrrrrrrrrrrrrrr");
+         console.log(result.equipamento);
+         Preco.getByEq(result.equipamento).then((res) => {
+            result.preco = (result.tempo/60) *res.preco;
+            Aluguel.update(aluguel,result);
+
+          }).catch((error)=>{
+            console.log(error);
+            res.redirect('/error')
+            });
+            console.log(result);
+            res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
+          }).catch((error)=>{
+            console.log(error);
+            res.redirect('/error')
+            });
 });
 router.post('/encerrar/:locais_id', function(req, res, next) {
     const locais = req.params.locais_id;
@@ -378,7 +392,7 @@ console.log(alugado);
         localsaida: String,
         acess: String,
         tempo: Number,
-        preço: Number,
+        preco: Number,
         dia: Number,
         mes: Number,
         ano: Number,
@@ -398,7 +412,7 @@ console.log(alugado);
       alugados._cpf = result.cpf;
       alugados.localsaida = result.local_saida;
       alugados.acess = result.acessorio;
-      alugados.preço = result.preço;
+      alugados.preco = result.preco;
       alugados.tempo = result.tempo;
       alugados.nome = result.nome;
       alugados.dia = dd;
