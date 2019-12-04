@@ -237,12 +237,11 @@ router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
 console.log(now);
 console.log("wwwwwwwwwwwwwwwwwwww");
 var string = alugueis[i].horario_retirada;
-var resultado1 = string.substring(0,10);
+
 // var resultado2 = string.substring()
 var ola = new Date(string);
 console.log(ola);
-console.log(resultado1);
-console.log("lllllllllll");
+
 // var intervalo=Interval.fromDateTimes(ola, now);
 
 // locaisInfo.tempo = intervalo.toString();
@@ -288,6 +287,24 @@ router.get('/acompmaster', auth.isAuthenticated, function(req, res, next) {
     locaisInfo._cpf = alugueis[i].cpf;
     locaisInfo.localsaida = alugueis[i].local_saida;
     locaisInfo.acess = alugueis[i].acessorio;
+    var now= DateTime.local();
+  console.log("kkkkkkkkkkkkkkkkkkkkkkkkk");
+console.log(now);
+console.log("wwwwwwwwwwwwwwwwwwww");
+var string = alugueis[i].horario_retirada;
+
+// var resultado2 = string.substring()
+var ola = new Date(string);
+console.log(ola);
+
+// var intervalo=Interval.fromDateTimes(ola, now);
+
+// locaisInfo.tempo = intervalo.toString();
+let minutes =  0;
+  minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
+  console.log(minutes);
+  locaisInfo.tempo = minutes;
+   console.log(locaisInfo.tempo);
     teste.push(locaisInfo);
   }
 
@@ -319,17 +336,29 @@ router.post('/acompmatriz', function(req, res, next) {
          });
 
  router.post('/cancelar/:locais_id', function(req, res, next) {
-const locais = req.params.locais_id;
-Aluguel.delete(locais);
-res.redirect(`/acompmaster`);
-         });
-var reldia = [];
-router.get('/pagamento/:aluguelid' , function(req, res, next){
-    const aluguel = req.params.aluguelid;
-Aluguel.getById(aluguel).then((result) => {
+    const locais = req.params.locais_id;
+    Aluguel.delete(locais);
+    res.redirect(`/acompmaster`);
+             });
+    var reldia = [];
+    router.get('/pagamento/:aluguelid' , function(req, res, next){
+        const aluguel = req.params.aluguelid;
 
-      res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
-});
+        Aluguel.getById(aluguel).then((result) => {
+        console.log(result);
+        var now= DateTime.local();
+        //
+        var string = result.horario_retirada;
+         var resultado1 = string.substring(0,10);
+        var ola = new Date(string);
+        // console.log(ola);
+        // console.log(resultado1);
+        let minutes =  0;
+         minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
+         result.tempo = minutes;
+        Aluguel.update(aluguel,result);
+          res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
+    });
 });
 router.post('/encerrar/:locais_id', function(req, res, next) {
     const locais = req.params.locais_id;
