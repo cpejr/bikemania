@@ -11,9 +11,9 @@
   <article class="mt-3">
     <section class="row col-12 d-block d-sm-flex justify-content-between mx-auto">
       <div class="text-center">
-        <form action="yellow-beach" method="post" id="yellow-beach-form">
-          <button type="button" id="yellow-beach-btn" class="btn orange-button btn-lg mt-4">Novo Cliente</button>
-        </form>
+
+          <button type="button" id="yellow-beach-btn" onclick="location.href='/signup'" class="btn orange-button btn-lg mt-4">Novo Cliente</button>
+
       </div>
       <div class="text-center">
         <button onclick="location.href = '/login'" class="btn orange-button btn-lg mt-4">Deslogar</button>
@@ -29,7 +29,6 @@
             <th colspan="6" class="text-center d-none d-lg-table-cell"></th>
             <th class="text-center">Tempo</th>
             <th class="text-center">Equipamento</th>
-            <th class="text-center">Preco</th>
             <th class="text-center">Opcoes</th>
           </tr>
         </thead>
@@ -46,7 +45,6 @@
             <td scope="row" class="text-center d-none">{{tempo}}</td>
             <td scope="row" class="text-center align-middle font-weight-bold">{{tempo}}min</td>
             <td scope="row" class="text-center align-middle font-weight-bold">{{eq}}</td>
-            <td scope="row" class="text-center align-middle font-weight-bold"></td>
             <td scope="row" class="text-center">
               <form action="/pagamento/{{id}}" method="get">
               <button class="btn text-white orange-button" type="submit">Encerrar</button>

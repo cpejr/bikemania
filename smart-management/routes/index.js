@@ -424,7 +424,36 @@ else{
   res.redirect('/acompanhamento');
 }
             });
+router.get('/update/:aluguelid' ,auth.isAuthenticated, function(req, res, next){
+      const id = req.params.aluguelid;
+      Aluguel.getById(id).then((result) => {
+      res.render('alterar', { title: 'Alterar', ...req.session, result, id});
+    });
 
+});
+router.post('/alteracao/:aluguelid' , function(req, res, next){
+    const aluguel = req.params.aluguelid;
+    const  alterado  = req.body.aluguel;
+    req.session.alterado = aluguel;
+    console.log(alterado);
+    console.log("kkkkkkkkkkkkkkkkkkkk");
+    Aluguel.getById(aluguel).then((result) => {
+    console.log(result);
+    var now= DateTime.local();
+    //
+    var string = result.horario_retirada;
+    // console.log(ola);
+    // console.log(resultado1);
+    result.horario_chegada = now;
+    console.log(alterado);
+    result.tempo = alterado.tempo;
+
+    Aluguel.update(aluguel,result);
+    console.log("lllllllllllllllllll");
+    console.log(result);
+      res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
+});
+});
 router.post('/acompvila', function(req, res, next) {
   req.session.unidade="Vila";
   console.log(req.session.unidade);
