@@ -8482,7 +8482,8 @@ a {
 
 table, th, td {
   border: 5px solid black;
-  font-family: "Swis721 LtEx BT"; }
+  font-family: "Swis721 LtEx BT";
+  background-color: #FFF; }
 
 th {
   font-size: 25px; }
@@ -8617,6 +8618,10 @@ body {
   background-color: #000000;
   padding-bottom: 0.04em; }
 
+.bg-CPE-white {
+  background-color: #FFF;
+  padding-bottom: 0.04em; }
+
 .bg-light-green {
   background-color: #A9F183; }
 
@@ -8638,6 +8643,11 @@ body {
 .thead-CPE-black th {
   background-color: #000000;
   color: #fff;
+  border-color: #32383e; }
+
+.thead-CPE-white th {
+  background-color: #FFF;
+  color: #fd7e14;
   border-color: #32383e; }
 
 .cursor-pointer {
