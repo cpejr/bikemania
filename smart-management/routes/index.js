@@ -153,6 +153,7 @@ Client.getByCpf(aluguel.cpf).then((client) => {
   // aluguel.client = client;
   // console.log("entrouprimeirosgdh");
   aluguel.nome = client.name;
+  aluguel.preco = 0;
   Aluguel.create(aluguel).then((aluguel_id) => {
 
     console.log("entrou");
@@ -250,6 +251,7 @@ let minutes =  0;
   minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
   console.log(minutes);
   locaisInfo.tempo = minutes;
+
    console.log(locaisInfo.tempo);
     teste.push(locaisInfo);
 
@@ -261,7 +263,7 @@ let minutes =  0;
   console.log(teste);
   res.render('acompanhamento', { title: 'Acompanhamento', ...req.session,teste,nome });
   });
-  }, 3000); 
+  }, 3000);
 });
 
 router.get('/acompmaster', auth.isAuthenticated, function(req, res, next) {
@@ -364,6 +366,8 @@ router.post('/acompmatriz', function(req, res, next) {
          console.log("rrrrrrrrrrrrrrrrrrrr");
          console.log(result.equipamento);
          Preco.getByEq(result.equipamento).then((res) => {
+           console.log("tttttttttttttttttttt");
+           console.log(res.preco);
             result.preco = (result.tempo/60) *res.preco;
             Aluguel.update(aluguel,result);
 
@@ -464,12 +468,25 @@ router.post('/alteracao/:aluguelid' , function(req, res, next){
     result.horario_chegada = now;
     console.log(alterado);
     result.tempo = alterado.tempo;
+    Preco.getByEq(result.equipamento).then((res) => {
+      console.log("tttttttttttttttttttt");
+      console.log(res.preco);
+       result.preco = (alterado.tempo/60) *res.preco;
+       Aluguel.update(aluguel,result);
 
-    Aluguel.update(aluguel,result);
-    console.log("lllllllllllllllllll");
-    console.log(result);
-      res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
-});
+     }).catch((error)=>{
+       console.log(error);
+       res.redirect('/error')
+       });
+       console.log(result);
+       res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
+     }).catch((error)=>{
+       console.log(error);
+       res.redirect('/error')
+       });
+
+
+
 });
 router.post('/acompvila', function(req, res, next) {
   req.session.unidade="Vila";
