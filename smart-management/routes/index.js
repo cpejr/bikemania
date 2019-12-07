@@ -208,10 +208,10 @@ router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
   var logado = req.session.unidade;
   var nome = new Array;
    // var now= DateTime.local();
-
+setInterval(function(){
   Aluguel.getAll().then((alugueis) => {
     var j=0;
-
+// setInterval(function(){
   for(var i = 0; i < alugueis.length; i++) {
     const locaisInfo = {
       id: String,
@@ -244,6 +244,7 @@ var ola = new Date(string);
 console.log(ola);
 
 // var intervalo=Interval.fromDateTimes(ola, now);
+ // setInterval(function(){
 
 let minutes =  0;
   minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
@@ -255,10 +256,12 @@ let minutes =  0;
   }
 
   }
+
   console.log('--------------');
   console.log(teste);
   res.render('acompanhamento', { title: 'Acompanhamento', ...req.session,teste,nome });
   });
+  }, 3000); 
 });
 
 router.get('/acompmaster', auth.isAuthenticated, function(req, res, next) {
