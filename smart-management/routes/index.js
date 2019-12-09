@@ -234,23 +234,23 @@ router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
     // locaisInfo._cpf = alugueis[i].cpf;
     // locaisInfo.localsaida = alugueis[i].local_saida;
     // locaisInfo.acess = alugueis[i].acessorio;
-//     var now= DateTime.local();
+    var now= DateTime.local();
 //   console.log("kkkkkkkkkkkkkkkkkkkkkkkkk");
 // console.log(now);
 // console.log("wwwwwwwwwwwwwwwwwwww");
-// var string = alugueis[i].horario_retirada;
+ var string = alugueis[i].horario_retirada;
 
 // var resultado2 = string.substring()
-// var ola = new Date(string);
+ var ola = new Date(string);
 // console.log(ola);
 
 // var intervalo=Interval.fromDateTimes(ola, now);
  // setInterval(function(){
 
-// let minutes =  0;
-//   minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
-//   console.log(minutes);
-//   locaisInfo.tempo = minutes;
+ let minutes =  0;
+  minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
+   console.log(minutes);
+   locaisInfo.tempo = minutes;
 //
 //    console.log(locaisInfo.tempo);
     teste.push(locaisInfo);
@@ -405,14 +405,17 @@ router.post('/acompmatriz', function(req, res, next) {
            console.log("tttttttttttttttttttt");
            console.log(res.preco);
             result.preco = (result.tempo/60) *res.preco;
+            console.log("qqqqqqqqqqqqqqqqqq");
+            console.log(result.preco);
             Aluguel.update(aluguel,result);
 
           }).catch((error)=>{
             console.log(error);
             res.redirect('/error')
             });
-            console.log(result);
-            res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
+          result.preco = (result.tempo/60) *res.preco;
+          Aluguel.update(aluguel,result);
+          res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
           }).catch((error)=>{
             console.log(error);
             res.redirect('/error')
