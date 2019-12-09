@@ -8365,7 +8365,11 @@ a {
   color: #00B7FF; }
 
 .texto-centro {
-  text-align: center; }
+  text-align: center;
+  position: center; }
+
+.texto-esquerda {
+  text-align: left; }
 
 .texto-central {
   background-position: center !important;
@@ -8419,16 +8423,47 @@ a {
     .btncadastrar {
       width: 100px; } }
 
+.font-botao {
+  font-family: "Segoe UI Symbol";
+  font-size: "10";
+  color: "black";
+  background-color: #FF6501;
+  width: 100%;
+  outline-color: #FF6501;
+  border-radius: 50px;
+  border: 10px;
+  height: 200px;
+  text-align: center; }
+
+.btnrelatorio2 {
+  font: "Poppins";
+  color: "black";
+  background-color: #3CB1FE;
+  width: 100%;
+  outline-color: #FF6501;
+  border-radius: 50px;
+  border: 10px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  margin-left: 10px;
+  margin-right: 10px; }
+
 .btnunidade {
   font-family: "Segoe UI Symbol";
   font-size: "10";
   color: "black";
   background-color: #FF6501;
-  width: 300px;
+  width: 100%;
   outline-color: #FF6501;
-  border-radius: 25px;
-  border: 10px;
-  height: 200px; }
+  border-radius: 50px;
+  height: 100%;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center; }
 
 .home-title {
   color: #FF6501; }
@@ -8466,19 +8501,6 @@ a {
   border: 10px;
   justify-content: flex-start;
   margin-left: 120px; }
-
-.btnrelatorio2 {
-  font: "Swis721 LtEx BT";
-  color: "black";
-  background-color: #3CB1FE;
-  width: 150px;
-  outline-color: #FF6501;
-  border-radius: 50px;
-  border: 10px;
-  margin-top: 90px;
-  margin-bottom: 50px;
-  text-align: center;
-  margin-left: 25%; }
 
 table, th, td {
   border: 5px solid black;
