@@ -78,17 +78,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-// app.engine('hbs', exphbs({
-//   defaultLayout: 'layout',
-//   extname: '.hbs',
-//   partialsDir: 'views',
-//   helpers: {
-//     // Here we're declaring the #section that appears in layout/layout.hbs
-//     section(name, options) {
-//       if (!this._sections) this._sections = {};
-//       this._sections[name] = options.fn(this);
-//       return null;
-//     }
-//   }
-// }));
+
 module.exports = app;
