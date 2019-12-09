@@ -1,0 +1,25 @@
+<nav class="navbar navbar-light bg-light" id="logobike">
+
+</nav>
+
+       <div class="texto-centro">
+         <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" >
+           Alterar
+       </FONT>
+       <br>
+       <br>
+<h3 class="pagamento">CPF: {{result.cpf}}</h3>
+</div>
+    <div class="box">
+<form action="/alteracao/{{id}}" method="post">
+  <div class="cadastro">
+    <div class="texto-central">
+      <label for="InputTempo" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Tempo:</FONT></label>
+    </div>
+  <input type="number" class="form-control" id="InputTempo"  placeholder="Tempo em minutos" name="aluguel[tempo]">
+ </div>
+
+ <div class="btntest col-4">
+   <button type="submit" class="btn_encerrar" >Confirmar</button> </div>
+ </form>
+</div>

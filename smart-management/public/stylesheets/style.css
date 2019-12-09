@@ -8504,7 +8504,8 @@ a {
 
 table, th, td {
   border: 5px solid black;
-  font-family: "Swis721 LtEx BT"; }
+  font-family: "Swis721 LtEx BT";
+  background-color: #FFF; }
 
 th {
   font-size: 25px; }
@@ -8629,11 +8630,18 @@ body {
 .text-CPE-black {
   color: #000000; }
 
+.text-CPE-orange {
+  color: #fd7e14; }
+
 .text-CPE-yellow {
   color: #EFDB30; }
 
 .bg-CPE-black {
   background-color: #000000;
+  padding-bottom: 0.04em; }
+
+.bg-CPE-white {
+  background-color: #FFF;
   padding-bottom: 0.04em; }
 
 .bg-light-green {
@@ -8657,6 +8665,11 @@ body {
 .thead-CPE-black th {
   background-color: #000000;
   color: #fff;
+  border-color: #32383e; }
+
+.thead-CPE-white th {
+  background-color: #FFF;
+  color: #fd7e14;
   border-color: #32383e; }
 
 .cursor-pointer {
@@ -8708,6 +8721,17 @@ body {
   color: #000000;
   background-color: #EFDB30;
   border-color: #EFDB30; }
+
+.orange-button {
+  color: #FFF;
+  background-color: #fd7e14;
+  border-color: #020202;
+  transition: ease all 0.6s; }
+
+.orange-button:hover {
+  color: #FFF;
+  background-color: #007bff;
+  border-color: #020202; }
 
 .login-button-position {
   position: relative;

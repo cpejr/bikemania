@@ -75,7 +75,7 @@ var dinheiro=0;
       localsaida: String,
       acess: String,
       tempo: Number,
-      preço: Number,
+      preco: Number,
       pagamento: String,
       nome: String
     }
@@ -87,7 +87,7 @@ var dinheiro=0;
     alugadim._cpf = alugados[i]._cpf;
     alugadim.localsaida = alugados[i].localsaida;
     alugadim.acess = alugados[i].acess;
-    alugadim.preço = alugados[i].preço;
+    alugadim.preco = alugados[i].preco;
     alugadim.tempo = alugados[i].tempo;
     alugadim.pagamento = alugados[i].pagamento;
     reldia.push(alugadim);
@@ -97,7 +97,7 @@ var dinheiro=0;
     else{
       dinheiro++;
     }
-    precott=precott+alugadim.preço;
+    precott=precott+alugadim.preco;
     tempott=tempott+alugadim.tempo;
   }
     console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
@@ -129,7 +129,7 @@ Alugado.getAllByMonth(mm,yyyy).then((result) => {
   for(var i=0;i<result.length;i++){
   quanttt = quanttt + result[i].quantidade;
     tempottm = tempottm + result[i].tempo;
-    precottm = precottm + result[i].preço;
+    precottm = precottm + result[i].preco;
   dimtt =  dimtt + result[i].dinheiro;
   cartt = cartt + result[i].cartao;
   }
@@ -207,7 +207,7 @@ router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
   const teste = [];
   var logado = req.session.unidade;
   var nome = new Array;
-  // var now= DateTime.local();
+   // var now= DateTime.local();
 
   Aluguel.getAll().then((alugueis) => {
     var j=0;
@@ -217,11 +217,14 @@ router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
       id: String,
       horarioretirada: String,
       eq: String,
-      horario_chegada: String,
-      _cpf: Number,
-      localsaida: String,
-      acess: String,
-      nome: String
+      // horario_chegada: String,
+      // _cpf: Number,
+     // localsaida: String,
+      // acess: String,
+      nome: String,
+      hora: Number,
+      minute:Number
+      // preco: Number
     }
 
     if(alugueis[i].local_saida == logado){
@@ -232,9 +235,36 @@ router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
     locaisInfo._cpf = alugueis[i].cpf;
     locaisInfo.localsaida = alugueis[i].local_saida;
     locaisInfo.acess = alugueis[i].acessorio;
-    // locaisInfo.tempo = Interval.fromDateTimes(now, alugueis[i].horario_retirada);
-    // console.log(locaisInfo.tempo);
+    var now= DateTime.local();
+  console.log("kkkkkkkkkkkkkkkkkkkkkkkkk");
+console.log(now);
+console.log("wwwwwwwwwwwwwwwwwwww");
+var string = alugueis[i].horario_retirada;
+
+// var resultado2 = string.substring()
+var ola = new Date(string);
+console.log(ola);
+
+// var intervalo=Interval.fromDateTimes(ola, now);
+
+let minutes =  0;
+  minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
+   console.log(minutes);
+   locaisInfo.tempo = minutes;
+   let minute = parseInt(minutes % 60,10);
+   if( minute < 10){
+     minute = '0' + minute;
+   }
+   let hour = parseInt((minutes - minute) / 60, 10);
+   if(hour < 10) {
+     hour = '0' + hour;
+   }
+   locaisInfo.hora = hour;
+   locaisInfo.minute = minute;
+//    console.log(locaisInfo.tempo);
+console.log(hour);
     teste.push(locaisInfo);
+
   }
 
   }
@@ -243,8 +273,55 @@ router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
   res.render('acompanhamento', { title: 'Acompanhamento', ...req.session,teste,nome });
   });
 });
+router.post('/tempo',(req, res) => {
+  const teste = [];
+  var logado = req.session.unidade;
+  var nome = new Array;
+   // var now= DateTime.local();
+// setInterval(function(){
 
-router.get('/acompmaster', auth.isAuthenticated, function(req, res, next) {
+  Aluguel.getAll().then((alugueis) => {
+    var j=0;
+// setInterval(function(){
+
+  for(var i = 0; i < alugueis.length; i++) {
+    const locaisInfo = {
+      tempo: Number,
+      horarioretirada: String
+    }
+console.log(logado);
+console.log("r");
+// console.log(alugueis[i].local_saida);
+    if(alugueis[i].local_saida == logado){
+    locaisInfo.horarioretirada = alugueis[i].horario_retirada;
+    console.log("rrrrrrrrrrrrrrr");
+
+    // locaisInfo._cpf = alugueis[i].cpf;
+    // locaisInfo.localsaida = alugueis[i].local_saida;
+    // locaisInfo.acess = alugueis[i].acessorio;
+     var now= DateTime.local();
+//   console.log("kkkkkkkkkkkkkkkkkkkkkkkkk");
+// console.log(now);
+// console.log("wwwwwwwwwwwwwwwwwwww");
+// var string = alugueis[i].horario_retirada;
+  var string = locaisInfo.horarioretirada;
+  var ola = new Date(string);
+  let minutes =  0;
+    minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
+    locaisInfo.tempo = minutes;
+  teste.push(locaisInfo);
+  console.log("wwwwwwwwwwwwwwwwwwww");
+
+  console.log(locaisInfo);
+// var resultado2 = string.substring()
+// var ola = new Date(string);
+// console.log(ola);
+}
+}
+res.send(teste);
+});
+});
+router.get('/acompmaster', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
   const teste = [];
   var logado = req.session.unidade;
   var nome = new Array;
@@ -271,6 +348,24 @@ router.get('/acompmaster', auth.isAuthenticated, function(req, res, next) {
     locaisInfo._cpf = alugueis[i].cpf;
     locaisInfo.localsaida = alugueis[i].local_saida;
     locaisInfo.acess = alugueis[i].acessorio;
+    var now= DateTime.local();
+  console.log("kkkkkkkkkkkkkkkkkkkkkkkkk");
+console.log(now);
+console.log("wwwwwwwwwwwwwwwwwwww");
+var string = alugueis[i].horario_retirada;
+
+// var resultado2 = string.substring()
+var ola = new Date(string);
+console.log(ola);
+
+// var intervalo=Interval.fromDateTimes(ola, now);
+
+// locaisInfo.tempo = intervalo.toString();
+let minutes =  0;
+  minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
+  console.log(minutes);
+  locaisInfo.tempo = minutes;
+   console.log(locaisInfo.tempo);
     teste.push(locaisInfo);
   }
 
@@ -302,17 +397,57 @@ router.post('/acompmatriz', function(req, res, next) {
          });
 
  router.post('/cancelar/:locais_id', function(req, res, next) {
-const locais = req.params.locais_id;
-Aluguel.delete(locais);
-res.redirect(`/acompmaster`);
-         });
-var reldia = [];
-router.get('/pagamento/:aluguelid' , function(req, res, next){
-    const aluguel = req.params.aluguelid;
-Aluguel.getById(aluguel).then((result) => {
+    const locais = req.params.locais_id;
+    Aluguel.delete(locais);
+    res.redirect(`/acompmaster`);
+             });
+    var reldia = [];
+    router.get('/pagamento/:aluguelid' , function(req, res, next){
+        const aluguel = req.params.aluguelid;
 
-      res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
-});
+        Aluguel.getById(aluguel).then((result) => {
+        console.log(result);
+        var now= DateTime.local();
+        //
+        var string = result.horario_retirada;
+         var resultado1 = string.substring(0,10);
+        var ola = new Date(string);
+        // console.log(ola);
+        // console.log(resultado1);
+        result.horario_chegada = now;
+        let minutes =  0;
+         minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
+         result.tempo = minutes;
+         let minute = parseInt(minutes % 60,10);
+         if( minute < 10){
+           minute = '0' + minute;
+         }
+         let hour = parseInt((minutes - minute) / 60, 10);
+         if(hour < 10) {
+           hour = '0' + hour;
+         }
+         result.hora = hour;
+         result.minute = minute;
+         console.log("rrrrrrrrrrrrrrrrrrrr");
+         console.log(result.equipamento);
+         Preco.getByEq(result.equipamento).then((res) => {
+           console.log("tttttttttttttttttttt");
+           console.log(res.preco);
+           console.log("ffffffffffffff");
+           console.log(result.tempo);
+            result.preco = (result.tempo/60) *res.preco;
+            Aluguel.update(aluguel,result);
+
+          }).catch((error)=>{
+            console.log(error);
+            res.redirect('/error')
+            });
+            console.log(result);
+            res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
+          }).catch((error)=>{
+            console.log(error);
+            res.redirect('/error')
+            });
 });
 router.post('/encerrar/:locais_id', function(req, res, next) {
     const locais = req.params.locais_id;
@@ -331,7 +466,7 @@ console.log(alugado);
         localsaida: String,
         acess: String,
         tempo: Number,
-        preço: Number,
+        preco: Number,
         dia: Number,
         mes: Number,
         ano: Number,
@@ -351,7 +486,7 @@ console.log(alugado);
       alugados._cpf = result.cpf;
       alugados.localsaida = result.local_saida;
       alugados.acess = result.acessorio;
-      alugados.preço = result.preço;
+      alugados.preco = result.preco;
       alugados.tempo = result.tempo;
       alugados.nome = result.nome;
       alugados.dia = dd;
@@ -377,7 +512,36 @@ else{
   res.redirect('/acompanhamento');
 }
             });
+router.get('/update/:aluguelid' ,auth.isAuthenticated, function(req, res, next){
+      const id = req.params.aluguelid;
+      Aluguel.getById(id).then((result) => {
+      res.render('alterar', { title: 'Alterar', ...req.session, result, id});
+    });
 
+});
+router.post('/alteracao/:aluguelid' , function(req, res, next){
+    const aluguel = req.params.aluguelid;
+    const  alterado  = req.body.aluguel;
+    req.session.alterado = aluguel;
+    console.log(alterado);
+    console.log("kkkkkkkkkkkkkkkkkkkk");
+    Aluguel.getById(aluguel).then((result) => {
+    console.log(result);
+    var now= DateTime.local();
+    //
+    var string = result.horario_retirada;
+    // console.log(ola);
+    // console.log(resultado1);
+    result.horario_chegada = now;
+    console.log(alterado);
+    result.tempo = alterado.tempo;
+
+    Aluguel.update(aluguel,result);
+    console.log("lllllllllllllllllll");
+    console.log(result);
+      res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
+});
+});
 router.post('/acompvila', function(req, res, next) {
   req.session.unidade="Vila";
   console.log(req.session.unidade);
