@@ -1,16 +1,28 @@
+
 $(document).ready(() => {
+
   console.log("kkkkkkkkkkkkkkkkk");
-  $.post('/index/tempo', {}, (horarios) => {
-    console.log(horarios);
-    setInterval(function(){
-      for(let i=0; i<horarios.length; i++){
-        var string = horarios.horarioretirada;
-        var ola = new Date(string);
-        let minutes =  0;
-          minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
-            body =   `<td scope="row" class="text-center align-middle font-weight-bold">${minutes} min </td>`;
+  setInterval(function(){
+  $.post('/tempo', {}, (horarios) => {
+    var body;
+
+  for(var i = 0; i < horarios.length; i++) {
+          body +=   `  <tr>
+              <td scope="row" class="text-center align-middle font-weight-bold"></td>
+
+          <td scope="row" class="text-center align-middle font-weight-bold">${horarios[i].tempo} min </td>
+          <td scope="row" class="text-center align-middle font-weight-bold"></td>
+          <td scope="row" class="text-center">
+            <form action="/pagamento/{{id}}" method="get">
+            <button class="btn text-white orange-button" type="submit">Encerrar</button>
+          </form>
+          </td>
+          </tr>`;
+          console.log(horarios[i].tempo);
       }
+      body += `</tbody>
+            </table>`;
       $('#horarios').html(body);
-       }, 3000);
     });
+    }, 3000);
 });

@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 const aluguelSchema = new mongoose.Schema({
   tempo: Number,
+  hora: String,
+  minute: String,
   nome: String,
   preco: Number,
   horario_retirada: String,
