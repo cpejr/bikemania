@@ -217,12 +217,14 @@ router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
       id: String,
       horarioretirada: String,
       eq: String,
-      horario_chegada: String,
-      _cpf: Number,
-      localsaida: String,
-      acess: String,
+      // horario_chegada: String,
+      // _cpf: Number,
+     // localsaida: String,
+      // acess: String,
       nome: String,
-      preco: Number
+      hora: Number,
+      minute:Number
+      // preco: Number
     }
 
     if(alugueis[i].local_saida == logado){
@@ -247,9 +249,20 @@ console.log(ola);
 
 let minutes =  0;
   minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
-  console.log(minutes);
-  locaisInfo.tempo = minutes;
-   console.log(locaisInfo.tempo);
+   console.log(minutes);
+   locaisInfo.tempo = minutes;
+   let minute = parseInt(minutes % 60,10);
+   if( minute < 10){
+     minute = '0' + minute;
+   }
+   let hour = parseInt((minutes - minute) / 60, 10);
+   if(hour < 10) {
+     hour = '0' + hour;
+   }
+   locaisInfo.hora = hour;
+   locaisInfo.minute = minute;
+//    console.log(locaisInfo.tempo);
+console.log(hour);
     teste.push(locaisInfo);
 
   }
@@ -260,8 +273,55 @@ let minutes =  0;
   res.render('acompanhamento', { title: 'Acompanhamento', ...req.session,teste,nome });
   });
 });
+router.post('/tempo',(req, res) => {
+  const teste = [];
+  var logado = req.session.unidade;
+  var nome = new Array;
+   // var now= DateTime.local();
+// setInterval(function(){
 
-router.get('/acompmaster', auth.isAuthenticated, function(req, res, next) {
+  Aluguel.getAll().then((alugueis) => {
+    var j=0;
+// setInterval(function(){
+
+  for(var i = 0; i < alugueis.length; i++) {
+    const locaisInfo = {
+      tempo: Number,
+      horarioretirada: String
+    }
+console.log(logado);
+console.log("r");
+// console.log(alugueis[i].local_saida);
+    if(alugueis[i].local_saida == logado){
+    locaisInfo.horarioretirada = alugueis[i].horario_retirada;
+    console.log("rrrrrrrrrrrrrrr");
+
+    // locaisInfo._cpf = alugueis[i].cpf;
+    // locaisInfo.localsaida = alugueis[i].local_saida;
+    // locaisInfo.acess = alugueis[i].acessorio;
+     var now= DateTime.local();
+//   console.log("kkkkkkkkkkkkkkkkkkkkkkkkk");
+// console.log(now);
+// console.log("wwwwwwwwwwwwwwwwwwww");
+// var string = alugueis[i].horario_retirada;
+  var string = locaisInfo.horarioretirada;
+  var ola = new Date(string);
+  let minutes =  0;
+    minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
+    locaisInfo.tempo = minutes;
+  teste.push(locaisInfo);
+  console.log("wwwwwwwwwwwwwwwwwwww");
+
+  console.log(locaisInfo);
+// var resultado2 = string.substring()
+// var ola = new Date(string);
+// console.log(ola);
+}
+}
+res.send(teste);
+});
+});
+router.get('/acompmaster', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
   const teste = [];
   var logado = req.session.unidade;
   var nome = new Array;
@@ -358,9 +418,23 @@ router.post('/acompmatriz', function(req, res, next) {
         let minutes =  0;
          minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
          result.tempo = minutes;
+         let minute = parseInt(minutes % 60,10);
+         if( minute < 10){
+           minute = '0' + minute;
+         }
+         let hour = parseInt((minutes - minute) / 60, 10);
+         if(hour < 10) {
+           hour = '0' + hour;
+         }
+         result.hora = hour;
+         result.minute = minute;
          console.log("rrrrrrrrrrrrrrrrrrrr");
          console.log(result.equipamento);
          Preco.getByEq(result.equipamento).then((res) => {
+           console.log("tttttttttttttttttttt");
+           console.log(res.preco);
+           console.log("ffffffffffffff");
+           console.log(result.tempo);
             result.preco = (result.tempo/60) *res.preco;
             Aluguel.update(aluguel,result);
 
