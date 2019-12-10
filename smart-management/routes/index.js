@@ -44,7 +44,7 @@ router.post('/signup',(req,res) => {
     });
 
 });
-router.get('/homemaster',auth.isAuthenticated, function(req, res, next) {
+router.get('/homemaster',auth.isAuthenticated,auth.isMaster, function(req, res, next) {
     res.render('homemaster', { title: 'Home', ...req.session });
 });
 router.get('/login', function(req, res, next) {
@@ -525,7 +525,7 @@ else{
   res.redirect('/acompanhamento');
 }
             });
-router.get('/update/:aluguelid' ,auth.isAuthenticated, function(req, res, next){
+router.get('/update/:aluguelid' ,auth.isAuthenticated, auth.isMaster, function(req, res, next){
       const id = req.params.aluguelid;
       Aluguel.getById(id).then((result) => {
       res.render('alterar', { title: 'Alterar', ...req.session, result, id});
