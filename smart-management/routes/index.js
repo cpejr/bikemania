@@ -130,6 +130,7 @@ Alugado.getAllByMonth(mm,yyyy).then((result) => {
   quanttt = quanttt + result[i].quantidade;
     tempottm = tempottm + result[i].tempo;
     precottm = precottm + result[i].preco;
+  
   dimtt =  dimtt + result[i].dinheiro;
   cartt = cartt + result[i].cartao;
   }
