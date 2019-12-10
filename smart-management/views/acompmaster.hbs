@@ -1,3 +1,4 @@
+<nav class="navbar navbar-light bg-light" id="logobike"></nav>
 <main class="full-screen">
   <article class="justify-content-center mx-0">
     <div class="bg-CPE-white Address-btn1">
@@ -27,10 +28,8 @@
         <thead class="thead-CPE-white">
           <tr>
             <th class="text-center">Nome</th>
-            <th colspan="6" class="text-center d-none d-lg-table-cell"></th>
             <th class="text-center">Tempo</th>
             <th class="text-center">Equipamento</th>
-            <th class="text-center">Preco</th>
             <th class="text-center">Opcoes</th>
           </tr>
         </thead>
@@ -38,16 +37,9 @@
           {{#each teste}}
           <tr>
             <td scope="row" class="text-center align-middle font-weight-bold">{{nome}}</td>
-            <td scope="row" class="text-center d-none d-lg-table-cell"></td>
-            <td scope="row" class="text-center d-none d-lg-table-cell"></td>
-            <td scope="row" class="text-center d-none d-lg-table-cell"></td>
-            <td scope="row" class="text-center d-none d-lg-table-cell"></td>
-            <td scope="row" class="text-center d-none d-lg-table-cell"></td>
-            <td scope="row" class="text-center d-none d-lg-table-cell"></td>
             <td scope="row" class="text-center d-none">{{tempo}}</td>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{tempo}}min</td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{hora}}:{{minute}}</td>
             <td scope="row" class="text-center align-middle font-weight-bold">{{eq}}</td>
-            <td scope="row" class="text-center align-middle font-weight-bold"></td>
             <td scope="row" class="text-center">
                 <form action="/pagamento/{{id}}" method="get">
                 <button class="btn text-white orange-button" type="submit">Encerrar</button>

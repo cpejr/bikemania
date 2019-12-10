@@ -197,8 +197,8 @@ router.post('/login', function(req, res, next) {
       res.redirect('/error')
       });
     }).catch((error)=>{
-      console.log(error);
-      res.redirect('/error')
+      console.log("llllllllllllllll");
+      res.redirect('/login')
       });
   });
 
@@ -337,7 +337,9 @@ router.get('/acompmaster', auth.isAuthenticated, auth.isMaster, function(req, re
       _cpf: Number,
       localsaida: String,
       acess: String,
-      nome: String
+      nome: String,
+      hora: String,
+      minute: String
     }
 
     if(alugueis[i].local_saida == logado){
@@ -366,6 +368,17 @@ let minutes =  0;
   console.log(minutes);
   locaisInfo.tempo = minutes;
    console.log(locaisInfo.tempo);
+   locaisInfo.tempo = minutes;
+   let minute = parseInt(minutes % 60,10);
+   if( minute < 10){
+     minute = '0' + minute;
+   }
+   let hour = parseInt((minutes - minute) / 60, 10);
+   if(hour < 10) {
+     hour = '0' + hour;
+   }
+   locaisInfo.hora = hour;
+   locaisInfo.minute = minute;
     teste.push(locaisInfo);
   }
 
