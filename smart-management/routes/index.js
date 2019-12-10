@@ -130,6 +130,7 @@ Alugado.getAllByMonth(mm,yyyy).then((result) => {
   quanttt = quanttt + result[i].quantidade;
     tempottm = tempottm + result[i].tempo;
     precottm = precottm + result[i].preco;
+
   dimtt =  dimtt + result[i].dinheiro;
   cartt = cartt + result[i].cartao;
   }
@@ -448,14 +449,15 @@ router.post('/acompmatriz', function(req, res, next) {
            console.log(res.preco);
            console.log("ffffffffffffff");
            console.log(result.tempo);
-            result.preco = (result.tempo/60) *res.preco;
-            Aluguel.update(aluguel,result);
+            
 
           }).catch((error)=>{
             console.log(error);
             res.redirect('/error')
             });
             console.log(result);
+            result.preco = (result.tempo/60) *res.preco;
+          Aluguel.update(aluguel,result);
             res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
           }).catch((error)=>{
             console.log(error);

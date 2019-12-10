@@ -115,12 +115,12 @@ class Alugado {
         const alugadim = {
           dia: Number,
           tempo: Number,
-          preço: Number,
+          preco: Number,
           pagamento: String
         }
 
         alugadim.dia = alugados[i].dia;
-        alugadim.preço = alugados[i].preço;
+        alugadim.preco = alugados[i].preco;
         alugadim.tempo = alugados[i].tempo;
         alugadim.pagamento = alugados[i].pagamento;
   //console.log(alugadim);
@@ -130,7 +130,7 @@ class Alugado {
         else{
           dinheiro++;
         }
-        precott=precott+alugadim.preço;
+        precott=precott+alugadim.preco;
         tempott=tempott+alugadim.tempo;
 
 
@@ -143,7 +143,7 @@ class Alugado {
     const dia = {
       day: Number,
       tempo: Number,
-      preço: Number,
+      preco: Number,
       cartao: Number,
       quantidade: Number,
       dinheiro: Number
@@ -151,12 +151,12 @@ class Alugado {
     dia.quantidade = quant;
     dia.day = m;
     dia.tempo = tempott;
-    dia.preço = precott;
+    dia.preco = precott;
     dia.cartao = cartao;
     dia.dinheiro = dinheiro;
     //console.log(dia);
   //  console.log(dia.day);
-  //  console.log(dia.preço);
+  //  console.log(dia.preco);
   //  console.log(dia.quantidade);
     relmes.push(dia);
     tempott = 0;
