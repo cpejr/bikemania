@@ -198,7 +198,7 @@ router.post('/login', function(req, res, next) {
       });
     }).catch((error)=>{
       console.log("llllllllllllllll");
-      res.redirect('/error')
+      res.redirect('/login')
       });
   });
 
