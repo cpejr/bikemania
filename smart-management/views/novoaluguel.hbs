@@ -22,50 +22,54 @@
       <div class="box">
         <form action="/novoaluguel" method="post">
           <div class="novoaluguel">
+
             <div class="texto-centro">
               <label for="InputCpf" ><FONT size="4" face="Swis721 LtEx BT" color="black" > CPF</FONT></label>
             </div>
             <input type="number" maxlength="11" class="form-control "  id="InputCpf"  placeholder="XXXXXXXXXXX" name="aluguel[cpf]"  >
-          <div class="cadastro">
-            <div class="texto-centro">
-              <label for="InputHorário" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Horário</FONT></label>
+            
+            <div class="cadastro">
+              <div class="texto-centro">
+                <label for="InputHorário" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Horário</FONT></label>
+              </div>
+              <input  type="time-local"   class="form-control" id="InputHorario"  placeholder="00:00" name="aluguel[horario_chegada]">
             </div>
-            <input  <input type="time"   class="form-control" id="InputHorario"  placeholder="00:00" name="aluguel[horario_chegada]">
-        </div>
-        <div class="cadastro">
-          <div class="texto-centro">
-            <label for="InputNumerodepessoas" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Pessoas </FONT></label>
-          </div>
-          <input type="number" class="form-control" id="InputNumerodepessoas"  placeholder="X" name="aluguel[pessoas]">
-       </div>
 
-         <div class="cadastro">
-           <div class="texto-centro">
-             <label for="InputEquipamento" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Equipamento</FONT></label>
-           </div>
-         </div>
-           <div class="texto-centro">
+            <div class="cadastro">
+              <div class="texto-centro">
+                <label for="InputNumerodepessoas" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Pessoas </FONT></label>
+              </div>
+              <input type="number" class="form-control" id="InputNumerodepessoas"  placeholder="X" name="aluguel[pessoas]">
+            </div>
 
-                <select id="productCode" class="drowdownoptions" name="aluguel[equipamento]" required = "required">
-                 <option value disabled selected> Tipo</option>
-                 <option value="Bicicleta aro 26">Bicicleta aro 26</option>
-                 <option value="Triciclo">Triciclo</option>
-                 <option value="Bicicleta Freeride">Bicicleta Freeride</option>
-                 <option value="Bicicleta Dupla">Bicicleta Dupla</option>
-                 <option value="Bicicleta comum">Bicicleta comum</option>
-                 <option value="Skate">Skate</option>
-                 <option value="Patinete">Patinete</option>
-                 <option value="Patins">Patins</option>
-                 <option value="Carrinho de rolimã">Carrinho de rolimã</option>
-                 <option value="Bicicleta Tripla">Bicicleta Tripla</option>
-                 <option value="Bicicleta com marcha aro 29">Bicicleta com marcha aro 29</option>
-                 <option value="Bicicleta Triciclo Família">Bicicleta Triciclo Família</option>
-                 <option value="Bicicleta Chopper">Bicicleta Chopper</option>
-                 <option value="MycoSep Trich">Triciclo trenzinho</option>
-                 <option>Outro</option>
-                </select>
+            <div class="cadastro">
+              <div class="texto-centro">
+                <label for="InputEquipamento" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Equipamento</FONT></label>
+              </div>
+            </div>
+
+              <div class="texto-centro">
+
+                    <select id="productCode" class="drowdownoptions" name="aluguel[equipamento]" required = "required">
+                    <option value disabled selected> Tipo</option>
+                    <option value="Bicicleta aro 26">Bicicleta aro 26</option>
+                    <option value="Triciclo">Triciclo</option>
+                    <option value="Bicicleta Freeride">Bicicleta Freeride</option>
+                    <option value="Bicicleta Dupla">Bicicleta Dupla</option>
+                    <option value="Bicicleta comum">Bicicleta comum</option>
+                    <option value="Skate">Skate</option>
+                    <option value="Patinete">Patinete</option>
+                    <option value="Patins">Patins</option>
+                    <option value="Carrinho de rolimã">Carrinho de rolimã</option>
+                    <option value="Bicicleta Tripla">Bicicleta Tripla</option>
+                    <option value="Bicicleta com marcha aro 29">Bicicleta com marcha aro 29</option>
+                    <option value="Bicicleta Triciclo Família">Bicicleta Triciclo Família</option>
+                    <option value="Bicicleta Chopper">Bicicleta Chopper</option>
+                    <option value="MycoSep Trich">Triciclo trenzinho</option>
+                    <option>Outro</option>
+                    </select>
+              </div>
           </div>
-       </div>
 
        <div class="form-group form-check">
            <input type="radio" class="form-check-input"  id="exampleCheck1" value="1" name="aluguel[acessorio]" >

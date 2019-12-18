@@ -1,38 +1,73 @@
+<button class="btn btn-default" onclick="location.href='/homemaster'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
+
 <table class="table table-hover">
   <thead>
     <tr>
-      <th scope="col">{{dd}}/{{mm}}/{{yyyy}}</th>
-      <th scope="col">Cliente</th>
-      <th scope="col">Unidade</th>
-      <th scope="col">Equipamento</th>
-      <th scope="col">Tempo</th>
-      <th scope="col">Preço</th>
-      <th scope="col">Pagamento</th>
+      <th scope="col">{{mm}}/{{yyyy}}</th>
+      <th scope="col">Bicicleta aro 26</th>
+      <th scope="col">Triciclo</th>
+      <th scope="col">Bicicleta Freeride</th>
+      <th scope="col">Bicicleta Dupla</th>
+      <th scope="col">Bicicleta comum</th>
+      <th scope="col">Skate</th>
+      <th scope="col">Patinete</th>
+      <th scope="col">Patins</th>
+      <th scope="col">Carrinho de rolimã</th>
+      <th scope="col">Bicicleta Tripla</th>
+      <th scope="col">Bicicleta com marcha aro 29</th>
+      <th scope="col">Bicicleta Chopper</th>
+      <th scope="col">Bicicleta Triciclo Família</th>
+      <th scope="col">Triciclo trenzinho</th>
+      
+
     </tr>
   </thead>
   <tbody>
-    {{#each reldia}}
+    {{#each result}}
     <tr>
-      <th scope="row">1</th>
-      <td>{{nome}}</td>
-      <td>{{localsaida}}</td>
-      <td>{{eq}}</td>
-      <td>{{tempo}}</td>
-      <td>{{preco}}</td>
-      <td>{{pagamento}}</td>
+      <th scope="row">{{day}}</th>
+      <td>{{quantidade}}</td>
+      <td>{{quantidade}}</td>
+      <td>{{quantidade}}</td>
+      <td>{{quantidade}}</td>
+      <td>{{quantidade}}</td>
+      <td>{{quantidade}}</td>
+      <td>{{quantidade}}</td>
+      <td>{{quantidade}}</td>
+      <td>{{quantidade}}</td>
+      <td>{{quantidade}}</td>
+      <td>{{quantidade}}</td>
+      <td>{{quantidade}}</td>
+      <td>{{quantidade}}</td>
+      <td>{{quantidade}}</td>
+      
+
 
     </tr>
     {{/each}}
 <tr>
-  <th scope="row"> {{reldia.length}}</th>
-  <td>--</td>
-  <td>--</td>
-  <td>--</td>
-  <td>{{tempott}}</td>
-  <td>{{precott}}</td>
-  <td>Cartão:{{cartao}} <br> Dinheiro:{{dinheiro}}</td>
+      <th scope="row">Total</th>
+      <td>{{quanttt}}</td>
+      <td>{{tempottm}}</td>
+      <td>{{precottm}}</td>
+      <td>{{cartt}}</td>
+      <td>{{dimtt}}</td>
 
-</tr>
+
+    </tr>
 
   </tbody>
 </table>
+
+
+
+
+
+
+
+
+
+
+
+
+

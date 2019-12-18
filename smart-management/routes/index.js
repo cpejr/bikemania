@@ -182,6 +182,45 @@ Client.getByCpf(aluguel.cpf).then((client) => {
   }
 });
 
+
+
+
+// criar rota para RelatorioPorEquipamento
+
+router.get('/relatorioporequipamento',auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  var today = new Date();
+  var mm= String(today.getMonth()+1);
+  var yyyy = today.getFullYear();
+  var quanttt=0;
+  var tempottm=0;
+  var precottm=0;
+  var dimtt=0;
+  var cartt=0;
+Alugado.getAllByMonth(mm,yyyy).then((result) => {
+  console.log("oooooooooo");
+  console.log(result);
+  for(var i=0;i<result.length;i++){
+  quanttt = quanttt + result[i].quantidade;
+    tempottm = tempottm + result[i].tempo;
+    precottm = precottm + result[i].preco;
+
+  dimtt =  dimtt + result[i].dinheiro;
+  cartt = cartt + result[i].cartao;
+  }
+  console.log("kkkkkkkkkkk");
+  console.log(precottm);
+  res.render('relatorioporequipamento', { title: 'Relatorio Por Equipamento', ...req.session, result, mm, yyyy, quanttt, tempottm, dimtt, cartt, precottm });
+
+
+});
+});
+
+
+
+
+
+
+
 router.post('/login', function(req, res, next) {
   const user=req.body.user;
   firebase.auth().signInWithEmailAndPassword(user.username, user.password).then((userF)=>{
