@@ -12,70 +12,72 @@
 
       </nav> -->
 
-      <div class="container">
-        <div class="row justify-content-start">
-          <div class="col-4">
-            <button class="btn btn-default" onclick="location.href='/acompanhamento'">
-              <i class="fa fa-shield fa-rotate-90 fa-3x texto-esquerda" aria-hidden="true">
-              </i>
-            </button>
-          </div>
-          <div class="col-4 texto-centro">
-            <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" class="texto-central" >
-              Novo Cliente
-            </FONT>
-          </div>
+<div class="container">
+  <div class="row justify-content-start">
+    <div class="col-4">
+      <button class="btn btn-default" onclick="location.href='/acompanhamento'">
+        <i class="fa fa-shield fa-rotate-90 fa-3x texto-esquerda" aria-hidden="true">
+        </i>
+      </button>
+    </div>
+    <div class="col-4 texto-centro">
+      <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" class="texto-central" >
+        Novo Cliente
+      </FONT>
+    </div>
+  </div>
+</div>
+
+
+<div class="box">
+  <form action="/signup" method="post">
+    <div class="cadastro">
+      <div class="texto-centro">
+        <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > Nome/Empresa</FONT></label>
+      </div>
+      <input type="text" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="Nome com espaço" name="client[name]"  >
+    </div>
+    <div class="cadastro">
+      <div class="texto-centro">
+        <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > CPF/CNPJ</FONT></label>
+      </div>
+      <input type="number" maxlength="11" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="XXXXXXXXXXX" name="client[cpf]">
+    </div>
+      <div class="cadastro">
+        <div class="texto-centro">
+          <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > RG</FONT></label>
         </div>
+      <input type="number" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="RG sem caracteres especiais" name="client[rg]">
+    </div>
+    <div class="cadastro">
+      <div class="texto-centro">
+        <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > Endereço de email</FONT></label>
       </div>
-
-      <div class="box">
-        <form action="/signup" method="post">
-          <div class="cadastro">
-            <div class="texto-centro">
-              <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > Nome/Empresa</FONT></label>
-            </div>
-            <input type="text" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="Nome com espaço" name="client[name]"  >
-        <div class="cadastro">
-          <div class="texto-centro">
-            <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > CPF/CNPJ</FONT></label>
-          </div>
-          <input type="number" maxlength="11" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="XXXXXXXXXXX" name="client[cpf]">
-       </div>
-         <div class="cadastro">
-           <div class="texto-centro">
-             <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > RG</FONT></label>
-           </div>
-         <input type="number" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="RG sem caracteres especiais" name="client[rg]">
+      <input type="email" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="Seu email" name="client[email]">
+    </div>
+    <div class="cadastro">
+        <div class="texto-centro">
+          <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > Telefone </FONT></label>
+        </div>
+        <input type="tel" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="(xx) xxxxx-xxxx" name="client[phone]">
+    </div>
+    <div class="cadastro">
+      <div class="texto-centro">
+        <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > Data de Nascimento </FONT></label>
       </div>
-        <div class="cadastro">
-          <div class="texto-centro">
-            <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > Endereço de email</FONT></label>
-          </div>
-          <input type="email" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="Seu email" name="client[email]">
-       </div>
-         <div class="cadastro">
-           <div class="texto-centro">
-             <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > Telefone </FONT></label>
-           </div>
-           <input type="tel" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="(xx) xxxxx-xxxx" name="client[phone]">
-       </div>
-       <div class="cadastro">
-         <div class="texto-centro">
-           <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > Data de Nascimento </FONT></label>
-         </div>
-         <input type="date" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="xx/xx/xxxx" name="client[birth]">
-     </div>
-       <div class="cadastro">
-         <div class="texto-centro">
-           <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > Endereço</FONT></label>
-         </div>
-         <input type="text" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="Logradouro e número " name="client[address]">
-     </div>
-
-       <br>
-          <div class="texto-centro">
-            <button type="submit" class="btncadastrar">Cadastrar</button>
-
-          </div>
-        </form>
+      <input type="date" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="xx/xx/xxxx" name="client[birth]">
+    </div>
+    <div class="cadastro">
+      <div class="texto-centro">
+        <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > Endereço</FONT></label>
       </div>
+      <input type="text" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="Logradouro e número " name="client[address]">
+    </div>
+
+    <br>
+      <div class="texto-centro">
+        <button type="submit" class="btncadastrar">Cadastrar</button>
+      </div>
+  </form>
+
+</div>
