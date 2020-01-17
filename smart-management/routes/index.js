@@ -453,55 +453,55 @@ router.post('/acompmatriz', function(req, res, next) {
     const locais = req.params.locais_id;
     Aluguel.delete(locais);
     res.redirect(`/acompmaster`);
-             });
-    var reldia = [];
-    router.get('/pagamento/:aluguelid' , function(req, res, next){
-        const aluguel = req.params.aluguelid;
+  });
 
-        Aluguel.getById(aluguel).then((result) => {
-        console.log(result);
-        var now= DateTime.local();
-        //
-        var string = result.horario_retirada;
-         var resultado1 = string.substring(0,10);
-        var ola = new Date(string);
-        // console.log(ola);
-        // console.log(resultado1);
-        result.horario_chegada = now;
-        let minutes =  0;
-         minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
-         result.tempo = minutes;
-         let minute = parseInt(minutes % 60,10);
-         if( minute < 10){
-           minute = '0' + minute;
-         }
-         let hour = parseInt((minutes - minute) / 60, 10);
-         if(hour < 10) {
-           hour = '0' + hour;
-         }
-         result.hora = hour;
-         result.minute = minute;
-         console.log("rrrrrrrrrrrrrrrrrrrr");
-         console.log(result.equipamento);
-         Preco.getByEq(result.equipamento).then((res) => {
-           console.log("tttttttttttttttttttt");
-           console.log(res.preco);
-           console.log("ffffffffffffff");
-           console.log(result.tempo);
-            
+  var reldia = [];
+  router.get('/pagamento/:aluguelid' , function(req, res, next){
+    const aluguel = req.params.aluguelid;
 
-          }).catch((error)=>{
-            console.log(error);
-            res.redirect('/error')
-            });
-            console.log(result);
-            result.preco = (result.tempo/60) *res.preco;
-          Aluguel.update(aluguel,result);
-            res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
-          }).catch((error)=>{
-            console.log(error);
-            res.redirect('/error')
-            });
+    Aluguel.getById(aluguel).then((result) => {
+      console.log(result);
+      var string = result.horario_retirada;
+      var resultado1 = string.substring(0,10);
+      var retirada = new Date(string);
+      var now = DateTime.local();
+      result.horario_chegada = now;
+      let minutes =  0;
+      minutes += parseFloat(Interval.fromDateTimes(retirada, now).length('minutes').toFixed(2));
+      result.tempo = minutes;
+      let minute = parseInt(minutes % 60, 10);
+      if( minute < 10) {
+        minute = '0' + minute;
+      }
+      let hour = parseInt((minutes - minute) / 60, 10);
+      if(hour < 10) {
+        hour = '0' + hour;
+      }
+
+      result.hora = hour;
+      result.minute = minute;
+      console.log("Equipamento: "+ result.equipamento);
+      Preco.getByEq(result.equipamento).then((res) => {
+        console.log(res.preco);
+        console.log(result.tempo);
+      }).catch((error) => {
+        console.log(error);
+        res.redirect('/error')
+      });
+      
+      console.log(result);
+      result.preco = result.minutes * res.preco;
+      Aluguel.update(aluguel, result).then((result_rent) => {
+        console.log(result_rent);
+        res.render('pagamento', { title: 'Pagamento', ...req.session, result_rent});
+      }).catch((error)=>{
+        console.log(error);
+        res.redirect('/error')
+      });
+    }).catch((error)=>{
+      console.log(error);
+      res.redirect('/error')
+    });
 });
 router.post('/encerrar/:locais_id', function(req, res, next) {
     const locais = req.params.locais_id;
