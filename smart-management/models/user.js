@@ -109,6 +109,21 @@ class User {
     });
   }
 
+  /**
+   * Get a User by it's uid
+   * @param {string} id - User Uid
+   * @returns {Object} - User Document Data
+   */
+  static getByCpf(id) {
+    return new Promise((resolve, reject) => {
+      UserModel.findOne({ cpf: id }).exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
 
   }
 

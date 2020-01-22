@@ -11,25 +11,20 @@ const Aluguel = require('../models/aluguel');
 const Alugado = require('../models/alugado');
 const Preco = require('../models/preco');
 
-// var Timer  = require('lib/easytimer/dist/easytimer.min.js');
-// var dd= String(today.getDate()).pad.Start(2,'0');
-// var mm= String(today.getMonth()+ 1).pad.Start(2,'0');
-// var yyyy = today.getFullYear();
-// var today= new Date();
-// var hours = today.getHours();
-// var minutes = today.getMinutes();
-// var scnds = today.getSeconds();
-
 /* GET home page. */
 router.get('/home',auth.isAuthenticated, function(req, res, next) {
+    console.log(req.session);
     res.render('home', { title: 'Home' , ...req.session});
 });
+
 router.get('/login2', function(req, res, next) {
   res.render('acmpteste', { title: 'Login' });
 });
+
 router.get('/signup',auth.isAuthenticated, function(req, res, next) {
   res.render('signup', { title: 'Cadastro' });
 });
+
 /*POST signup*/
 router.post('/signup',(req,res) => {
   const  client  = req.body.client;
@@ -44,15 +39,19 @@ router.post('/signup',(req,res) => {
     });
 
 });
+
 router.get('/homemaster',auth.isAuthenticated,auth.isMaster, function(req, res, next) {
-    res.render('homemaster', { title: 'Home', ...req.session });
+  res.render('homemaster', { title: 'Home', ...req.session });
 });
+
 router.get('/login', function(req, res, next) {
   res.render('index', { title: 'Login' });
 });
+
 router.get('/novoaluguel',auth.isAuthenticated, function(req, res, next) {
   res.render('novoaluguel', { title: 'Novo Aluguel', ...req.session });
 });
+
 router.get('/relatoriodiario',auth.isAuthenticated,auth.isMaster, function(req, res, next) {
   var precott=0;
   var tempott=0;
@@ -143,48 +142,57 @@ Alugado.getAllByMonth(mm,yyyy).then((result) => {
 });
 
 router.post('/novoaluguel', function(req, res, next) {
-  const  aluguel  = req.body.aluguel;
-  aluguel.local_saida=req.session.unidade;
-  var nome  ;
-  var saida= DateTime.local();
- aluguel.horario_retirada = saida;
- console.log(aluguel.horario_retirada);
-console.log(nome);
-Client.getByCpf(aluguel.cpf).then((client) => {
-  // aluguel.client = client;
-  // console.log("entrouprimeirosgdh");
-  aluguel.nome = client.name;
-  Aluguel.create(aluguel).then((aluguel_id) => {
-
-    console.log("entrou");
-    console.log(aluguel_id);
-    console.log("-------------------------------------------------------------");
-    console.log(aluguel);
-
+  const aluguel  = req.body.aluguel;
+  aluguel.status = "Rodando";
+  var d = new Date();
+  var h = d.getHours();
+  var m = d.getMinutes();
+  aluguel.startHour = h;
+  aluguel.startMinute = m;
+  Client.getByCpf(aluguel.cpf).then((client) => {
+    aluguel.client = client;
+    console.log(client);
+    aluguel.clientName = client.name;
+    Aluguel.create(aluguel).then((rent) => {
+      if(req.session.logado.type=='Master') {
+        res.redirect('/acompmaster');
+      }
+      else {
+        res.redirect('/acompanhamento');
+      }
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('error');
+    });
   }).catch((error) => {
     console.log(error);
     res.redirect('error');
-  });
-}).catch((error) => {
-  console.log(error);
-  res.redirect('error');
+  });    
 });
 
-
-
-    if(req.session.logado.type=='Master'){
-      res.redirect('/acompmaster');
-  //    res.render('acompmaster', { title: 'master' , ...nome});
-    }
-  else{
-    res.redirect('/acompanhamento');
-    //res.render('acompanhamento', { title: 'normal' , ...nome});
-  }
+router.post('/novoaluguelcontinue', function(req, res, next) {
+  const aluguel  = req.body.aluguel;
+  aluguel.status = "Rodando";
+  var d = new Date();
+  var h = d.getHours();
+  var m = d.getMinutes();
+  aluguel.startHour = h;
+  aluguel.startMinute = m;
+  Client.getByCpf(aluguel.cpf).then((client) => {
+    aluguel.client = client;
+    console.log(client);
+    aluguel.clientName = client.name;
+    Aluguel.create(aluguel).then((rent) => {
+      res.render('novoaluguel', { title: 'Novo Aluguel', ...req.session, cpf: aluguel.cpf});
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('error');
+    });
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('error');
+  });    
 });
-
-
-
-
 // criar rota para RelatorioPorEquipamento
 
 router.get('/relatorioporequipamento',auth.isAuthenticated, auth.isMaster, function(req, res, next) {
@@ -215,21 +223,15 @@ Alugado.getAllByMonth(mm,yyyy).then((result) => {
 });
 });
 
-
-
-
-
-
-
 router.post('/login', function(req, res, next) {
   const user=req.body.user;
   firebase.auth().signInWithEmailAndPassword(user.username, user.password).then((userF)=>{
-    mongo.getByUid(userF.user.uid).then((result)=> {
+    mongo.getByUid(userF.user.uid).then((result) => {
       req.session.logado=result;
-    if(req.session.logado.type=='Master'){
+      if(req.session.logado.type=='Master') {
         res.redirect('/homemaster')
       }
-      else{
+      else {
          res.redirect('/home')
       }
     }).catch((error)=>{
@@ -237,11 +239,10 @@ router.post('/login', function(req, res, next) {
       res.redirect('/error')
       });
     }).catch((error)=>{
-      console.log("llllllllllllllll");
+      console.log(error);
       res.redirect('/login')
       });
-  });
-
+});
 
 router.get('/acompanhamento', auth.isAuthenticated, function(req, res, next) {
   const teste = [];
@@ -313,6 +314,7 @@ console.log(hour);
   res.render('acompanhamento', { title: 'Acompanhamento', ...req.session,teste,nome });
   });
 });
+
 router.post('/tempo',(req, res) => {
   const teste = [];
   var logado = req.session.unidade;
@@ -361,83 +363,28 @@ console.log("r");
 res.send(teste);
 });
 });
-router.get('/acompmaster', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
-  const teste = [];
-  var logado = req.session.unidade;
-  var nome = new Array;
-  Aluguel.getAll().then((alugueis) => {
-    var j=0;
 
-  for(var i = 0; i < alugueis.length; i++) {
-    const locaisInfo = {
-      id: String,
-      horarioretirada: String,
-      eq: String,
-      horario_chegada: String,
-      _cpf: Number,
-      localsaida: String,
-      acess: String,
-      nome: String,
-      hora: String,
-      minute: String
-    }
-
-    if(alugueis[i].local_saida == logado){
-    locaisInfo.nome = alugueis[i].nome;
-    locaisInfo.id = alugueis[i]._id;
-    locaisInfo.horarioretirada = alugueis[i].horario_retirada;
-    locaisInfo.eq= alugueis[i].equipamento;
-    locaisInfo._cpf = alugueis[i].cpf;
-    locaisInfo.localsaida = alugueis[i].local_saida;
-    locaisInfo.acess = alugueis[i].acessorio;
-    var now= DateTime.local();
-  console.log("kkkkkkkkkkkkkkkkkkkkkkkkk");
-console.log(now);
-console.log("wwwwwwwwwwwwwwwwwwww");
-var string = alugueis[i].horario_retirada;
-
-// var resultado2 = string.substring()
-var ola = new Date(string);
-console.log(ola);
-
-// var intervalo=Interval.fromDateTimes(ola, now);
-
-// locaisInfo.tempo = intervalo.toString();
-let minutes =  0;
-  minutes += parseFloat(Interval.fromDateTimes(ola, now).length('minutes').toFixed(2));
-  console.log(minutes);
-  locaisInfo.tempo = minutes;
-   console.log(locaisInfo.tempo);
-   locaisInfo.tempo = minutes;
-   let minute = parseInt(minutes % 60,10);
-   if( minute < 10){
-     minute = '0' + minute;
-   }
-   let hour = parseInt((minutes - minute) / 60, 10);
-   if(hour < 10) {
-     hour = '0' + hour;
-   }
-   locaisInfo.hora = hour;
-   locaisInfo.minute = minute;
-    teste.push(locaisInfo);
-  }
-
-  }
-  console.log('--------------');
-  console.log(teste);
-  res.render('acompmaster', { title: 'Acompanhamento Master', ...req.session,teste,nome });
+router.get('/acompmaster', auth.isAuthenticated, function(req, res, next) {
+  var unity = req.session.unidade;
+  console.log("******************");
+  Aluguel.getAllByUnity(unity).then((rents) => {
+    console.log(unity);
+    console.log(rents);
+    res.render('acompmaster', { title: 'Acompanhamento Master', ...req.session, rents });
   });
 });
+
 router.post('/acompmirante', function(req, res, next) {
    req.session.unidade="Mirante";
-   console.log(req.session.unidade);
+   console.log("usuário: " + req.session);
    if(req.session.logado.type == "Master"){
+      console.log("Indo para acompmaster");
        res.redirect(`/acompmaster`);
      }
      else{
        res.redirect(`/acompanhamento`);
      }
-     });
+  });
 
 router.post('/acompmatriz', function(req, res, next) {
   req.session.unidade="Matriz";
@@ -456,9 +403,9 @@ router.post('/acompmatriz', function(req, res, next) {
   });
 
   var reldia = [];
-  router.get('/pagamento/:aluguelid' , function(req, res, next){
+  router.get('/pagamento/:aluguelid' , function(req, res, next) {
     const aluguel = req.params.aluguelid;
-
+    console.log(aluguel);
     Aluguel.getById(aluguel).then((result) => {
       console.log(result);
       var string = result.horario_retirada;
@@ -502,7 +449,8 @@ router.post('/acompmatriz', function(req, res, next) {
       console.log(error);
       res.redirect('/error')
     });
-});
+  });
+
 router.post('/encerrar/:locais_id', function(req, res, next) {
     const locais = req.params.locais_id;
     const  alugado  = req.body.alugado;
@@ -565,14 +513,18 @@ if(req.session.logado.type == "Master"){
 else{
   res.redirect('/acompanhamento');
 }
-            });
+  });
+
 router.get('/update/:aluguelid' ,auth.isAuthenticated, auth.isMaster, function(req, res, next){
       const id = req.params.aluguelid;
-      Aluguel.getById(id).then((result) => {
-      res.render('alterar', { title: 'Alterar', ...req.session, result, id});
+      Aluguel.getById(id).then((rent) => {
+        Client.getById(rent.client).then((client) => {
+          res.render('alterar', { title: 'Alterar', ...req.session, rent, client});
+        });        
     });
 
 });
+
 router.post('/alteracao/:aluguelid' , function(req, res, next){
     const aluguel = req.params.aluguelid;
     const  alterado  = req.body.aluguel;
@@ -596,6 +548,7 @@ router.post('/alteracao/:aluguelid' , function(req, res, next){
       res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
 });
 });
+
 router.post('/acompvila', function(req, res, next) {
   req.session.unidade="Vila";
   console.log(req.session.unidade);
@@ -606,6 +559,7 @@ router.post('/acompvila', function(req, res, next) {
       res.redirect(`/acompanhamento`);
     }
           });
+
 router.post('/voltar', function(req, res, next) {
     if(req.session.logado.type == "Master"){
         res.render('homemaster', { title: 'Home Master', ...req.session, reldia });
@@ -615,12 +569,13 @@ router.post('/voltar', function(req, res, next) {
     }
     res.redirect(`/acompanhamento`);
           });
-          router.post('/deslog', function(req, res, next) {
-            firebase.auth().signOut().then(function(){});
-              user = null;
-              req.session.logado= null;
-              res.redirect(`/login`);
-                     });
+
+router.post('/deslog', function(req, res, next) {
+  firebase.auth().signOut().then(function(){});
+    user = null;
+    req.session.logado= null;
+    res.redirect(`/login`);
+});
 
 
 module.exports = router;

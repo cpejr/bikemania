@@ -1,29 +1,23 @@
 const mongoose = require('mongoose');
 
 const aluguelSchema = new mongoose.Schema({
-  tempo: Number,
-  hora: String,
-  minute: String,
-  nome: String,
-  preco: Number,
-  horario_retirada: String,
-  equipamento: String,
-  horario_chegada: String,
-  /*horario_chegada:{
-    hora:Number,
-    minuto:Number
-  },*/
-  cpf: Number,
-  local_saida: String,
-  //nome: String,
-  acessorio:{
-    type:Boolean,
-    default: 0
-
-  }  //tem ou nao tem
-
-
-
+  client: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  clientName: String,
+  quantity: Number,
+  equipament: String,
+  accessory: String,
+  status: String,
+  time: Number,
+  price: Number,
+  startHour: String,
+  startMinute: String,
+  endHour: String,
+  endMinute: String,
+  startLocal: String,
+  endLocal: String
 }, { timestamps: true, static: false });
 const AluguelModel = mongoose.model('Aluguel', aluguelSchema);
 
@@ -104,13 +98,14 @@ class Aluguel {
    });
  }
 
- /**
-  * Get a User by it's id
-  * @param {string} id - User Id
-  * @returns {Object} - User Document Data
-  */
-
-
-
+ static getAllByUnity(value) {
+  return new Promise((resolve, reject) => {
+    AluguelModel.find({ startLocal: value }).populate('client').exec().then((result) => {
+      resolve(result);
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+}
   }
   module.exports = Aluguel;
