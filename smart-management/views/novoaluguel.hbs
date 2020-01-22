@@ -24,33 +24,35 @@
           <div class="novoaluguel">
 
             <div class="texto-centro">
-              <label for="InputCpf" ><FONT size="4" face="Swis721 LtEx BT" color="black" > CPF</FONT></label>
+              <label for="InputCpf" ><FONT size="4" face="Swis721 LtEx BT" color="black" >CPF</FONT></label>
             </div>
-            <input type="number" maxlength="11" class="form-control "  id="InputCpf"  placeholder="XXXXXXXXXXX" name="aluguel[cpf]"  >
-            
-            <div class="cadastro">
-              <div class="texto-centro">
-                <label for="InputHorário" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Horário</FONT></label>
-              </div>
-              <input  type="time-local"   class="form-control" id="InputHorario"  placeholder="00:00" name="aluguel[horario_chegada]">
-            </div>
+            <input type="text" maxlength="11" class="form-control "  id="InputCpf"  placeholder="XXXXXXXXXXX" name="aluguel[cpf]"  >
 
             <div class="cadastro">
-              <div class="texto-centro">
-                <label for="InputNumerodepessoas" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Pessoas </FONT></label>
+                  <div class="texto-centro mt-3">
+                    <label for="InputEquipamento" ><FONT size="4" face="Swis721 LtEx BT" color="black" >Local de retirada</FONT></label>
+                    <select id="productCode" class="drowdownoptions form-control" name="aluguel[startLocal]" required = "required">
+                      <option value disabled selected>Loja de retirada</option>
+                      <option value="Bem-Ti-Vi">Bem-Ti-Vi</option>
+                      <option value="Matriz">Matriz</option>
+                      <option value="Vila Pampulha">Vila Pampulha</option>
+                      <option value="Shopping Contagem">Shopping Contagem</option>                
+                    </select>
+                  </div>
+                </div>
+
+            <div class="cadastro row mt-3">
+              <div class="col-4">
+                <div class="texto-centro">
+                  <label for="InputNumerodepessoas" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Quantidade </FONT></label>
+                </div>
+                <input type="number" class="form-control" id="InputNumerodepessoas"  placeholder="X" name="aluguel[quantity]">
               </div>
-              <input type="number" class="form-control" id="InputNumerodepessoas"  placeholder="X" name="aluguel[pessoas]">
-            </div>
-
-            <div class="cadastro">
-              <div class="texto-centro">
-                <label for="InputEquipamento" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Equipamento</FONT></label>
-              </div>
-            </div>
-
-              <div class="texto-centro">
-
-                    <select id="productCode" class="drowdownoptions" name="aluguel[equipamento]" required = "required">
+              <div class="col-8">
+                <div class="cadastro">
+                  <div class="texto-centro">
+                    <label for="InputEquipamento" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Equipamento</FONT></label>
+                    <select id="productCode" class="drowdownoptions form-control" name="aluguel[equipament]" required = "required">
                     <option value disabled selected> Tipo</option>
                     <option value="Bicicleta aro 26">Bicicleta aro 26</option>
                     <option value="Triciclo">Triciclo</option>
@@ -68,22 +70,24 @@
                     <option value="MycoSep Trich">Triciclo trenzinho</option>
                     <option>Outro</option>
                     </select>
-              </div>
+                  </div>
+                </div>
+              </div>              
+            </div>
           </div>
 
-       <div class="form-group form-check">
-           <input type="radio" class="form-check-input"  id="exampleCheck1" value="1" name="aluguel[acessorio]" >
-           <label class="form-check-label"  for="exampleCheck1"><FONT size="3" face="Swis721 LtEx BT" color="black" > Com Acessório</FONT></label>
-         </div>
-       <div class="form-group form-check">
-           <input type="radio" class="form-check-input"  id="exampleCheck1" value="0" name="aluguel[acessorio]" >
-           <label class="form-check-label"  for="exampleCheck1"><FONT size="3" face="Swis721 LtEx BT" color="black" >Sem Acessório</FONT></label>
-         </div>
+       <div class="form-group form-check mt-3">
+           <input type="checkbox" class="form-check-input"  name="aluguel[accessory]" >
+           <label class="form-check-label"  for="exampleCheck1"><FONT size="3" face="Swis721 LtEx BT" color="black" >Levou acessório?</FONT></label>
+        </div>
+         
+        <div class="texto-centro">
+          <button type="submit" class="btncadastrar">Iniciar</button>
+        </div>
+        <div class="texto-centro">
+          <button type="submit" class="btncadastrar">Adicionar novo</button>
+        </div>
+          
 
-       <br>
-          <div class="texto-centro">
-            <button type="submit" class="btncadastrar">Alugar</button>
-
-          </div>
         </form>
       </div>
