@@ -1,14 +1,13 @@
 <nav class="navbar navbar-light bg-light" id="logobike">
 
 </nav>
-
        <div class="texto-centro">
          <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" >
            Alterar
        </FONT>
        <br>
        <br>
-<h3 class="pagamento">CPF: {{result.cpf}}</h3>
+<h3 class="pagamento">CPF: {{client.cpf}}</h3>
 </div>
     <div class="box">
 <form action="/alteracao/{{id}}" method="post">
@@ -19,7 +18,8 @@
   <input type="number" class="form-control" id="InputTempo"  placeholder="Tempo em minutos" name="aluguel[tempo]">
  </div>
 
- <div class="btntest col-4">
-   <button type="submit" class="btn_encerrar" >Confirmar</button> </div>
+ <div class="texto-centro mt-3">
+   <button type="submit" class="btn_encerrar" >Confirmar</button> 
+</div>
  </form>
 </div>

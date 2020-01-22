@@ -25,6 +25,7 @@
     <section class="container">
       <table class="table table-responsive-sm">
         <caption>Lista de aluguéis</caption>
+        <div id="txt"></div>
         <thead class="thead-CPE-white">
           <tr>
             <th class="text-center">Nome</th>
@@ -34,23 +35,24 @@
           </tr>
         </thead>
         <tbody id="table">
-          {{#each teste}}
+          {{#each rents}}
           <tr>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{nome}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{clientName}}</td>
             <td scope="row" class="text-center d-none">{{tempo}}</td>
+            
             <td scope="row" class="text-center align-middle font-weight-bold">{{hora}}:{{minute}}</td>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{eq}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{equipament}}</td>
             <td scope="row" class="text-center">
                 <form action="/pagamento/{{id}}" method="get">
-                <button class="btn text-white orange-button" type="submit">Encerrar</button>
-              </form>
-              <form action="/cancelar/{{id}}" method="POST">
-                <input type="hidden" name="user[name]" value="{{name}}">
-                <button class="btn text-white orange-button" type="submit">Cancelar</button>
-              </form>
-              <form action="/update/{{id}}" method="get">
-              <button class="btn text-white orange-button" type="submit">Alterar</button>
-            </form>
+                  <button class="btn text-white orange-button" type="submit">Encerrar</button>
+                </form>
+                <form action="/cancelar/{{id}}" method="POST">
+                  <input type="hidden" name="user[name]" value="{{name}}">
+                  <button class="btn text-white orange-button mt-1" type="submit">Cancelar</button>
+                </form>
+                <form action="/update/{{id}}" method="get">
+                  <button class="btn text-white orange-button mt-1" type="submit">Alterar</button>
+                </form>
             </td>
           </tr>
           {{/each}}
@@ -64,3 +66,6 @@
 <script src="/javascripts/moment-with-locales.min.js"></script>
 <script src="/javascripts/search-table.js"></script>
 <script src="/javascripts/index.js"></script>
+<script src="/javascripts/aluguel.js"></script>
+
+

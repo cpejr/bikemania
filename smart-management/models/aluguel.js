@@ -5,14 +5,17 @@ const aluguelSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
+  clientName: String,
   quantity: Number,
   equipament: String,
   accessory: String,
   status: String,
   time: Number,
   price: Number,
-  startTime: String,
-  endTime: String,
+  startHour: String,
+  startMinute: String,
+  endHour: String,
+  endMinute: String,
   startLocal: String,
   endLocal: String
 }, { timestamps: true, static: false });
@@ -97,17 +100,12 @@ class Aluguel {
 
  static getAllByUnity(value) {
   return new Promise((resolve, reject) => {
-    AluguelModel.find({ startLocal: value }).populate('client').then((result) => {
+    AluguelModel.find({ startLocal: value }).populate('client').exec().then((result) => {
       resolve(result);
     }).catch((err) => {
       reject(err);
     });
   });
 }
-
-
-
-
-
   }
   module.exports = Aluguel;
