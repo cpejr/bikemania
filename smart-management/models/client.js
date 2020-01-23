@@ -2,13 +2,31 @@ const mongoose = require('mongoose');
 
 const clientSchema = new mongoose.Schema({
 
-  name: String,
-  address: String,
-  cpf: Number,
-  rg: Number,
-  email: String,
-  phone: Number,
-
+  name: {
+    type: String,
+    required: true
+  },
+  address: {
+    type: String,
+    required: true
+  },
+  cpf: {
+    type: Number,
+    required: true,
+    unique: true
+  },
+  rg: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  phone: {
+    type: Number,
+    required: true
+  }
 
 }, { timestamps: true, static: false });
 const ClientModel = mongoose.model('Client', clientSchema);
@@ -79,7 +97,6 @@ class Client {
   * @param {string} id - User Id
   * @returns {null}
   */
-
   static delete(id) {
     return new Promise((resolve, reject) => {
       ClientModel.findOneAndDelete({_id: id}).then(() => {
@@ -90,6 +107,11 @@ class Client {
    });
  }
 
+ /**
+   * Get a User by it's CPF
+   * @param {string} cpf - User CPF
+   * @returns {Object} - User Document Data
+   */
  static getByCpf(cpf) {
    return new Promise((resolve, reject) => {
    ClientModel.findOne({cpf: cpf}).exec().then((result) => {
@@ -100,5 +122,5 @@ class Client {
    });
  }
 
-  }
-  module.exports = Client;
+}
+module.exports = Client;

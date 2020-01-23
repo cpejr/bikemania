@@ -7,11 +7,11 @@ module.exports = {
 // Caso não haja nenhum usuário logado, a página é redirecionada para o login. Caso haja um usuário logado, a página que o usuário quer acessar é carregada
   isAuthenticated: (req, res, next) => {
     const user = firebase.auth().currentUser;
-    if(user!== null){
+    if(user !== null){
       next();
     }
     else {
-      res.redirect('/login');
+      res.redirect('/');
     }
   },
   isMaster: (req, res, next) => {
@@ -20,7 +20,7 @@ module.exports = {
      next();
    }
    else {
-     res.redirect('/login');
+     res.redirect('/');
    }
  },
 }

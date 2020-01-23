@@ -2,53 +2,47 @@
 <main class="full-screen">
   <article class="justify-content-center mx-0">
     <div class="bg-CPE-white Address-btn1">
-      <button class="btn btn-default" onclick="location.href='/homemaster'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
-      <div class="acomp-header">
-        <h3 class="text-CPE-orange">Acompanhamento de aluguéis</h3>
+      <button class="btn btn-default" onclick="location.href='/home'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
+      <div class="acomp-header text-center">
+        <h3 class="text-CPE-orange">Acompanhamento de Alugueis</h3>
+        <h3 class="text-CPE-orange">{{unidade}}</h3>
       </div>
     </div>
-    <button class="btn btn-default" onclick="location.href='/novoaluguel'"> <i class="fa fa-plus-circle fa-5x" aria-hidden="true"></i> </button>
+    <button class="btn btn-default" onclick="location.href='/newRent'"> <i class="fa fa-plus-circle fa-5x" aria-hidden="true"></i> </button>
   </article>
   <article class="mt-3">
     <section class="row col-12 d-block d-sm-flex justify-content-between mx-auto">
       <div class="text-center">
-
         <button type="button" id="yellow-beach-btn" onclick="location.href='/signup'" class="btn orange-button btn-lg mt-4">Novo Cliente</button>
-
-
       </div>
       <div class="text-center">
-        <button onclick="location.href = '/login'" class="btn orange-button btn-lg mt-4">Deslogar</button>
+        <button onclick="location.href = '/logout'" class="btn orange-button btn-lg mt-4">Deslogar</button>
       </div>
     </section>
     <br>
     <section class="container">
       <table class="table table-responsive-sm">
-        <caption>Lista de aluguéis</caption>
-        <div id="txt"></div>
         <thead class="thead-CPE-white">
           <tr>
             <th class="text-center">Nome</th>
-            <th class="text-center">Tempo</th>
             <th class="text-center">Equipamento</th>
+            <th class="text-center">Quantidade</th>
             <th class="text-center">Opções</th>
           </tr>
         </thead>
         <tbody id="table">
           {{#each rents}}
           <tr>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{clientName}}</td>
-            <td scope="row" class="text-center d-none">{{tempo}}</td>
-            
-            <td scope="row" class="text-center align-middle font-weight-bold">{{hora}}:{{minute}}</td>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{equipament}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{client.name}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{equipament.name}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{quantity}}</td>
             <td scope="row" class="text-center">
-                <form action="/pagamento/{{id}}" method="get">
-                  <button class="btn text-white orange-button" type="submit">Encerrar</button>
+                <form action="/show/{{id}}" method="get">
+                  <button class="btn text-white orange-button" type="submit">Ver</button>
                 </form>
-                <form action="/cancelar/{{id}}" method="POST">
+                <form action="/delete/{{id}}" method="POST">
                   <input type="hidden" name="user[name]" value="{{name}}">
-                  <button class="btn text-white orange-button mt-1" type="submit">Cancelar</button>
+                  <button class="btn text-white orange-button mt-1" type="submit" onclick="deleteRent()">Cancelar</button>
                 </form>
                 <form action="/update/{{id}}" method="get">
                   <button class="btn text-white orange-button mt-1" type="submit">Alterar</button>
@@ -67,5 +61,10 @@
 <script src="/javascripts/search-table.js"></script>
 <script src="/javascripts/index.js"></script>
 <script src="/javascripts/aluguel.js"></script>
+<script> 
+  function deleteRent() { 
+      confirm("Tem certeza que deseja excluir este aluguel?"); 
+  } 
+</script> 
 
 
