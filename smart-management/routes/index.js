@@ -124,7 +124,7 @@ router.post('/newRent', auth.isAuthenticated, function(req, res, next) {
     minutes = "0" + minutes;
   }
   rent.startHour = hour + ":" + minutes;
-
+  rent.remainingQuantity = rent.quantity;
   Client.getByCpf(rent.cpf).then((client) => {
     rent.client = client;
     Equipament.getByName(rent.equipamentName).then((equipament) => {
@@ -161,10 +161,42 @@ router.get('/show/:_id' , auth.isAuthenticated, function(req, res, next) {
     var unitPrice = rent.equipament.price;
     unitPrice = unitPrice.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});;
     actualPrice = actualPrice.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
-    res.render('show', { title: 'Visualizar', ...req.session, rent, rentTime, actualPrice, unitPrice});
-  }).catch((error)=>{
+    res.render('show', { title: 'Visualizar', ...req.session, rent, rentTime, actualPrice, unitPrice, now});
+  }).catch((error) => {
     console.log(error);
     res.redirect('/error')
+  });
+});
+
+/* GET close Rent */
+router.post('/close/:_id', function(req, res, next) {
+  const id = req.params._id;
+  const close = req.body.close;
+  Rent.getById(id).then((rent) => {
+    rent.endLocal = close.endLocal;
+    rent.payment = close.payment;
+    rent.remainingQuantity -= close.returnQuantity;
+    if (rent.remainingQuantity == "0") {
+      rent.status = "Finalizado";
+    }
+    var time = parseInt(close.rentTime);
+    rent.receivedPrice += close.returnQuantity*rent.equipament.price*time;
+    console.log(rent.receivedPrice);
+    var date = new Date();
+    var hour = date.getHours();
+    var minutes = date.getMinutes();
+    if (hour < "10") {
+      hour = "0" + hour;
+    }
+    if (minutes < "10") {
+      minutes = "0" + minutes;
+    }
+    rent.endHour = hour + ":" + minutes;
+    rent.endTime = date.getTime();
+
+    Rent.update(id, rent).then((rent) => {
+      res.redirect('/dashboard');
+    });
   });
 });
 
@@ -283,70 +315,6 @@ router.get('/show/:_id' , auth.isAuthenticated, function(req, res, next) {
 
 // });
 // });
-
-// router.post('/close/:locais_id', function(req, res, next) {
-//     const locais = req.params.locais_id;
-//     const  alugado  = req.body.alugado;
-//     console.log("rrrrrrrrrrrr");
-// console.log(alugado);
-//     Aluguel.getById(locais).then((result) => {
-//       console.log("ooooooooooooo");
-//       console.log(result);
-//       const alugados = {
-//         id: String,
-//         horarioretirada: String,
-//         eq: String,
-//         horariochegada: String,
-//         _cpf: Number,
-//         localsaida: String,
-//         acess: String,
-//         tempo: Number,
-//         preco: Number,
-//         dia: Number,
-//         mes: Number,
-//         ano: Number,
-//         nome: String,
-//         pagamento: String
-
-//       }
-
-//         var today = new Date();
-//       var dd= String(today.getDate());
-//       var mm= String(today.getMonth()+1);
-//       var yyyy = today.getFullYear();
-//       alugados.pagamento = req.body.alugado.pagamento;
-//       alugados.horarioretirada = result.horario_retirada;
-//       alugados.horariochegada= result.horario_chegada;
-//       alugados.eq= result.equipamento;
-//       alugados._cpf = result.cpf;
-//       alugados.localsaida = result.local_saida;
-//       alugados.acess = result.acessorio;
-//       alugados.preco = result.preco;
-//       alugados.tempo = result.tempo;
-//       alugados.nome = result.nome;
-//       alugados.dia = dd;
-//       alugados.mes = mm;
-//       alugados.ano = yyyy;
-//       console.log("kkkkkkkkkkkk");
-//       console.log(alugados);
-//       Alugado.create(alugados).then((alugado_id) => {
-//         console.log("eeeeeeeeeeeeeeeee");
-//         console.log(alugado_id);
-//       });
-//     // reldia.push(result);
-//     // console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeey");
-//     // console.log(reldia);
-//     // console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeey");
-//     });
-
-//     Aluguel.delete(locais);
-// if(req.session.logado.type == "Master"){
-//   res.redirect('/acompmaster');
-// }
-// else{
-//   res.redirect('/acompanhamento');
-// }
-//   });
 
 // router.get('/update/:aluguelid' ,auth.isAuthenticated, auth.isMaster, function(req, res, next){
 //       const id = req.params.aluguelid;

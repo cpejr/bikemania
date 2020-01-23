@@ -6,7 +6,8 @@ const rentSchema = new mongoose.Schema({
     ref: 'Client'
   },
   quantity: Number,
-  equipament: {
+  remainingQuantity: Number,
+  accessory: {
     type: String,
     default: "off"
   },
@@ -29,11 +30,13 @@ const rentSchema = new mongoose.Schema({
   month: String,
   year: String,
 
-  price: String,
-
+  receivedPrice: {
+    type: Number,
+    default: 0
+  },
   startLocal: String,
   endLocal: String,
-  payment: String
+  payment: String,
 }, { timestamps: true, static: false });
 const RentModel = mongoose.model('Rent', rentSchema);
 
@@ -116,7 +119,7 @@ class Rent {
 
  static getAllByStartLocal(value) {
   return new Promise((resolve, reject) => {
-    RentModel.find({ startLocal: value }).populate('client').populate('equipament').exec().then((result) => {
+    RentModel.find({ startLocal: value , status:"Rodando" }).populate('client').populate('equipament').exec().then((result) => {
       resolve(result);
     }).catch((err) => {
       reject(err);
