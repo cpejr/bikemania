@@ -1,34 +1,50 @@
 const mongoose = require('mongoose');
 
-const aluguelSchema = new mongoose.Schema({
+const rentSchema = new mongoose.Schema({
   client: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'Client'
   },
-  clientName: String,
   quantity: Number,
-  equipament: String,
-  accessory: String,
-  status: String,
-  time: Number,
-  price: Number,
-  startHour: String,
-  startMinute: String,
-  endHour: String,
-  endMinute: String,
-  startLocal: String,
-  endLocal: String
-}, { timestamps: true, static: false });
-const AluguelModel = mongoose.model('Aluguel', aluguelSchema);
+  equipament: {
+    type: String,
+    default: "off"
+  },
+  equipament: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Equipament'
+  },
+  status: {
+    type: String,
+    default: "Rodando"
+  },
 
-class Aluguel {
+  startTime: String,
+  startHour: String,
+  endTime: String,
+  endHour: String,
+  totalTime: String,
+
+  day: String,
+  month: String,
+  year: String,
+
+  price: String,
+
+  startLocal: String,
+  endLocal: String,
+  payment: String
+}, { timestamps: true, static: false });
+const RentModel = mongoose.model('Rent', rentSchema);
+
+class Rent {
   /**
-   * Get all Aluguel from database
+   * Get all Rent from database
    * @returns {Array} Array of Users
    */
   static getAll() {
     return new Promise((resolve, reject) => {
-      AluguelModel.find({}).exec().then((results) => {
+        RentModel.find({}).exec().then((results) => {
         resolve(results);
       }).catch((err) => {
         reject(err);
@@ -43,7 +59,7 @@ class Aluguel {
    */
   static getById(id) {
     return new Promise((resolve, reject) => {
-      AluguelModel.findById(id).exec().then((result) => {
+        RentModel.findById(id).populate('client').populate('equipament').exec().then((result) => {
         resolve(result);
       }).catch((err) => {
         reject(err);
@@ -53,12 +69,12 @@ class Aluguel {
 
   /**
    * Create a new User
-   * @param {Object} aluguel - User Document Data
+   * @param {Object} rent - User Document Data
    * @returns {string} - New User Id
    */
-  static create(aluguel) {
+  static create(rent) {
     return new Promise((resolve, reject) => {
-      AluguelModel.create(aluguel).then((result) => {
+        RentModel.create(rent).then((result) => {
         resolve(result._id);
       }).catch((err) => {
         reject(err);
@@ -67,14 +83,14 @@ class Aluguel {
   }
 
   /**
-   * Update a Aluguel
-   * @param {string} id - Aluguel Id
-   * @param {Object} Aluguel - Aluguel Document Data
+   * Update a Rent
+   * @param {string} id - rent Id
+   * @param {Object} rent - rent Document Data
    * @returns {null}
    */
-  static update(id, aluguel) {
+  static update(id, rent) {
     return new Promise((resolve, reject) => {
-      AluguelModel.findByIdAndUpdate(id, aluguel).then(() => {
+        RentModel.findByIdAndUpdate(id, rent).then(() => {
         resolve();
       }).catch((err) => {
         reject(err);
@@ -90,7 +106,7 @@ class Aluguel {
 
   static delete(id) {
     return new Promise((resolve, reject) => {
-      AluguelModel.findOneAndDelete({_id: id}).then(() => {
+        RentModel.findOneAndDelete({_id: id}).then(() => {
         resolve();
       }).catch((err) => {
         reject(err);
@@ -98,14 +114,14 @@ class Aluguel {
    });
  }
 
- static getAllByUnity(value) {
+ static getAllByStartLocal(value) {
   return new Promise((resolve, reject) => {
-    AluguelModel.find({ startLocal: value }).populate('client').exec().then((result) => {
+    RentModel.find({ startLocal: value }).populate('client').populate('equipament').exec().then((result) => {
       resolve(result);
     }).catch((err) => {
       reject(err);
     });
-  });
-}
+    });
   }
-  module.exports = Aluguel;
+}
+  module.exports = Rent;

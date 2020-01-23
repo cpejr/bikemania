@@ -1,0 +1,68 @@
+<nav class="navbar navbar-light bg-light" id="logobike"></nav>
+<div class="pl-lg-5 pr-lg-5">
+  <div class="texto-centro mb-3">
+    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" >
+      Resumo do Aluguel
+    </FONT>
+  </div>
+
+  <div class="row mt-3">
+    <div class = "col-lg-6">
+      <h3 class="pagamento"><b>Nome do cliente:</b> {{rent.client.name}}</h3>
+      <h3 class="pagamento"><b>CPF/CNPJ:</b> {{rent.client.cpf}}</h3>
+      <h3 class="pagamento"><b>Hora de chegada:</b> {{rent.startHour}}</h3>
+      <h3 class="pagamento"><b>Tempo de aluguel:</b> {{rentTime}} minutos</h3>
+      <h3 class="pagamento"><b>Equipamento:</b> {{rent.equipament.name}}</h3>
+      <h3 class="pagamento"><b>Quantidade:</b> {{rent.quantity}}</h3>
+      <h3 class="pagamento"><b>Preço por unidade por minuto:</b> {{unitPrice}}</h3>
+      <h3 class="pagamento"><b>Preço total: </b> {{actualPrice}}</h3>
+    </div>
+
+    <div class="col-lg-6 mt-sm-3">
+      <form action="/close/{{rent.id}}" method="post">
+        <h3 class="text-CPE-orange">Forma de pagamento</h3>
+        
+          <div class="col-lg-5">
+            <label for="InputNumerodepessoas" ><FONT size="4" face="Swis721 LtEx BT" color="black" >Quantidade devolvida</FONT></label>
+          </div>
+          <div class="col-8 col-lg-4">
+            <input type="number" class="form-control" id="InputNumerodepessoas" name="rent[return]" max="{{rent.quantity}}" value="{{rent.quantity}}">
+          </div>
+
+          <div class="cadastro">
+            <div class="texto-centro mt-3 col-8 col-lg-4">
+              <label for="InputEquipamento" ><FONT size="4" face="Swis721 LtEx BT" color="black" >Local de devolução</FONT></label>
+              <select id="productCode" class="drowdownoptions form-control" name="rent[startLocal]" required = "required">
+                <option value={{rent.startLocal}}>{{rent.startLocal}}</option>
+                <option value="Mirante Bem-Ti-Vi">Mirante Bem-Ti-Vi</option>
+                <option value="Matriz">Matriz</option>
+                <option value="Vila Pampulha">Vila Pampulha</option>
+                <option value="Shopping Contagem">Shopping Contagem</option>                
+              </select>
+            </div>
+          </div>
+        
+        <div class="row mt-3">
+          <div class="col-4 col-lg-2">
+            <div class="form-group form-check">
+                <input type="radio" class="form-check-input"  id="exampleCheck1" value="card" name="rent[payment]" >
+                <label class="form-check-label"  for="exampleCheck1"><FONT size="3" face="Swis721 LtEx BT" color="black" > Cartão</FONT></label>
+            </div>
+          </div>
+          <div class="col-4 col-lg-2">
+            <div class="form-group form-check">
+              <input type="radio" class="form-check-input"  id="exampleCheck1" value="money" name="rent[payment]" >
+              <label class="form-check-label"  for="exampleCheck1"><FONT size="3" face="Swis721 LtEx BT" color="black" >Dinheiro</FONT></label>
+            </div>
+          </div>
+        </div>
+        <div class="btntest col-4">
+        <button type="submit" class="btn_encerrar">Encerrar aluguel</button> </div>
+      </form>
+    </div>    
+  </div>
+  
+
+
+  
+</div>
