@@ -43,7 +43,7 @@ const RentModel = mongoose.model('Rent', rentSchema);
 class Rent {
   /**
    * Get all Rent from database
-   * @returns {Array} Array of Users
+   * @returns {Array} Array of rents
    */
   static getAll() {
     return new Promise((resolve, reject) => {
@@ -58,7 +58,7 @@ class Rent {
   /**
    * Get a User by it's id
    * @param {string} id - User Id
-   * @returns {Object} - User Document Data
+   * @returns {Object} - rent Document Data
    */
   static getById(id) {
     return new Promise((resolve, reject) => {
@@ -71,9 +71,9 @@ class Rent {
   }
 
   /**
-   * Create a new User
-   * @param {Object} rent - User Document Data
-   * @returns {string} - New User Id
+   * Create a new rent
+   * @param {Object} rent - rent Document Data
+   * @returns {string} - New rent Id
    */
   static create(rent) {
     return new Promise((resolve, reject) => {
@@ -102,11 +102,10 @@ class Rent {
   }
 
   /**
-  * Delete a User
-  * @param {string} id - User Id
+  * Delete a rent
+  * @param {string} id - rent Id
   * @returns {null}
   */
-
   static delete(id) {
     return new Promise((resolve, reject) => {
         RentModel.findOneAndDelete({_id: id}).then(() => {
@@ -124,6 +123,16 @@ class Rent {
     }).catch((err) => {
       reject(err);
     });
+    });
+  }
+
+  static getAllByDate(day, month, year) {
+    return new Promise((resolve, reject) => {
+      RentModel.find({ day: day , month: month, year: year, status: "Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
     });
   }
 }
