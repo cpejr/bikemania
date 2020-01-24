@@ -279,11 +279,11 @@ router.post('/dailyReport', auth.isAuthenticated, auth.isMaster, function(req, r
   });
 });
 
-/* GET show Rent */
-router.get('/reportDetails/:_id', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+/* GET daily Rent report Details  */
+router.get('/dailyReportDetails/:_id', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
   const id = req.params._id;
   Rent.getById(id).then((rent) => {
-    res.render('reportDetails', { title: 'Info', ...req.session, rent});
+    res.render('dailyReportDetails', { title: 'Info', ...req.session, rent});
   }).catch((error) => {
     console.log(error);
     res.redirect('/error')
@@ -292,7 +292,6 @@ router.get('/reportDetails/:_id', auth.isAuthenticated, auth.isMaster, function(
 
 /* GET dailyBalance */
 router.get('/monthlyBalance', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
-  const id = req.params._id;
   var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   var date = new Date();
   var year = date.getFullYear();
@@ -352,33 +351,28 @@ router.post('/monthlyReport', auth.isAuthenticated, auth.isMaster, function(req,
   });
 });
 
-// router.get('/relatorioporequipamento',auth.isAuthenticated, auth.isMaster, function(req, res, next) {
-//   var today = new Date();
-//   var mm= String(today.getMonth()+1);
-//   var yyyy = today.getFullYear();
-//   var quanttt=0;
-//   var tempottm=0;
-//   var precottm=0;
-//   var dimtt=0;
-//   var cartt=0;
-// Alugado.getAllByMonth(mm,yyyy).then((result) => {
-//   console.log("oooooooooo");
-//   console.log(result);
-//   for(var i=0;i<result.length;i++){
-//   quanttt = quanttt + result[i].quantidade;
-//     tempottm = tempottm + result[i].tempo;
-//     precottm = precottm + result[i].preco;
+/* GET daily Rent report Details  */
+router.get('/monthlyReportDetails/:_id', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  const id = req.params._id;
+  Rent.getById(id).then((rent) => {
+    res.render('monthlyReportDetails', { title: 'Info', ...req.session, rent});
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
+});
 
-//   dimtt =  dimtt + result[i].dinheiro;
-//   cartt = cartt + result[i].cartao;
-//   }
-//   console.log("kkkkkkkkkkk");
-//   console.log(precottm);
-//   res.render('relatorioporequipamento', { title: 'Relatorio Por Equipamento', ...req.session, result, mm, yyyy, quanttt, tempottm, dimtt, cartt, precottm });
+/* GET equipament Balance */
+router.get('/equipamentBalance', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  Equipament.getAll().then((equipaments) => {
+    res.render('equipamentBalance', { title: 'Balanço de Equipamentos', ...req.session, equipaments});
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
+});
 
 
-// });
-// });
 
 // router.get('/update/:aluguelid' ,auth.isAuthenticated, auth.isMaster, function(req, res, next){
 //       const id = req.params.aluguelid;
