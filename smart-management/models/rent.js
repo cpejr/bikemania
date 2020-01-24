@@ -135,5 +135,35 @@ class Rent {
       });
     });
   }
+
+  static getAllByMonth(month, year) {
+    return new Promise((resolve, reject) => {
+      RentModel.find({ month: month, year: year, status: "Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  static getAllByDateAndStartLocal(startLocal, day, month, year) {
+    return new Promise((resolve, reject) => {
+      RentModel.find({startLocal: startLocal, day: day , month: month, year: year, status: "Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  static getAllByMonthAndStartLocal(startLocal, month, year) {
+    return new Promise((resolve, reject) => {
+      RentModel.find({startLocal: startLocal, month: month, year: year, status: "Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
 }
   module.exports = Rent;
