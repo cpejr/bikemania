@@ -215,15 +215,63 @@ router.post('/close/:_id', function(req, res, next) {
   });
 });
 
-/* GET daily Report */
-router.get('/dailyReport', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+/* GET dailyBalance */
+router.get('/dailyBalance', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  const id = req.params._id;
   var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   var date = new Date();
   var year = date.getFullYear();
   var month = months[date.getMonth()];
   var monthNumber = (date.getMonth()+1);
   var day = date.getDate();
-  Rent.getAllByDate(day , month, year).then((rents) => {
+  Rent.getAllByDate(day, month, year).then((rents) => {    
+    let totalProfit = rents.reduce((totalProfit, cur) => totalProfit + cur.receivedPrice, 0);
+    let totalUnits = rents.reduce((totalUnits, cur) => totalUnits + cur.quantity, 0);
+    Rent.getAllByDateAndStartLocal("Matriz", day, month, year).then((matrizRents) => {
+      let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.receivedPrice, 0);
+      let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
+      Rent.getAllByDateAndStartLocal("Mirante Bem-Ti-Vi", day, month, year).then((miranteRents) => {
+        let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.receivedPrice, 0);
+        let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
+        Rent.getAllByDateAndStartLocal("Vila Pampulha", day, month, year).then((vilaRents) => {
+          let vilaProfit = vilaRents.reduce((vilaProfit, cur) => vilaProfit + cur.receivedPrice, 0);
+          let vilaUnits = vilaRents.reduce((vilaUnits, cur) => vilaUnits + cur.quantity, 0);
+          Rent.getAllByDateAndStartLocal("Shopping Contagem", day, month, year).then((contagemRents) => {
+            let contagemProfit = contagemRents.reduce((contagemProfit, cur) => contagemProfit + cur.receivedPrice, 0);
+            let contagemUnits = contagemRents.reduce((contagemUnits, cur) => contagemUnits + cur.quantity, 0);
+            res.render('dailyBalance', { title: 'Info', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, day, monthNumber, year, });
+          }).catch((error) => {
+            console.log(error);
+            res.redirect('/error')
+          });    
+        }).catch((error) => {
+          console.log(error);
+          res.redirect('/error')
+        });
+      }).catch((error) => {
+        console.log(error);
+        res.redirect('/error')
+      });
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('/error')
+    });
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
+});
+
+/* GET daily Report */
+router.post('/dailyReport', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  const startLocal = req.body.local;
+  var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var date = new Date();
+  var year = date.getFullYear();
+  var month = months[date.getMonth()];
+  var monthNumber = (date.getMonth()+1);
+  var day = date.getDate();
+  Rent.getAllByDateAndStartLocal(startLocal, day , month, year).then((rents) => {
     res.render('dailyReport', { title: 'Relatório Diário', ...req.session, rents, day, monthNumber, year});
   }).catch((error) => {
     console.log(error);
@@ -243,51 +291,66 @@ router.get('/reportDetails/:_id', auth.isAuthenticated, auth.isMaster, function(
 });
 
 /* GET dailyBalance */
-router.get('/dailyBalance', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+router.get('/monthlyBalance', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
   const id = req.params._id;
   var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   var date = new Date();
   var year = date.getFullYear();
   var month = months[date.getMonth()];
   var monthNumber = (date.getMonth()+1);
-  var day = date.getDate();
-  Rent.getAllByDate(day, month, year).then((rents) => {    
+  Rent.getAllByMonth(month, year).then((rents) => {    
     let totalProfit = rents.reduce((totalProfit, cur) => totalProfit + cur.receivedPrice, 0);
     let totalUnits = rents.reduce((totalUnits, cur) => totalUnits + cur.quantity, 0);
-    res.render('balance', { title: 'Info', ...req.session, totalProfit, totalUnits, day, monthNumber, year});
+    Rent.getAllByMonthAndStartLocal("Matriz", month, year).then((matrizRents) => {
+      let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.receivedPrice, 0);
+      let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
+      Rent.getAllByMonthAndStartLocal("Mirante Bem-Ti-Vi", month, year).then((miranteRents) => {
+        let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.receivedPrice, 0);
+        let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
+        Rent.getAllByMonthAndStartLocal("Vila Pampulha", month, year).then((vilaRents) => {
+          let vilaProfit = vilaRents.reduce((vilaProfit, cur) => vilaProfit + cur.receivedPrice, 0);
+          let vilaUnits = vilaRents.reduce((vilaUnits, cur) => vilaUnits + cur.quantity, 0);
+          Rent.getAllByMonthAndStartLocal("Shopping Contagem", month, year).then((contagemRents) => {
+            let contagemProfit = contagemRents.reduce((contagemProfit, cur) => contagemProfit + cur.receivedPrice, 0);
+            let contagemUnits = contagemRents.reduce((contagemUnits, cur) => contagemUnits + cur.quantity, 0);
+            res.render('monthlyBalance', { title: 'Info', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, monthNumber, year, });
+          }).catch((error) => {
+            console.log(error);
+            res.redirect('/error')
+          });    
+        }).catch((error) => {
+          console.log(error);
+          res.redirect('/error')
+        });
+      }).catch((error) => {
+        console.log(error);
+        res.redirect('/error')
+      });
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('/error')
+    });
   }).catch((error) => {
     console.log(error);
     res.redirect('/error')
   });
 });
 
-// router.get('/relatoriomensal',auth.isAuthenticated, auth.isMaster, function(req, res, next) {
-//   var today = new Date();
-//   var mm= String(today.getMonth()+1);
-//   var yyyy = today.getFullYear();
-//   var quanttt=0;
-//   var tempottm=0;
-//   var precottm=0;
-//   var dimtt=0;
-//   var cartt=0;
-// Alugado.getAllByMonth(mm,yyyy).then((result) => {
-//   console.log("oooooooooo");
-//   console.log(result);
-//   for(var i=0;i<result.length;i++){
-//   quanttt = quanttt + result[i].quantidade;
-//     tempottm = tempottm + result[i].tempo;
-//     precottm = precottm + result[i].preco;
-
-//   dimtt =  dimtt + result[i].dinheiro;
-//   cartt = cartt + result[i].cartao;
-//   }
-//   console.log("kkkkkkkkkkk");
-//   console.log(precottm);
-//   res.render('relatoriomensal', { title: 'Relatorio Mensal', ...req.session, result, mm, yyyy, quanttt, tempottm, dimtt, cartt, precottm });
-
-
-// });
-// });
+/* GET daily Report */
+router.post('/monthlyReport', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  const startLocal = req.body.local;
+  var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var date = new Date();
+  var year = date.getFullYear();
+  var month = months[date.getMonth()];
+  var monthNumber = (date.getMonth()+1);
+  Rent.getAllByMonthAndStartLocal(startLocal, month, year).then((rents) => {
+    res.render('monthlyReport', { title: 'Relatório Mensal', ...req.session, rents, monthNumber, year});
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
+});
 
 // router.get('/relatorioporequipamento',auth.isAuthenticated, auth.isMaster, function(req, res, next) {
 //   var today = new Date();
