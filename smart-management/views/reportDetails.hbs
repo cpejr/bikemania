@@ -1,0 +1,23 @@
+<nav class="navbar navbar-light bg-light" id="logobike"></nav>
+<div class="pl-lg-5 pr-lg-5">
+  <button class="btn btn-default" onclick="location.href='/dailyReport'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
+  <div class="texto-centro mb-3">
+    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" >
+      Resumo do Aluguel
+    </FONT>
+  </div>
+
+  <div class="col mt-3 text-center">    
+      <h3 class="pagamento"><b>Nome do cliente:</b> {{rent.client.name}}</h3>
+      <h3 class="pagamento"><b>CPF/CNPJ:</b> {{rent.client.cpf}}</h3>
+      <h3 class="pagamento"><b>Hora de saída:</b> {{rent.startHour}}</h3>
+      <h3 class="pagamento"><b>Local da saída: </b> {{rent.startLocal}}</h3>      
+      <h3 class="pagamento"><b>Hora de devolução:</b> {{rent.endHour}}</h3>
+      <h3 class="pagamento"><b>Local de devolução: </b> {{rent.endLocal}}</h3>        
+      <h3 class="pagamento"><b>Tempo de aluguel:</b> {{rentTime}} minutos</h3>
+      <h3 class="pagamento"><b>Equipamento:</b> {{rent.equipament.name}}</h3>
+      <h3 class="pagamento"><b>Quantidade:</b> {{rent.quantity}}</h3>
+      <h3 class="pagamento"><b>Preço total: </b> {{rent.receivedPrice}}</h3>
+      <h3 class="pagamento"><b>Forma de pagamento: </b> {{rent.payment}}</h3>  
+  </div>  
+</div>

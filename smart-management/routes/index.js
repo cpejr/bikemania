@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 /* POST login route */
 router.post('/login', function(req, res, next) {
   const user = req.body.user;
-  firebase.auth().signInWithEmailAndPassword(user.userName, user.password).then((userFirebase)=>{
+  firebase.auth().signInWithEmailAndPassword(user.userName, user.password).then((userFirebase) => {
     mongodb.getByUid(userFirebase.user.uid).then((result) => {
       req.session.logado = result;
       res.redirect('/home');
@@ -68,12 +68,14 @@ router.get('/dashboard', auth.isAuthenticated, function(req, res, next) {
   var unity = req.session.unidade;
   Rent.getAllByStartLocal(unity).then((rents) => {
     if(req.session.logado.type == 'Master') {
-      console.log(rents);
       res.render('dashboardMaster', { title: 'Dashboard Master', ...req.session, rents });
     }
     else {
       res.render('dashboard', { title: 'Dashboard', ...req.session, rents });
     }
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
   });
 });
 
@@ -81,8 +83,12 @@ router.get('/dashboard', auth.isAuthenticated, function(req, res, next) {
 router.get('/logout', auth.isAuthenticated, function(req, res, next) {
   delete req.session.logado;
   delete req.session.unidade;
-  firebase.auth().signOut().then(function(){});
+  firebase.auth().signOut().then(function(){
     res.redirect(`/`);
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });    
 });
 
 /* GET signup */
@@ -136,7 +142,10 @@ router.post('/newRent', auth.isAuthenticated, function(req, res, next) {
         console.log(error);
         res.redirect('error');
       });
-    });    
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('/error')
+    });  
   }).catch((error) => {
     console.log(error);
     res.redirect('error');
@@ -176,12 +185,11 @@ router.post('/close/:_id', function(req, res, next) {
     rent.endLocal = close.endLocal;
     rent.payment = close.payment;
     rent.remainingQuantity -= close.returnQuantity;
-    if (rent.remainingQuantity == "0") {
+    if (rent.remainingQuantity === 0) {
       rent.status = "Finalizado";
     }
     var time = parseInt(close.rentTime);
     rent.receivedPrice += close.returnQuantity*rent.equipament.price*time;
-    console.log(rent.receivedPrice);
     var date = new Date();
     var hour = date.getHours();
     var minutes = date.getMinutes();
@@ -193,72 +201,65 @@ router.post('/close/:_id', function(req, res, next) {
     }
     rent.endHour = hour + ":" + minutes;
     rent.endTime = date.getTime();
+    rent.totalTime = Math.trunc((rent.endTime - rent.startTime)/60000);
 
     Rent.update(id, rent).then((rent) => {
       res.redirect('/dashboard');
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('/error')
     });
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
   });
 });
 
-// router.get('/relatoriodiario',auth.isAuthenticated,auth.isMaster, function(req, res, next) {
-//   var precott=0;
-//   var tempott=0;
-//   var today = new Date();
-//   var dd= String(today.getDate());
-//   var mm= String(today.getMonth()+1);
-//   var yyyy = today.getFullYear();
-//   const reldia = [];
-//   // if(yd == dd){
-//   Alugado.getAllByDay(dd,mm,yyyy).then((alugados) => {
-// var cartao=0;
-// var dinheiro=0;
-//   for(var i = 0; i < alugados.length; i++) {
-//     const alugadim = {
-//       id: String,
-//       horarioretirada: String,
-//       eq: String,
-//       horario_chegada: String,
-//       _cpf: Number,
-//       localsaida: String,
-//       acess: String,
-//       tempo: Number,
-//       preco: Number,
-//       pagamento: String,
-//       nome: String
-//     }
+/* GET daily Report */
+router.get('/dailyReport', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var date = new Date();
+  var year = date.getFullYear();
+  var month = months[date.getMonth()];
+  var monthNumber = (date.getMonth()+1);
+  var day = date.getDate();
+  Rent.getAllByDate(day , month, year).then((rents) => {
+    res.render('dailyReport', { title: 'Relatório Diário', ...req.session, rents, day, monthNumber, year});
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
+});
 
-//     alugadim.nome = alugados[i].nome;
-//     alugadim.id = alugados[i].id;
-//     alugadim.horarioretirada = alugados[i].horarioretirada;
-//     alugadim.eq= alugados[i].eq;
-//     alugadim._cpf = alugados[i]._cpf;
-//     alugadim.localsaida = alugados[i].localsaida;
-//     alugadim.acess = alugados[i].acess;
-//     alugadim.preco = alugados[i].preco;
-//     alugadim.tempo = alugados[i].tempo;
-//     alugadim.pagamento = alugados[i].pagamento;
-//     reldia.push(alugadim);
-//     if(alugadim.pagamento == "Cartao"){
-//       cartao++;
-//     }
-//     else{
-//       dinheiro++;
-//     }
-//     precott=precott+alugadim.preco;
-//     tempott=tempott+alugadim.tempo;
-//   }
-//     console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-//     console.log(reldia);
-//     console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-//     // console.log(reldia[0].localsaida);
-//     console.log("ooooooooooooooooooooooooo");
+/* GET show Rent */
+router.get('/reportDetails/:_id', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  const id = req.params._id;
+  Rent.getById(id).then((rent) => {
+    res.render('reportDetails', { title: 'Info', ...req.session, rent});
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
+});
 
-// console.log(precott);
-//   res.render('relatoriodiario', { title: 'Relatorio Diário', ...req.session,reldia , dd, mm, yyyy, precott, tempott, cartao, dinheiro });
-
-// });
-
-// });
+/* GET dailyBalance */
+router.get('/dailyBalance', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  const id = req.params._id;
+  var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var date = new Date();
+  var year = date.getFullYear();
+  var month = months[date.getMonth()];
+  var monthNumber = (date.getMonth()+1);
+  var day = date.getDate();
+  Rent.getAllByDate(day, month, year).then((rents) => {    
+    let totalProfit = rents.reduce((totalProfit, cur) => totalProfit + cur.receivedPrice, 0);
+    let totalUnits = rents.reduce((totalUnits, cur) => totalUnits + cur.quantity, 0);
+    res.render('balance', { title: 'Info', ...req.session, totalProfit, totalUnits, day, monthNumber, year});
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
+});
 
 // router.get('/relatoriomensal',auth.isAuthenticated, auth.isMaster, function(req, res, next) {
 //   var today = new Date();
