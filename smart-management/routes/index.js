@@ -88,7 +88,7 @@ router.get('/logout', auth.isAuthenticated, function(req, res, next) {
   }).catch((error) => {
     console.log(error);
     res.redirect('/error')
-  });    
+  });
 });
 
 /* GET signup */
@@ -145,11 +145,11 @@ router.post('/newRent', auth.isAuthenticated, function(req, res, next) {
     }).catch((error) => {
       console.log(error);
       res.redirect('/error')
-    });  
+    });
   }).catch((error) => {
     console.log(error);
     res.redirect('error');
-  });    
+  });
 });
 
 /* POST delete Rent */
@@ -224,7 +224,7 @@ router.get('/dailyBalance', auth.isAuthenticated, auth.isMaster, function(req, r
   var month = months[date.getMonth()];
   var monthNumber = (date.getMonth()+1);
   var day = date.getDate();
-  Rent.getAllByDate(day, month, year).then((rents) => {    
+  Rent.getAllByDate(day, month, year).then((rents) => {
     let totalProfit = rents.reduce((totalProfit, cur) => totalProfit + cur.receivedPrice, 0);
     let totalUnits = rents.reduce((totalUnits, cur) => totalUnits + cur.quantity, 0);
     Rent.getAllByDateAndStartLocal("Matriz", day, month, year).then((matrizRents) => {
@@ -243,7 +243,7 @@ router.get('/dailyBalance', auth.isAuthenticated, auth.isMaster, function(req, r
           }).catch((error) => {
             console.log(error);
             res.redirect('/error')
-          });    
+          });
         }).catch((error) => {
           console.log(error);
           res.redirect('/error')
@@ -297,7 +297,7 @@ router.get('/monthlyBalance', auth.isAuthenticated, auth.isMaster, function(req,
   var year = date.getFullYear();
   var month = months[date.getMonth()];
   var monthNumber = (date.getMonth()+1);
-  Rent.getAllByMonth(month, year).then((rents) => {    
+  Rent.getAllByMonth(month, year).then((rents) => {
     let totalProfit = rents.reduce((totalProfit, cur) => totalProfit + cur.receivedPrice, 0);
     let totalUnits = rents.reduce((totalUnits, cur) => totalUnits + cur.quantity, 0);
     Rent.getAllByMonthAndStartLocal("Matriz", month, year).then((matrizRents) => {
@@ -316,7 +316,7 @@ router.get('/monthlyBalance', auth.isAuthenticated, auth.isMaster, function(req,
           }).catch((error) => {
             console.log(error);
             res.redirect('/error')
-          });    
+          });
         }).catch((error) => {
           console.log(error);
           res.redirect('/error')
@@ -365,7 +365,24 @@ router.get('/monthlyReportDetails/:_id', auth.isAuthenticated, auth.isMaster, fu
 /* GET equipament Balance */
 router.get('/equipamentBalance', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
   Equipament.getAll().then((equipaments) => {
-    res.render('equipamentBalance', { title: 'Balanço de Equipamentos', ...req.session, equipaments});
+    Rent.getAllByMonth("January",2020).then((rents) =>{
+      equipaments.forEach(equipament => {
+        console.log(equipament._id);
+        equipament.rents = 0;
+        equipament.value = 0;
+        // console.log(equipament);
+        rents.forEach(rent => {
+          if (equipament.name == rent.equipament.name){
+            equipament.rents += rent.quantity;
+            equipament.value += rent.receivedPrice;
+          }
+        });
+      });
+      res.render('equipamentBalance', { title: 'Balanço de Equipamentos', ...req.session, equipaments});
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('/error')
+    });
   }).catch((error) => {
     console.log(error);
     res.redirect('/error')
@@ -379,7 +396,7 @@ router.get('/equipamentBalance', auth.isAuthenticated, auth.isMaster, function(r
 //       Aluguel.getById(id).then((rent) => {
 //         Client.getById(rent.client).then((client) => {
 //           res.render('alterar', { title: 'Alterar', ...req.session, rent, client});
-//         });        
+//         });
 //     });
 
 // });
