@@ -365,22 +365,24 @@ router.get('/monthlyReportDetails/:_id', auth.isAuthenticated, auth.isMaster, fu
 /* GET equipament Balance */
 router.get('/equipamentBalance', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
   Equipament.getAll().then((equipaments) => {
-    equipaments.forEach(equipament => {
-      equipament.rents = 0;
-      // console.log(equipament);
-      Rent.getEquipamentByMonthAndEquipamentID("January",2020,equipament._id).then((rents) =>{
+    Rent.getAllByMonth("January",2020).then((rents) =>{
+      equipaments.forEach(equipament => {
+        console.log(equipament._id);
+        equipament.rents = 0;
+        equipament.value = 0;
+        // console.log(equipament);
         rents.forEach(rent => {
-          equipament.rents += rent.quantity;
+          if (equipament.name == rent.equipament.name){
+            equipament.rents += rent.quantity;
+            equipament.value += rent.receivedPrice;
+          }
         });
-        console.log("antes"+equipament);
       });
-
+      res.render('equipamentBalance', { title: 'Balanço de Equipamentos', ...req.session, equipaments});
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('/error')
     });
-    console.log("depois"+equipaments);
-
-
-    res.render('equipamentBalance', { title: 'Balanço de Equipamentos', ...req.session, equipaments});
-
   }).catch((error) => {
     console.log(error);
     res.redirect('/error')

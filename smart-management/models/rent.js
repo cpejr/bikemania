@@ -146,15 +146,6 @@ class Rent {
     });
   }
 
-  static getEquipamentByMonthAndEquipamentID(month, year, id) {
-    return new Promise((resolve, reject) => {
-      RentModel.find({ equipament: { _id: id}, month: month, year: year, status: "Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
-        resolve(result);
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-  }
 
   static getAllByDateAndStartLocal(startLocal, day, month, year) {
     return new Promise((resolve, reject) => {

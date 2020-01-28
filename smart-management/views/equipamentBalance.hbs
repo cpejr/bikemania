@@ -3,7 +3,7 @@
   <button class="btn btn-default" onclick="location.href='/home'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
   <div class="texto-centro mb-3">
     <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" >
-      Relatório de Equipamentos 
+      Relatório de Equipamentos
     </FONT>
   </div>
 </div>
@@ -13,6 +13,7 @@
     <tr>
       <th scope="col">Nome</th>
       <th scope="col">Preço</th>
+      <th scope="col">Faturamento</th>
       <th scope="col">Alocações</th>
     </tr>
   </thead>
@@ -21,6 +22,7 @@
         <tr>
             <td scope="row">{{name}}</td>
             <td scope="row">{{price}}</td>
+            <td scope="row">{{value}}</td>
             <td scope="row">{{rents}}</td>
         </tr>
     {{/each}}
