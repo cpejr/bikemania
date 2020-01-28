@@ -59,7 +59,7 @@ router.post('/dashboardMatriz', auth.isAuthenticated, function(req, res, next) {
 
 /* POST Contagem route */
 router.post('/dashboardContagem', auth.isAuthenticated, function(req, res, next) {
-  req.session.unidade = "Contagem";
+  req.session.unidade = "Shopping Contagem";
   res.redirect(`/dashboard`);
 });
 
