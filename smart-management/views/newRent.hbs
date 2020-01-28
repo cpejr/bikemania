@@ -6,67 +6,87 @@
       Lançamento de aluguéis
     </FONT>
   </div>
-      <div class="box">
+      <div class="pl-lg-5 pr-lg-5">
         <form action="/newRent" method="post">
-          <div class="novoaluguel">
-            <div class="texto-centro">
-              <label for="InputCpf" ><FONT size="4" face="Swis721 LtEx BT" color="black" >CPF</FONT></label>
-            </div>
-            <input type="text" maxlength="11" class="form-control "  id="InputCpf"  placeholder="XXXXXXXXXXX" name="rent[cpf]" autofocus >{{cpf}}</input>
-
+          <div class="mt-3">
             <div class="cadastro">
-              <div class="texto-centro mt-3">
-                <label for="InputEquipamento" ><FONT size="4" face="Swis721 LtEx BT" color="black" >Local de retirada</FONT></label>
-                <select id="productCode" class="drowdownoptions form-control" name="rent[startLocal]" required = "required">
+              <div class="texto-centro">
+                <label><FONT size="4" face="Swis721 LtEx BT" color="black" >CPF</FONT></label>
+              </div>
+              <input type="text" maxlength="11" class="form-control " placeholder="XXXXXXXXXXX" name="rent[cpf]" autofocus>{{cpf}}</input>
+            </div>
+
+            <div class="cadastro mt-3">
+              <div class="texto-centro">
+                <label ><FONT size="4" face="Swis721 LtEx BT" color="black" >Local de retirada</FONT></label>
+              </div>
+                <select class="drowdownoptions form-control" name="rent[startLocal]" required = "required">
                   <option value disabled selected>Loja de retirada</option>
                   <option value="Mirante Bem-Ti-Vi">Mirante Bem-Ti-Vi</option>
                   <option value="Matriz">Matriz</option>
                   <option value="Vila Pampulha">Vila Pampulha</option>
                   <option value="Shopping Contagem">Shopping Contagem</option>                
-                </select>
-              </div>
+                </select>            
             </div>
 
-            <div class="cadastro row mt-3">
-              <div class="col-4">
-                <div class="texto-centro">
-                  <label for="InputNumerodepessoas" ><FONT size="4" face="Swis721 LtEx BT" color="black" >Quantidade </FONT></label>
-                </div>
-                <input type="number" class="form-control" id="InputNumerodepessoas"  placeholder="X" name="rent[quantity]">
-              </div>
-              <div class="col-8">
-                <div class="cadastro">
+            <div class="cadastro row">              
+              <div class="col-lg-8">
+                <div class="cadastro mt-3">
                   <div class="texto-centro">
-                    <label for="InputEquipamento" ><FONT size="4" face="Swis721 LtEx BT" color="black" > Equipamento</FONT></label>
-                    <select id="productCode" class="drowdownoptions form-control" name="rent[equipamentName]" required = "required">
+                    <label><FONT size="4" face="Swis721 LtEx BT" color="black" > Equipamento</FONT></label>
+                    <select class="drowdownoptions form-control" name="rent[equipamentName]" required = "required">
                     <option value disabled selected> Tipo</option>
-                    <option value="Bicicleta aro 26">Bicicleta aro 26</option>
+                    <option value="Bicicleta com marcha aro 26">Bicicleta com marcha aro 26</option>
                     <option value="Bicicleta com marcha aro 29">Bicicleta com marcha aro 29</option>                    
                     <option value="Bicicleta Freeride">Bicicleta Freeride</option>
+                    <option value="Bicicleta Chopper">Bicicleta Chopper</option>
                     <option value="Bicicleta Dupla">Bicicleta Dupla</option>
                     <option value="Bicicleta Comum">Bicicleta Comum</option>
                     <option value="Bicicleta Tripla">Bicicleta Tripla</option>
                     <option value="Bicicleta Triciclo Família">Bicicleta Triciclo Família</option>
                     <option value="Bicicleta Trenzinho">Bicicleta Trenzinho</option>
                     <option value="Triciclo">Triciclo</option>
+                    <option value="Moto Elétrica">Moto Elétrica</option>
                     <option value="Skate">Skate</option>
+                    <option value="Bola">Bola</option>
+                    <option value="Corda">Corda</option>
+                    <option value="Frescobol">Frescobol</option>
+                    <option value="Kangoo Jump">Kangoo Jump</option>
+                    <option value="Drift Tracker">Drift Tracker</option>
                     <option value="Patinete">Patinete</option>
                     <option value="Patins">Patins</option>
-                    <option value="Carrinho de Rolimã">Carrinho de Rolimã</option> 
-                    <option value="Outros">Outros</option>
                     </select>
                   </div>
                 </div>
-              </div>              
+              </div>  
+              <div class="col-lg-4">
+                <div class="texto-centro mt-3">
+                  <label><FONT size="4" face="Swis721 LtEx BT" color="black" >Quantidade </FONT></label>
+                </div>
+                <input type="number" class="form-control" name="rent[quantity]">
+              </div>           
             </div>
-          </div>
 
-       <div class="form-group form-check mt-3">
-           <input type="checkbox" class="form-check-input"  name="rent[accessory]" >
-           <label class="form-check-label"  for="exampleCheck1"><FONT size="3" face="Swis721 LtEx BT" color="black" >Levou acessório?</FONT></label>
-        </div>
-         
-        <div class="texto-centro">
+            <div class="cadastro row mt-3">              
+              <div class="col-lg-6">
+                <div class="cadastro mt-3">
+                  <div class="texto-centro">
+                    <label><FONT size="4" face="Swis721 LtEx BT" color="black" >Quantidade de acessórios</FONT></label>
+                  </div>
+                  <input type="number" maxlength="11" class="form-control" name="rent[accessory]" value=0></input>
+                </div>
+              </div>  
+              <div class="col-lg-6">
+                <div class="cadastro mt-3">
+                  <div class="texto-centro">
+                    <label><FONT size="4" face="Swis721 LtEx BT" color="black" >Quantidade de acessórios extras</FONT></label>
+                  </div>
+                  <input type="number" maxlength="11" class="form-control" name="rent[extraAccessory]" value=0></input>
+                </div>
+              </div>            
+            </div>
+          </div>         
+        <div class="texto-centro mt-3">
           <button type="submit" class="btncadastrar">Iniciar</button>
         </div>        
 
