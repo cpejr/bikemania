@@ -146,6 +146,7 @@ class Rent {
     });
   }
 
+
   static getAllByDateAndStartLocal(startLocal, day, month, year) {
     return new Promise((resolve, reject) => {
       RentModel.find({startLocal: startLocal, day: day , month: month, year: year, status: "Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
