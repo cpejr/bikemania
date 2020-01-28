@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const equipamentSchema = new mongoose.Schema({
   name: String,
-  price: Number
+  price: Number,
+  rents: Number
 }, { timestamps: true, static: false });
 
 
