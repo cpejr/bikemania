@@ -1,0 +1,32 @@
+<nav class="navbar navbar-light bg-light" id="logobike"></nav>
+<div class="pl-lg-5 pr-lg-5">
+  <button class="btn btn-default" onclick="location.href='/home'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
+  <div class="texto-centro mb-3">
+    <button class="col-xs-12 col-sm-12 col-md-2 btnrelatorio3" type="submit" onclick="location.href='/equipamentBalance/previous'">Mês Anterior</button>
+    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" >
+      Relatório de Equipamentos  -  {{date.monthNumber}}/{{date.year}}
+    </FONT>
+    <button class="col-xs-12 col-sm-12 col-md-2 btnrelatorio3" type="submit" onclick="location.href='/equipamentBalance/next'">Mês Posterior</button>
+  </div>
+</div>
+
+<table class="table table-hover mt-3">
+  <thead>
+    <tr>
+      <th scope="col">Nome</th>
+      <th scope="col">Preço</th>
+      <th scope="col">Faturamento</th>
+      <th scope="col">Alocações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each equipaments}}
+        <tr>
+            <td scope="row">{{name}}</td>
+            <td scope="row">{{price}}</td>
+            <td scope="row">{{value}}</td>
+            <td scope="row">{{rents}}</td>
+        </tr>
+    {{/each}}
+  </tbody>
+</table>
