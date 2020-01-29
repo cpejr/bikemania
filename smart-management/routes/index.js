@@ -364,8 +364,18 @@ router.get('/monthlyReportDetails/:_id', auth.isAuthenticated, auth.isMaster, fu
 
 /* GET equipament Balance */
 router.get('/equipamentBalance', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var date = new Date();
+  var date = {
+    year: date.getFullYear(),
+    month:   months[date.getMonth()],
+    monthNumber: (date.getMonth()+1)
+  }
+console.log(date);
+  req.session.date = date;
+  console.log(req.session);
   Equipament.getAll().then((equipaments) => {
-    Rent.getAllByMonth("January",2020).then((rents) =>{
+    Rent.getAllByMonth(date.month,date.year).then((rents) =>{
       equipaments.forEach(equipament => {
         console.log(equipament._id);
         equipament.rents = 0;
@@ -378,7 +388,97 @@ router.get('/equipamentBalance', auth.isAuthenticated, auth.isMaster, function(r
           }
         });
       });
-      res.render('equipamentBalance', { title: 'Balanço de Equipamentos', ...req.session, equipaments});
+      res.render('equipamentBalance', { title: 'Balanço de Equipamentos', ...req.session, equipaments, date});
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('/error')
+    });
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
+});
+
+/* GET equipament Balance previous */
+router.get('/equipamentBalance/previous', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var date = req.session.date;
+  if(date.monthNumber > 1){
+    date.monthNumber -= 1;
+    date.month = months[date.monthNumber -1];
+  }
+  else if (date.monthNumber == 1) {
+    date.monthNumber = 12;
+    date.month = months[11];
+    date.year -= 1;
+  }
+console.log(date);
+//   req.session.date = date;
+  console.log(req.session);
+  Equipament.getAll().then((equipaments) => {
+    Rent.getAllByMonth(date.month,date.year).then((rents) =>{
+      equipaments.forEach(equipament => {
+        console.log(equipament._id);
+        equipament.rents = 0;
+        equipament.value = 0;
+        // console.log(equipament);
+        rents.forEach(rent => {
+          if (equipament.name == rent.equipament.name){
+            equipament.rents += rent.quantity;
+            equipament.value += rent.receivedPrice;
+          }
+        });
+      });
+      res.render('equipamentBalancePrevious', { title: 'Balanço de Equipamentos', ...req.session, equipaments});
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('/error')
+    });
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
+});
+
+/* GET equipament Balance previous */
+router.get('/equipamentBalance/next', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var date = req.session.date;
+  var date_at = new Date();
+  var date_at = {
+    year: date_at.getFullYear(),
+    month:   months[date_at.getMonth()],
+    monthNumber: (date_at.getMonth()+1)
+  }
+  if (date_at.monthNumber == date.monthNumber && date_at.year == date.year) {
+    res.redirect('/equipamentBalance');
+  }
+  else {
+    if(date.monthNumber < 12){
+        date.monthNumber += 1;
+        date.month = months[date.monthNumber + 1];
+      }
+      else if (date.monthNumber == 12) {
+          date.monthNumber = 1;
+          date.month = months[0];
+          date.year += 1;
+        }
+  }
+  Equipament.getAll().then((equipaments) => {
+    Rent.getAllByMonth(date.month,date.year).then((rents) =>{
+      equipaments.forEach(equipament => {
+        // console.log(equipament._id);
+        equipament.rents = 0;
+        equipament.value = 0;
+        // console.log(equipament);
+        rents.forEach(rent => {
+          if (equipament.name == rent.equipament.name){
+            equipament.rents += rent.quantity;
+            equipament.value += rent.receivedPrice;
+          }
+        });
+      });
+      res.render('equipamentBalancePrevious', { title: 'Balanço de Equipamentos', ...req.session, equipaments, date});
     }).catch((error) => {
       console.log(error);
       res.redirect('/error')
