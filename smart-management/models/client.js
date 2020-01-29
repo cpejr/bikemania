@@ -8,7 +8,6 @@ const clientSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: true
   },
   cpf: {
     type: Number,
@@ -21,11 +20,9 @@ const clientSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: true
   },
   phone: {
     type: Number,
-    required: true
   }
 
 }, { timestamps: true, static: false });
