@@ -8438,6 +8438,20 @@ a {
 .btnrelatorio2 {
   font: "Poppins";
   color: "black";
+  font-size: "1";
+  background-color: #3CB1FE;
+  width: 100%;
+  outline-color: #FF6501;
+  border-radius: 50px;
+  border: 1px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  margin-left: 10px;
+  margin-right: 10px; }
+
+.btnrelatorio3 {
+  font: "Poppins";
+  color: "black";
   background-color: #3CB1FE;
   width: 100%;
   outline-color: #FF6501;
