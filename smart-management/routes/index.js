@@ -99,12 +99,20 @@ router.get('/signup', auth.isAuthenticated, function(req, res, next) {
 /* POST signup */
 router.post('/signup', auth.isAuthenticated, function(req,res) {
   const client  = req.body.client;
+  console.log(client);
+  var text = "/newRent/" + client.cpf;
+  console.log(text);
   Client.create(client).then((client_id) => {
-    res.redirect(`/newRent`);
+    res.redirect(text);
   }).catch((error) => {
     console.log(error);
     res.redirect('error');
   });
+});
+
+router.get('/newRent/:cpf', auth.isAuthenticated, function(req, res, next) {
+  var cpf = req.params.cpf;
+  res.render('newRentCpf', { title: 'Novo Aluguel', ...req.session, cpf });
 });
 
 /* GET new Rent */
