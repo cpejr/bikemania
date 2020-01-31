@@ -22,21 +22,21 @@
       <div class="texto-centro">
         <label for="InputEmail1" class="required"><FONT size="5" face="Swis721 LtEx BT" color="black">Nome/Empresa</FONT></label>
       </div>
-      <input type="text" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="Nome com espaço" name="client[name]" autofocus required>
+      <input type="text" class="form-control"  aria-describedby="emailHelp" placeholder="Nome com espaço" name="client[name]" autofocus required>
     </div>
 
     <div class="cadastro">
       <div class="texto-centro">
         <label for="InputEmail1" class="required"><FONT size="5" face="Swis721 LtEx BT" color="black" >CPF/CNPJ</FONT></label>
       </div>
-      <input type="text" maxlength="11" pattern="[0-9]+$" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="Apenas números" name="client[cpf]" required>
+      <input type="text" class="form-control" id="cpf" aria-describedby="emailHelp"  placeholder="Apenas números"  required>
     </div>
 
     <div class="cadastro">
         <div class="texto-centro">
           <label for="InputEmail1" class="required"><FONT size="5" face="Swis721 LtEx BT" color="black" >RG</FONT></label>
         </div>
-      <input type="text" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="RG sem caracteres especiais" name="client[rg]" required>
+      <input type="text" class="form-control" id="rg" aria-describedby="emailHelp" placeholder="RG sem caracteres especiais" name="client[rg]" required>
     </div>
 
   </div>
@@ -44,17 +44,17 @@
   <div class="col-lg-6">
     <div class="cadastro">
       <div class="texto-centro">
-        <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > Endereço de email</FONT></label>
+        <label  ><FONT size="5" face="Swis721 LtEx BT" color="black" > Endereço de e-mail</FONT></label>
       </div>
-      <input type="email" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="Seu email" name="client[email]">
+      <input type="email" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="Seu e-mail" name="client[email]" >
     </div>
     
     <div class="cadastro">
         <div class="texto-centro">
-          <label for="InputEmail1" ><FONT size="5" face="Swis721 LtEx BT" color="black" > Telefone </FONT></label>
+          <label ><FONT size="5" face="Swis721 LtEx BT" color="black" > Telefone </FONT></label>
         </div>
-        <input type="tel" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="(xx) xxxxx-xxxx" name="client[phone]">
-    </div>
+        <input type="text" class="form-control telefone" id="telefone" aria-describedby="emailHelp" placeholder="(xx) xxxxx-xxxx" name="client[phone]">
+  </div>
 
     <div class="cadastro">
       <div class="texto-centro">
@@ -65,8 +65,7 @@
 
   </div>    
 
-</div>
-    
+  </div>
 
     <div class="cadastro">
       <div class="texto-centro">
@@ -81,3 +80,6 @@
   </form>
 
 </div>
+
+<script type="text/javascript" src="/javascripts/jquery.mask.min.js"></script>
+<script src="/javascripts/mask.js" charset="utf-8"></script>
