@@ -141,6 +141,8 @@ router.post('/newRent', auth.isAuthenticated, function(req, res, next) {
   rent.remainingQuantity = rent.quantity;
   Client.getByCpf(rent.cpf).then((client) => {
     rent.client = client;
+    rent.quantity = parseInt(rent.quantity);
+    client.equipamentRents = parseInt(client.equipamentRents);
     client.equipamentRents += rent.quantity;
     var clientId = client._id;
     Client.update(clientId, client).then(() => {
