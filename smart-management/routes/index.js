@@ -141,18 +141,25 @@ router.post('/newRent', auth.isAuthenticated, function(req, res, next) {
   rent.remainingQuantity = rent.quantity;
   Client.getByCpf(rent.cpf).then((client) => {
     rent.client = client;
-    Equipament.getByName(rent.equipamentName).then((equipament) => {
-      delete rent.equipamentName;
-      rent.equipament = equipament;
-      Rent.create(rent).then((rent) => {
-        res.redirect('/dashboard');
+    client.equipamentRents += rent.quantity;
+    var clientId = client._id;
+    Client.update(clientId, client).then(() => {
+      Equipament.getByName(rent.equipamentName).then((equipament) => {
+        delete rent.equipamentName;
+        rent.equipament = equipament;
+        Rent.create(rent).then((rent) => {
+          res.redirect('/dashboard');
+        }).catch((error) => {
+          console.log(error);
+          res.redirect('error');
+        });
       }).catch((error) => {
         console.log(error);
-        res.redirect('error');
+        res.redirect('/error')
       });
     }).catch((error) => {
       console.log(error);
-      res.redirect('/error')
+      res.redirect('error');
     });
   }).catch((error) => {
     console.log(error);
@@ -497,41 +504,25 @@ router.get('/equipamentBalance/next', auth.isAuthenticated, auth.isMaster, funct
   });
 });
 
+/* GET show Rent */
+router.get('/clientList' , auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  Client.getAll().then((clients) => {
+    res.render('clientList', { title: 'Lista de Clientes', ...req.session, clients});
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
+});
 
-
-// router.get('/update/:aluguelid' ,auth.isAuthenticated, auth.isMaster, function(req, res, next){
-//       const id = req.params.aluguelid;
-//       Aluguel.getById(id).then((rent) => {
-//         Client.getById(rent.client).then((client) => {
-//           res.render('alterar', { title: 'Alterar', ...req.session, rent, client});
-//         });
-//     });
-
-// });
-
-// router.post('/alteracao/:aluguelid' , function(req, res, next){
-//     const aluguel = req.params.aluguelid;
-//     const  alterado  = req.body.aluguel;
-//     req.session.alterado = aluguel;
-//     console.log(alterado);
-//     console.log("kkkkkkkkkkkkkkkkkkkk");
-//     Aluguel.getById(aluguel).then((result) => {
-//     console.log(result);
-//     var now= DateTime.local();
-//     //
-//     var string = result.horario_retirada;
-//     // console.log(ola);
-//     // console.log(resultado1);
-//     result.horario_chegada = now;
-//     console.log(alterado);
-//     result.tempo = alterado.tempo;
-
-//     Aluguel.update(aluguel,result);
-//     console.log("lllllllllllllllllll");
-//     console.log(result);
-//       res.render('pagamento', { title: 'Pagamento', ...req.session, aluguel, result});
-// });
-// });
-
+/* GET daily Rent report Details  */
+router.get('/client/:_id', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  const id = req.params._id;
+  Client.getById(id).then((client) => {
+    res.render('clientDetails', { title: 'Info', ...req.session, client});
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
+});
 
 module.exports = router;

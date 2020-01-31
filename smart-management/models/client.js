@@ -25,7 +25,11 @@ const clientSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    //required: true
+    required: true
+  },
+  equipamentRents: {
+    type: Number,
+    default: 0
   }
 
 }, { timestamps: true, static: false });
@@ -82,7 +86,7 @@ class Client {
    * @param {Object} Client - User Document Data
    * @returns {null}
    */
-  static update(id, user) {
+  static update(id, client) {
     return new Promise((resolve, reject) => {
       ClientModel.findByIdAndUpdate(id, client).then(() => {
         resolve();
