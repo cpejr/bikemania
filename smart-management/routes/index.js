@@ -386,7 +386,8 @@ router.get('/equipamentBalance', auth.isAuthenticated, auth.isMaster, function(r
   var date = {
     year: date.getFullYear(),
     month:   months[date.getMonth()],
-    monthNumber: (date.getMonth()+1)
+    monthNumber: (date.getMonth()+1),
+    hour: date.getHours()
   }
 console.log(date);
   req.session.date = date;
