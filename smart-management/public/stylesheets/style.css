@@ -8774,7 +8774,7 @@ body {
   top: -1.5em;
   left: 0.4em;
   font-size: 1em;
-    font-size-adjust: 1; }
+    font-size-opacity: 1; }
 
 .new-shadow {
   box-shadow: none !important; }
@@ -8788,7 +8788,7 @@ body {
   top: -1.5em;
   left: 0.4em;
   font-size: 1em;
-    font-size-adjust: 1; }
+    font-size-opacity: 1; }
 
 .wrapper {
   display: flex;

@@ -25,7 +25,7 @@ const clientSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: true
+   // required: true
   },
   equipamentRents: {
     type: Number,
