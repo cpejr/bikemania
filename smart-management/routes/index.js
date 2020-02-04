@@ -32,7 +32,7 @@ router.post('/login', function(req, res, next) {
 /* GET home page. */
 router.get('/home', auth.isAuthenticated, function(req, res, next) {
   if(req.session.logado.type == 'Master') {
-    res.render('homeMaster', { title: 'Home', ...req.session });
+    res.render('homemaster', { title: 'Home', ...req.session });
   }
   else {
     res.render('home', { title: 'Home' , ...req.session});
