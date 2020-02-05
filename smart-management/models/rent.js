@@ -17,17 +17,14 @@ const rentSchema = new mongoose.Schema({
     type: String,
     default: "Rodando"
   },
-
   startTime: String,
   startHour: String,
   endTime: String,
   endHour: String,
   totalTime: String,
-
   day: String,
   month: String,
   year: String,
-
   receivedPrice: {
     type: Number,
     default: 0
@@ -35,6 +32,11 @@ const rentSchema = new mongoose.Schema({
   startLocal: String,
   endLocal: String,
   payment: String,
+  sale: {
+    type: String,
+    default: "Desativado"
+  }
+
 }, { timestamps: true, static: false });
 const RentModel = mongoose.model('Rent', rentSchema);
 

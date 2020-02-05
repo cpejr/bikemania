@@ -8,7 +8,6 @@ const clientSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    //required: true
   },
   cpf: {
     type: String,
@@ -21,13 +20,15 @@ const clientSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    //required: true
   },
   phone: {
     type: String,
-   // required: true
   },
   equipamentRents: {
+    type: Number,
+    default: 0
+  },
+  points: {
     type: Number,
     default: 0
   }

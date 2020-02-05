@@ -32,7 +32,7 @@ router.post('/login', function(req, res, next) {
 /* GET home page. */
 router.get('/home', auth.isAuthenticated, function(req, res, next) {
   if(req.session.logado.type == 'Master') {
-    res.render('homemaster', { title: 'Home', ...req.session });
+    res.render('homeMaster', { title: 'Home', ...req.session });
   }
   else {
     res.render('home', { title: 'Home' , ...req.session});
@@ -99,9 +99,7 @@ router.get('/signup', auth.isAuthenticated, function(req, res, next) {
 /* POST signup */
 router.post('/signup', auth.isAuthenticated, function(req,res) {
   const client  = req.body.client;
-  console.log(client);
   var text = "/newRent/" + client.cpf;
-  console.log(text);
   Client.create(client).then((client_id) => {
     res.redirect(text);
   }).catch((error) => {
@@ -110,6 +108,7 @@ router.post('/signup', auth.isAuthenticated, function(req,res) {
   });
 });
 
+/* GET new Rent with CPF*/
 router.get('/newRent/:cpf', auth.isAuthenticated, function(req, res, next) {
   var cpf = req.params.cpf;
   res.render('newRentCpf', { title: 'Novo Aluguel', ...req.session, cpf });
@@ -144,7 +143,16 @@ router.post('/newRent', auth.isAuthenticated, function(req, res, next) {
     rent.quantity = parseInt(rent.quantity);
     client.equipamentRents = parseInt(client.equipamentRents);
     client.equipamentRents += rent.quantity;
+
+    client.points = parseInt(client.points);
+    client.points += rent.quantity;
     var clientId = client._id;
+
+    if (client.points > 9) {
+      client.points -= 10;
+      rent.sale = "Ativado";
+    }
+
     Client.update(clientId, client).then(() => {
       Equipament.getByName(rent.equipamentName).then((equipament) => {
         delete rent.equipamentName;
@@ -180,14 +188,18 @@ router.post('/delete/:_id', auth.isAuthenticated, function(req, res, next) {
 router.get('/show/:_id' , auth.isAuthenticated, function(req, res, next) {
   const id = req.params._id;
   Rent.getById(id).then((rent) => {
+    var sale = 1;
     var date = new Date();
     var now = date.getTime();
     var rentTime = Math.trunc((now - rent.startTime)/60000);
-    var actualPrice = rent.quantity*rent.equipament.price*rentTime;
+    if(rent.sale == "Ativado") {
+      sale = 0.5;
+    }
+    var actualPrice = rent.quantity*rent.equipament.price*rentTime*sale;
     var unitPrice = rent.equipament.price;
     unitPrice = unitPrice.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});;
     actualPrice = actualPrice.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
-    res.render('show', { title: 'Visualizar', ...req.session, rent, rentTime, actualPrice, unitPrice, now});
+    res.render('show', { title: 'Visualizar', ...req.session, rent, rentTime, actualPrice, unitPrice, now});  
   }).catch((error) => {
     console.log(error);
     res.redirect('/error')
@@ -199,6 +211,10 @@ router.post('/close/:_id', function(req, res, next) {
   const id = req.params._id;
   const close = req.body.close;
   Rent.getById(id).then((rent) => {
+    var sale = 1;
+    if (rent.sale == "Ativado") {
+      sale = 0.5;
+    }
     rent.endLocal = close.endLocal;
     rent.payment = close.payment;
     rent.remainingQuantity -= close.returnQuantity;
@@ -206,7 +222,7 @@ router.post('/close/:_id', function(req, res, next) {
       rent.status = "Finalizado";
     }
     var time = parseInt(close.rentTime);
-    rent.receivedPrice += close.returnQuantity*rent.equipament.price*time;
+    rent.receivedPrice += close.returnQuantity*rent.equipament.price*time*sale;
     var date = new Date();
     var hour = date.getHours();
     var minutes = date.getMinutes();
