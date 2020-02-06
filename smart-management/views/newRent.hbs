@@ -13,7 +13,7 @@
               <div class="texto-centro">
                 <label for="InputEmail1" class="required"><FONT size="5" face="Swis721 LtEx BT" color="black" >CPF/CNPJ</FONT></label>
               </div>
-              <input type="text" class="form-control" id="cpf" aria-describedby="emailHelp"  placeholder="Apenas números" name="rent[cpf]" required>
+              <input type="text" class="form-control" id="cpf" aria-describedby="emailHelp"  placeholder="Apenas números" name="rent[cpf]" value="{{cpf}}" required>
             </div>
 
             <div class="cadastro mt-3">
@@ -25,11 +25,11 @@
                   <option value="Mirante Bem-Ti-Vi">Mirante Bem-Ti-Vi</option>
                   <option value="Matriz">Matriz</option>
                   <option value="Vila Pampulha">Vila Pampulha</option>
-                  <option value="Shopping Contagem">Shopping Contagem</option>                
-                </select>            
+                  <option value="Shopping Contagem">Shopping Contagem</option>
+                </select>
             </div>
 
-            <div class="cadastro row">              
+            <div class="cadastro row">
               <div class="col-lg-8">
                 <div class="cadastro mt-3">
                   <div class="texto-centro">
@@ -37,7 +37,7 @@
                     <select class="drowdownoptions form-control" name="rent[equipamentName]" required = "required">
                     <option value disabled selected> Tipo</option>
                     <option value="Bicicleta com marcha aro 26">Bicicleta com marcha aro 26</option>
-                    <option value="Bicicleta com marcha aro 29">Bicicleta com marcha aro 29</option>                    
+                    <option value="Bicicleta com marcha aro 29">Bicicleta com marcha aro 29</option>
                     <option value="Bicicleta Freeride">Bicicleta Freeride</option>
                     <option value="Bicicleta Chopper">Bicicleta Chopper</option>
                     <option value="Bicicleta Dupla">Bicicleta Dupla</option>
@@ -58,15 +58,15 @@
                     </select>
                   </div>
                 </div>
-              </div>  
+              </div>
               <div class="col-lg-4">
                 <div class="texto-centro mt-3">
                   <label><FONT size="4" face="Swis721 LtEx BT" color="black" >Quantidade </FONT></label>
                 </div>
                 <input type="number" class="form-control" name="rent[quantity]">
-              </div>           
+              </div>
             </div>
-            <div class="cadastro row mt-3">              
+            <div class="cadastro row mt-3">
               <div class="col-lg-6">
                 <div class="cadastro mt-3">
                   <div class="texto-centro">
@@ -74,7 +74,7 @@
                   </div>
                   <input type="number" maxlength="11" class="form-control" name="rent[accessory]" value=0></input>
                 </div>
-              </div>  
+              </div>
               <div class="col-lg-6">
                 <div class="cadastro mt-3">
                   <div class="texto-centro">
@@ -82,9 +82,9 @@
                   </div>
                   <input type="number" maxlength="11" class="form-control" name="rent[extraAccessory]" value=0></input>
                 </div>
-              </div>            
+              </div>
             </div>
-          </div>         
+          </div>
         <div class="texto-centro mt-3">
           <button type="submit" class="btncadastrar">Iniciar</button>
         </div>

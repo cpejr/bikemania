@@ -1,0 +1,68 @@
+<nav class="navbar navbar-light bg-light" id="logobike"></nav>
+<div class="pl-lg-5 pr-lg-5">
+  <button class="btn btn-default" onclick="location.href='/home'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
+  <div class="texto-centro mb-3">
+    <button class="col-xs-12 col-sm-12 col-md-2 btnrelatorio3" type="submit" onclick="location.href='/dailyBalance/previous'">Dia Anterior</button>
+    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" >
+      Relatório Diário - {{date.day}}/{{date.monthNumber}}/{{date.year}}
+    </FONT>
+    <button class="col-xs-12 col-sm-12 col-md-2 btnrelatorio3" type="submit" onclick="location.href='/dailyBalance/next'">Dia Posterior</button>
+  </div>
+</div>
+
+<div class="row">
+    <form action="/dailyReport" method="post">
+        <input type="hidden" class="form-control" name="local" value="Matriz">
+        <button class="btn text-white orange-button m-2" type="submit">Matriz</button>
+    </form>
+    <form action="/dailyReport" method="post">
+        <input type="hidden" class="form-control" name="local" value="Mirante Bem-Ti-Vi">
+        <button class="btn text-white orange-button m-2" type="submit">Mirante Bem-Ti-Vi</button>
+    </form>
+    <form action="/dailyReport" method="post">
+        <input type="hidden" class="form-control" name="local" value="Shopping Contagem">
+        <button class="btn text-white orange-button m-2" type="submit">Shopping Contagem</button>
+    </form>
+    <form action="/dailyReport" method="post">
+        <input type="hidden" class="form-control" name="local" value="Vila Pampulha">
+        <button class="btn text-white orange-button m-2" type="submit">Vila Pampulha</button>
+    </form>
+</div>
+
+
+<table class="table table-hover mt-3">
+  <thead>
+    <tr>
+      <th scope="col">Loja</th>
+      <th scope="col">Alocações</th>
+      <th scope="col">Faturamento</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Matriz</td>
+      <td>{{matrizUnits}}</td>
+      <td>{{matrizProfit}}</td>
+    </tr>
+    <tr>
+      <td>Mirante Bem-Ti-Vi</td>
+      <td>{{miranteUnits}}</td>
+      <td>{{miranteProfit}}</td>
+    </tr>
+    <tr>
+      <td>Shopping Contagem</td>
+      <td>{{contagemUnits}}</td>
+      <td>{{contagemProfit}}</td>
+    </tr>
+    <tr>
+      <td>Vila Pampulha</td>
+      <td>{{vilaUnits}}</td>
+      <td>{{vilaProfit}}</td>
+    </tr>
+    <tr>
+      <td>Total</td>
+      <td>{{totalUnits}}</td>
+      <td>{{totalProfit}}</td>
+    </tr>
+  </tbody>
+</table>
