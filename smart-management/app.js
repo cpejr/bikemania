@@ -1,14 +1,16 @@
-const session = require('express-session');
-const bodyParser = require('body-parser');
 require('dotenv').config();
+const bodyParser = require('body-parser');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var sassMiddleware = require('node-sass-middleware');
+const session = require('express-session');
 const firebase = require('firebase');
 const mongoose = require('mongoose');
+const flash = require('express-flash');
+const exphbs = require('express-handlebars');
 
 var indexRouter = require('./routes/index');
 
@@ -44,6 +46,44 @@ app.use(session({
 }));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+app.engine('hbs', exphbs({
+  defaultLayout: 'layout',
+  extname: '.hbs',
+  partialsDir: 'views/partials',
+  helpers: {
+    // Here we're declaring the #section that appears in layout/layout.hbs
+    section(name, options) {
+      if (!this._sections) this._sections = {};
+      this._sections[name] = options.fn(this);
+      return null;
+    },
+    // Compare logic
+    compare(lvalue, rvalue, options) {
+      if (arguments.length < 3) {
+        throw new Error("Handlerbars Helper 'compare' needs 2 parameters");
+      }
+      const operator = options.hash.operator || '==';
+      const operators = {
+        '==': function(l, r) { return l == r; },
+        '===': function(l, r) { return l === r; },
+        '!=': function(l, r) { return l != r; },
+        '<': function(l, r) { return l < r; },
+        '>': function(l, r) { return l > r; },
+        '<=': function(l, r) { return l <= r; },
+        '>=': function(l, r) { return l >= r; },
+        'typeof': function(l, r) { return typeof l == r; }
+      }
+      if (!operators[operator]) {
+        throw new Error(`Handlerbars Helper 'compare' doesn't know the operator ${operator}`);
+      }
+      const result = operators[operator](lvalue, rvalue);
+      if (result) {
+        return options.fn(this);
+      }
+      return options.inverse(this);
+    }
+  }
+ }));
 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -56,6 +96,7 @@ app.use(sassMiddleware({
   sourceMap: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(flash());
 
 app.use('/', indexRouter);
 
