@@ -24,8 +24,40 @@ router.post('/login', function(req, res, next) {
       res.redirect('/error')
     });
   }).catch((error) => {
+    switch (error.code) {
+       case 'auth/wrong-password':
+         req.flash('danger', 'Senha incorreta.');
+         break;
+       case 'auth/user-not-found':
+         req.flash('danger', 'Email não cadastrado.');
+         break;
+       case 'auth/network-request-failed':
+         req.flash('danger', 'Falha na internet. Verifique sua conexão de rede.');
+         break;
+       default:
+         req.flash('danger', 'Erro indefinido.');
+         console.log(error.code)
+       }
+     console.log(`Error Code: ${error.code}`);
+     console.log(`Error Message: ${error.message}`);
+     res.redirect('/');
+  });
+});
+
+router.get('/forgotPassword', (req, res) => {
+  res.render('forgotPassword', {title:'Esqueci Minha Senha'});
+});
+
+router.post('/forgotPassword', (req, res) => {
+  console.log(req.body);
+  const emailAddress = req.body.user.userName;
+  console.log(emailAddress);
+  firebase.auth().sendPasswordResetEmail(emailAddress).then(function() {
+    res.redirect('/');
+    req.flash('success', 'Email enviado');
+  }).catch((error) => {
     console.log(error);
-    res.redirect('/login')
+    res.redirect('/error');
   });
 });
 
@@ -104,7 +136,15 @@ router.post('/signup', auth.isAuthenticated, function(req,res) {
     res.redirect(text);
   }).catch((error) => {
     console.log(error);
-    res.redirect('error');
+    switch (error.code) {
+      case 11000:
+      if(error.keyPattern.cpf) {
+          req.flash('danger', 'CPF inserido já está em uso'); }
+      else if(error.keyPattern.rg) {
+          req.flash('danger', 'RG inserido já está em uso'); }
+        break;
+    }
+    res.redirect('/signup');
   });
 });
 
@@ -143,7 +183,6 @@ router.post('/newRent', auth.isAuthenticated, function(req, res, next) {
     rent.quantity = parseInt(rent.quantity);
     client.equipamentRents = parseInt(client.equipamentRents);
     client.equipamentRents += rent.quantity;
-
     client.points = parseInt(client.points);
     client.points += rent.quantity;
     var clientId = client._id;
@@ -172,8 +211,9 @@ router.post('/newRent', auth.isAuthenticated, function(req, res, next) {
       res.redirect('error');
     });
   }).catch((error) => {
+    req.flash('danger',"CPF não cadastrado");
     console.log(error);
-    res.redirect('error');
+    res.redirect('/newRent');
   });
 });
 

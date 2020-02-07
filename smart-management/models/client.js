@@ -16,7 +16,8 @@ const clientSchema = new mongoose.Schema({
   },
   rg: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   email: {
     type: String,

@@ -44,6 +44,7 @@ app.use(session({
   secret: 'some-private-cpe-key',
   key: 'cpe'
 }));
+app.use(flash());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.engine('hbs', exphbs({
@@ -96,7 +97,6 @@ app.use(sassMiddleware({
   sourceMap: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(flash());
 
 app.use('/', indexRouter);
 
