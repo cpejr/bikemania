@@ -111,6 +111,9 @@ router.get('/dashboard', auth.isAuthenticated, function(req, res, next) {
   });
 });
 
+
+
+
 /* GET logout */
 router.get('/logout', auth.isAuthenticated, function(req, res, next) {
   delete req.session.logado;
