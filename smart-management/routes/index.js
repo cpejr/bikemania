@@ -111,9 +111,6 @@ router.get('/dashboard', auth.isAuthenticated, function(req, res, next) {
   });
 });
 
-
-
-
 /* GET logout */
 router.get('/logout', auth.isAuthenticated, function(req, res, next) {
   delete req.session.logado;
@@ -307,16 +304,16 @@ router.get('/dailyBalance', auth.isAuthenticated, auth.isMaster, function(req, r
   Rent.getAllByDate(date.day, date.month, date.year).then((rents) => {
     let totalProfit = rents.reduce((totalProfit, cur) => totalProfit + cur.receivedPrice, 0);
     let totalUnits = rents.reduce((totalUnits, cur) => totalUnits + cur.quantity, 0);
-    Rent.getAllByDateAndStartLocal("Matriz", date.day, date.month, date.year).then((matrizRents) => {
+    Rent.getAllByDateAndEndLocal("Matriz", date.day, date.month, date.year).then((matrizRents) => {
       let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.receivedPrice, 0);
       let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
-      Rent.getAllByDateAndStartLocal("Mirante Bem-Ti-Vi", date.day, date.month, date.year).then((miranteRents) => {
+      Rent.getAllByDateAndEndLocal("Mirante Bem-Ti-Vi", date.day, date.month, date.year).then((miranteRents) => {
         let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.receivedPrice, 0);
         let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
-        Rent.getAllByDateAndStartLocal("Vila Pampulha", date.day, date.month,date.year).then((vilaRents) => {
+        Rent.getAllByDateAndEndLocal("Vila Pampulha", date.day, date.month,date.year).then((vilaRents) => {
           let vilaProfit = vilaRents.reduce((vilaProfit, cur) => vilaProfit + cur.receivedPrice, 0);
           let vilaUnits = vilaRents.reduce((vilaUnits, cur) => vilaUnits + cur.quantity, 0);
-          Rent.getAllByDateAndStartLocal("Shopping Contagem", date.day, date.month, date.year).then((contagemRents) => {
+          Rent.getAllByDateAndEndLocal("Shopping Contagem", date.day, date.month, date.year).then((contagemRents) => {
             let contagemProfit = contagemRents.reduce((contagemProfit, cur) => contagemProfit + cur.receivedPrice, 0);
             let contagemUnits = contagemRents.reduce((contagemUnits, cur) => contagemUnits + cur.quantity, 0);
             res.render('dailyBalance', { title: 'Info', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, date });
@@ -506,11 +503,11 @@ router.get('/dailyBalance/next', auth.isAuthenticated, auth.isMaster, function(r
 
 /* GET daily Report */
 router.post('/dailyReport', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
-  const startLocal = req.body.local;
+  const endLocal = req.body.local;
   const id = req.params._id;
   var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   var date = req.session.date;
-  Rent.getAllByDateAndStartLocal(startLocal, date.day , date.month, date.year).then((rents) => {
+  Rent.getAllByDateAndEndLocal(endLocal, date.day , date.month, date.year).then((rents) => {
     res.render('dailyReport', { title: 'Relatório Diário', ...req.session, rents, date});
   }).catch((error) => {
     console.log(error);
@@ -543,16 +540,16 @@ router.get('/monthlyBalance', auth.isAuthenticated, auth.isMaster, function(req,
   Rent.getAllByMonth(date.month, date.year).then((rents) => {
     let totalProfit = rents.reduce((totalProfit, cur) => totalProfit + cur.receivedPrice, 0);
     let totalUnits = rents.reduce((totalUnits, cur) => totalUnits + cur.quantity, 0);
-    Rent.getAllByMonthAndStartLocal("Matriz", date.month, date.year).then((matrizRents) => {
+    Rent.getAllByMonthAndEndLocal("Matriz", date.month, date.year).then((matrizRents) => {
       let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.receivedPrice, 0);
       let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
-      Rent.getAllByMonthAndStartLocal("Mirante Bem-Ti-Vi", date.month, date.year).then((miranteRents) => {
+      Rent.getAllByMonthAndEndLocal("Mirante Bem-Ti-Vi", date.month, date.year).then((miranteRents) => {
         let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.receivedPrice, 0);
         let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
-        Rent.getAllByMonthAndStartLocal("Vila Pampulha", date.month, date.year).then((vilaRents) => {
+        Rent.getAllByMonthAndEndLocal("Vila Pampulha", date.month, date.year).then((vilaRents) => {
           let vilaProfit = vilaRents.reduce((vilaProfit, cur) => vilaProfit + cur.receivedPrice, 0);
           let vilaUnits = vilaRents.reduce((vilaUnits, cur) => vilaUnits + cur.quantity, 0);
-          Rent.getAllByMonthAndStartLocal("Shopping Contagem", date.month, date.year).then((contagemRents) => {
+          Rent.getAllByMonthAndEndLocal("Shopping Contagem", date.month, date.year).then((contagemRents) => {
             let contagemProfit = contagemRents.reduce((contagemProfit, cur) => contagemProfit + cur.receivedPrice, 0);
             let contagemUnits = contagemRents.reduce((contagemUnits, cur) => contagemUnits + cur.quantity, 0);
             res.render('monthlyBalance', { title: 'Info', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, date});
