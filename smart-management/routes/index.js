@@ -272,9 +272,13 @@ router.post('/close/:_id', function(req, res, next) {
     if (minutes < "10") {
       minutes = "0" + minutes;
     }
+    rent.discount = rent.receivedPrice;
+    rent.hasDiscount = close.hasDiscount;
+    rent.justification = close.justification;
     rent.endHour = hour + ":" + minutes;
     rent.endTime = date.getTime();
     rent.totalTime = Math.trunc((rent.endTime - rent.startTime)/60000);
+    console.log(rent);
 
     Rent.update(id, rent).then((rent) => {
       res.redirect('/dashboard');
@@ -287,6 +291,29 @@ router.post('/close/:_id', function(req, res, next) {
     res.redirect('/error')
   });
 });
+
+
+/* GET close Rent */
+router.post('/dailyReport/edit/:_id', function(req, res, next) {
+  const id = req.params._id;
+  const price = req.body.price;
+  console.log("Atualizando");
+  Rent.getById(id).then((rent) => {
+    console.log(id);
+    console.log(rent);
+    rent.discount = price;
+    Rent.update(id, rent).then((rent) => {
+      res.redirect('/dashboard');
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('/error')
+    });
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
+});
+
 
 /* GET dailyBalance */
 router.get('/dailyBalance', auth.isAuthenticated, auth.isMaster, function(req, res, next) {

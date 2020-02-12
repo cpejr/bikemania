@@ -17,10 +17,21 @@
       <h3 class="pagamento"><b>Local da saída: </b> {{rent.startLocal}}</h3>      
       <h3 class="pagamento"><b>Hora de devolução:</b> {{rent.endHour}}</h3>
       <h3 class="pagamento"><b>Local de devolução: </b> {{rent.endLocal}}</h3>        
-      <h3 class="pagamento"><b>Tempo de aluguel:</b> {{rentTime}} minutos</h3>
+      <h3 class="pagamento"><b>Tempo de aluguel:</b> {{rent.totalTime}} min.</h3>
       <h3 class="pagamento"><b>Equipamento:</b> {{rent.equipament.name}}</h3>
       <h3 class="pagamento"><b>Quantidade:</b> {{rent.quantity}}</h3>
       <h3 class="pagamento"><b>Preço total: </b> {{rent.receivedPrice}}</h3>
       <h3 class="pagamento"><b>Forma de pagamento: </b> {{rent.payment}}</h3>  
+      <h3 class="pagamento"><b>Possui desconto: </b> {{rent.hasDiscount}}</h3> 
+      <h3 class="pagamento"><b>Justificativa: </b> {{rent.justification}}</h3>
+      <form action="/dailyReport/edit/{{rent._id}}" method="post">
+       <div class="texto-centro mt-3">
+        <label ><FONT size="4" color="black" >Valor Real</FONT></label>
+        <input type="number" class="form-control col-3" name="price" value="{{rent.discount}}">   
+      </div>
+      <div class="btntest mt-3 texto-centro">
+        <button type="submit" class="btn_encerrar">Atualizar</button> </div>  
+      </form>
+      
   </div>  
 </div>
