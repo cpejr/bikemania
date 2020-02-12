@@ -35,6 +35,15 @@ const rentSchema = new mongoose.Schema({
   sale: {
     type: String,
     default: "Desativado"
+  },
+  discount: Number,
+  justification: {
+    type: String,
+    default: "Não há justificativa"
+  },
+  hasDiscount: {
+    type: String,
+    default: "Não"
   }
 
 }, { timestamps: true, static: false });
