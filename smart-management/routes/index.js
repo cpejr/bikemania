@@ -832,13 +832,33 @@ router.get('/monthlyBalance/Next', auth.isAuthenticated, auth.isMaster, function
 
 
 /* GET daily Report */
-router.post('/monthlyReport', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
-  const startLocal = req.body.local;
+router.get('/monthlyReport', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  const monthty = req.session.monthlyReport;
   var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   var year = req.session.date.year;
   var month = req.session.date.month;
   var monthNumber = req.session.date.monthNumber;
-  Rent.getAllByMonthAndStartLocal(startLocal, month, year).then((rents) => {
+  Rent.getAllByMonthAndEndLocal(monthty.endLocal, month, year).then((rents) => {
+    res.render('monthlyReport', { title: 'Relatório Mensal', ...req.session, rents, monthNumber, year});
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
+});
+
+// POST daily Report
+router.post('/monthlyReport', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
+  const endLocal = req.body.local;
+  var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var year = req.session.date.year;
+  var month = req.session.date.month;
+  var monthNumber = req.session.date.monthNumber;
+  var monthlyReport = {
+    endLocal: req.body.local
+  };
+  req.session.monthlyReport = monthlyReport;
+  console.log(req.session);
+  Rent.getAllByMonthAndStartLocal(endLocal, month, year).then((rents) => {
     res.render('monthlyReport', { title: 'Relatório Mensal', ...req.session, rents, monthNumber, year});
   }).catch((error) => {
     console.log(error);
@@ -857,6 +877,25 @@ router.get('/monthlyReportDetails/:_id', auth.isAuthenticated, auth.isMaster, fu
   });
 });
 
+router.post('/monthlyReport/edit/:_id', function(req, res, next) {
+  const id = req.params._id;
+  const price = req.body.price;
+  console.log("Atualizando");
+  Rent.getById(id).then((rent) => {
+    console.log(id);
+    console.log(rent);
+    rent.discount = price;
+    Rent.update(id, rent).then((rent) => {
+      res.redirect('/monthlyReport');
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('/error')
+    });
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
+});
 /* GET equipament Balance */
 router.get('/equipamentBalance', auth.isAuthenticated, auth.isMaster, function(req, res, next) {
   var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -872,6 +911,8 @@ console.log(date);
   console.log(req.session);
   Equipament.getAll().then((equipaments) => {
     Rent.getAllByMonth(date.month,date.year).then((rents) =>{
+      var totalUnits = 0;
+      var totalProfit = 0;
       equipaments.forEach(equipament => {
         console.log(equipament._id);
         equipament.rents = 0;
@@ -880,11 +921,13 @@ console.log(date);
         rents.forEach(rent => {
           if (equipament.name == rent.equipament.name){
             equipament.rents += rent.quantity;
-            equipament.value += rent.receivedPrice;
+            equipament.value += rent.discount;
           }
         });
+        totalUnits += equipament.rents;
+        totalProfit += equipament.value;
       });
-      res.render('equipamentBalance', { title: 'Balanço de Equipamentos', ...req.session, equipaments, date});
+      res.render('equipamentBalance', { title: 'Balanço de Equipamentos', ...req.session, equipaments, date, totalUnits, totalProfit});
     }).catch((error) => {
       console.log(error);
       res.redirect('/error')
@@ -913,6 +956,8 @@ console.log(date);
   console.log(req.session);
   Equipament.getAll().then((equipaments) => {
     Rent.getAllByMonth(date.month,date.year).then((rents) =>{
+      var totalUnits = 0;
+      var totalProfit = 0;
       equipaments.forEach(equipament => {
         console.log(equipament._id);
         equipament.rents = 0;
@@ -921,11 +966,13 @@ console.log(date);
         rents.forEach(rent => {
           if (equipament.name == rent.equipament.name){
             equipament.rents += rent.quantity;
-            equipament.value += rent.receivedPrice;
+            equipament.value += rent.discount;
           }
         });
+        totalUnits += equipament.rents;
+        totalProfit += equipament.value;
       });
-      res.render('equipamentBalancePrevious', { title: 'Balanço de Equipamentos', ...req.session, equipaments});
+      res.render('equipamentBalancePrevious', { title: 'Balanço de Equipamentos', ...req.session, equipamentstotalUnits, totalProfit});
     }).catch((error) => {
       console.log(error);
       res.redirect('/error')
@@ -963,6 +1010,8 @@ router.get('/equipamentBalance/next', auth.isAuthenticated, auth.isMaster, funct
 
   Equipament.getAll().then((equipaments) => {
     Rent.getAllByMonth(date.month,date.year).then((rents) =>{
+      var totalUnits = 0;
+      var totalProfit = 0;
       equipaments.forEach(equipament => {
         // console.log(equipament._id);
         equipament.rents = 0;
@@ -971,11 +1020,15 @@ router.get('/equipamentBalance/next', auth.isAuthenticated, auth.isMaster, funct
         rents.forEach(rent => {
           if (equipament.name == rent.equipament.name){
             equipament.rents += rent.quantity;
-            equipament.value += rent.receivedPrice;
+            equipament.value += rent.discount;
           }
         });
+        totalUnits += equipament.rents;
+        totalProfit += equipament.value;
       });
-      res.render('equipamentBalancePrevious', { title: 'Balanço de Equipamentos', ...req.session, equipaments, date});
+
+      console.log(totalUnits);
+      res.render('equipamentBalancePrevious', { title: 'Balanço de Equipamentos', ...req.session, equipaments, date, totalUnits, totalProfit});
     }).catch((error) => {
       console.log(error);
       res.redirect('/error')
