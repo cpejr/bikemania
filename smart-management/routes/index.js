@@ -73,7 +73,7 @@ router.get('/home', auth.isAuthenticated, function(req, res, next) {
 
 /* POST Mirante route */
 router.post('/dashboardMirante', auth.isAuthenticated, function(req, res, next) {
-  req.session.unidade = "Mirante Bem-Ti-Vi";
+  req.session.unidade = "Bem-Te-Vi";
   res.redirect(`/dashboard`);
 });
 
@@ -334,7 +334,7 @@ router.get('/dailyBalance', auth.isAuthenticated, auth.isMaster, function(req, r
     Rent.getAllByDateAndEndLocal("Matriz", date.day, date.month, date.year).then((matrizRents) => {
       let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.discount, 0);
       let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
-      Rent.getAllByDateAndEndLocal("Mirante Bem-Ti-Vi", date.day, date.month, date.year).then((miranteRents) => {
+      Rent.getAllByDateAndEndLocal("Bem-Te-Vi", date.day, date.month, date.year).then((miranteRents) => {
         let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.discount, 0);
         let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
         Rent.getAllByDateAndEndLocal("Vila Pampulha", date.day, date.month,date.year).then((vilaRents) => {
@@ -398,7 +398,7 @@ router.get('/dailyBalance/:day::month::year', auth.isAuthenticated, auth.isMaste
     Rent.getAllByDateAndEndLocal("Matriz", date.day, date.month, date.year).then((matrizRents) => {
       let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.discount, 0);
       let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
-      Rent.getAllByDateAndEndLocal("Mirante Bem-Ti-Vi", date.day, date.month, date.year).then((miranteRents) => {
+      Rent.getAllByDateAndEndLocal("Bem-Te-Vi", date.day, date.month, date.year).then((miranteRents) => {
         let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.discount, 0);
         let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
         Rent.getAllByDateAndEndLocal("Vila Pampulha", date.day, date.month,date.year).then((vilaRents) => {
@@ -472,7 +472,7 @@ router.get('/dailyBalance/previous', auth.isAuthenticated, auth.isMaster, functi
     Rent.getAllByDateAndStartLocal("Matriz", date.day, date.month, date.year).then((matrizRents) => {
       let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.discount, 0);
       let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
-      Rent.getAllByDateAndStartLocal("Mirante Bem-Ti-Vi", date.day, date.month, date.year).then((miranteRents) => {
+      Rent.getAllByDateAndStartLocal("Bem-Te-Vi", date.day, date.month, date.year).then((miranteRents) => {
         let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.discount, 0);
         let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
         Rent.getAllByDateAndStartLocal("Vila Pampulha", date.day, date.month,date.year).then((vilaRents) => {
@@ -570,7 +570,7 @@ router.get('/dailyBalance/next', auth.isAuthenticated, auth.isMaster, function(r
     Rent.getAllByDateAndStartLocal("Matriz", date.day, date.month, date.year).then((matrizRents) => {
       let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.discount, 0);
       let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
-      Rent.getAllByDateAndStartLocal("Mirante Bem-Ti-Vi", date.day, date.month, date.year).then((miranteRents) => {
+      Rent.getAllByDateAndStartLocal("Bem-Te-Vi", date.day, date.month, date.year).then((miranteRents) => {
         let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.discount, 0);
         let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
         Rent.getAllByDateAndStartLocal("Vila Pampulha", date.day, date.month,date.year).then((vilaRents) => {
@@ -687,7 +687,7 @@ router.get('/monthlyBalance', auth.isAuthenticated, auth.isMaster, function(req,
     Rent.getAllByMonthAndEndLocal("Matriz", date.month, date.year).then((matrizRents) => {
       let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.discount, 0);
       let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
-      Rent.getAllByMonthAndEndLocal("Mirante Bem-Ti-Vi", date.month, date.year).then((miranteRents) => {
+      Rent.getAllByMonthAndEndLocal("Bem-Te-Vi", date.month, date.year).then((miranteRents) => {
         let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.discount, 0);
         let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
         Rent.getAllByMonthAndEndLocal("Vila Pampulha", date.month, date.year).then((vilaRents) => {
@@ -737,7 +737,7 @@ router.get('/monthlyBalance/Previous', auth.isAuthenticated, auth.isMaster, func
     Rent.getAllByMonthAndStartLocal("Matriz", date.month, date.year).then((matrizRents) => {
       let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.discount, 0);
       let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
-      Rent.getAllByMonthAndStartLocal("Mirante Bem-Ti-Vi", date.month, date.year).then((miranteRents) => {
+      Rent.getAllByMonthAndStartLocal("Bem-Te-Vi", date.month, date.year).then((miranteRents) => {
         let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.discount, 0);
         let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
         Rent.getAllByMonthAndStartLocal("Vila Pampulha", date.month, date.year).then((vilaRents) => {
@@ -798,7 +798,7 @@ router.get('/monthlyBalance/Next', auth.isAuthenticated, auth.isMaster, function
     Rent.getAllByMonthAndStartLocal("Matriz", date.month, date.year).then((matrizRents) => {
       let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.discount, 0);
       let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
-      Rent.getAllByMonthAndStartLocal("Mirante Bem-Ti-Vi", date.month, date.year).then((miranteRents) => {
+      Rent.getAllByMonthAndStartLocal("Bem-Te-Vi", date.month, date.year).then((miranteRents) => {
         let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.discount, 0);
         let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
         Rent.getAllByMonthAndStartLocal("Vila Pampulha", date.month, date.year).then((vilaRents) => {
