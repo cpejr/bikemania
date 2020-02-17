@@ -35,6 +35,15 @@ const rentSchema = new mongoose.Schema({
   sale: {
     type: String,
     default: "Desativado"
+  },
+  discount: Number,
+  justification: {
+    type: String,
+    default: "Não há justificativa"
+  },
+  hasDiscount: {
+    type: String,
+    default: "Não"
   }
 
 }, { timestamps: true, static: false });
@@ -126,6 +135,16 @@ class Rent {
     });
   }
 
+  static getAllByEndLocal(value) {
+    return new Promise((resolve, reject) => {
+      RentModel.find({ endLocal: value , status:"Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+      });
+    }
+
   static getAllByDate(day, month, year) {
     return new Promise((resolve, reject) => {
       RentModel.find({ day: day , month: month, year: year, status: "Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
@@ -157,6 +176,16 @@ class Rent {
     });
   }
 
+  static getAllByDateAndEndLocal(endLocal, day, month, year) {
+    return new Promise((resolve, reject) => {
+      RentModel.find({endLocal: endLocal, day: day , month: month, year: year, status: "Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
   static getAllByMonthAndStartLocal(startLocal, month, year) {
     return new Promise((resolve, reject) => {
       RentModel.find({startLocal: startLocal, month: month, year: year, status: "Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
@@ -166,5 +195,16 @@ class Rent {
       });
     });
   }
+
+  static getAllByMonthAndEndLocal(endLocal, month, year) {
+    return new Promise((resolve, reject) => {
+      RentModel.find({endLocal: endLocal, month: month, year: year, status: "Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
 }
   module.exports = Rent;

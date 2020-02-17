@@ -63,7 +63,7 @@
                 <div class="texto-centro mt-3">
                   <label><FONT size="4" face="Swis721 LtEx BT" color="black" >Quantidade </FONT></label>
                 </div>
-                <input type="number" class="form-control" name="rent[quantity]" min="1" value="{{quantity}}" required>
+                <input type="number" class="form-control" name="rent[quantity]" min="1" value=1 required>
               </div>
             </div>
             <div class="cadastro row mt-3">
@@ -72,7 +72,7 @@
                   <div class="texto-centro">
                     <label><FONT size="4" face="Swis721 LtEx BT" color="black" >Quantidade de acessórios</FONT></label>
                   </div>
-                  <input type="number" maxlength="11" class="form-control" name="rent[accessory]" value=0></input>
+                  <input type="number" maxlength="11" class="form-control" name="rent[accessory]" min="0" value=0></input>
                 </div>
               </div>
               <div class="col-lg-6">
@@ -80,7 +80,7 @@
                   <div class="texto-centro">
                     <label><FONT size="4" face="Swis721 LtEx BT" color="black" >Quantidade de acessórios extras</FONT></label>
                   </div>
-                  <input type="number" maxlength="11" class="form-control" name="rent[extraAccessory]" value=0></input>
+                  <input type="number" maxlength="11" class="form-control" name="rent[extraAccessory]" min="0" value=0></input>
                 </div>
               </div>
             </div>
