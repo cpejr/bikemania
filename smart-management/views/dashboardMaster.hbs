@@ -44,7 +44,7 @@
                   <button class="btn text-white orange-button" type="submit">Ver</button>
                 </form>
                 <form action="/delete/{{id}}" method="POST">
-                  <button class="btn text-white orange-button mt-1" onclick="deleteRent()" type="submit" >Cancelar</button>
+                  <button class="btn text-white orange-button mt-1" id = "confirmClickActionElementId"  type="submit" >Cancelar</button>
                 </form>
             </td>
           </tr>
@@ -60,10 +60,8 @@
 <script src="/javascripts/search-table.js"></script>
 <script src="/javascripts/index.js"></script>
 <script src="/javascripts/aluguel.js"></script>
-<script> 
-  function deleteRent() { 
-      confirm("Tem certeza que deseja excluir este aluguel?"); 
-  } 
-</script> 
-
-
+<script>
+  function deleteRent() {
+      confirm("Tem certeza que deseja excluir este aluguel?");
+  }
+</script>
