@@ -147,11 +147,37 @@ router.post('/signup', auth.isAuthenticated, function(req,res) {
     res.redirect('/signup');
   });
 });
+router.get('/returnName/:cpf', auth.isAuthenticated, function(req, res, next) {
+  var cpf = req.params._cpf;
+  console.log(cpf);
+  console.log("------------------------------------------------------------------------");
+  Client.getByCpf(cpf).then((client) => {
+    var name=client.name;
+    alert(name);
+    console.log(name+"name");
+    res.send(name);
+
+  }).catch((error) => {
+    console.log(error);
+  });
+  res.send(null);
+
+});
 
 /* GET new Rent with CPF*/
 router.get('/newRent/:cpf', auth.isAuthenticated, function(req, res, next) {
   var cpf = req.params.cpf;
-  res.render('newRent', { title: 'Novo Aluguel', ...req.session, cpf });
+  console.log(cpf);
+  console.log("------------------------------------------------------------------------");
+
+  Client.getByCpf(cpf).then((client) => {
+    var name=client.name;
+    console.log(name+"name");
+    res.render('newRent', { title: 'Novo Aluguel', ...req.session, cpf, name });
+
+  }).catch((error) => {
+    console.log(error);
+  });
 });
 
 /* GET new Rent */
@@ -678,7 +704,7 @@ router.get('/monthlyBalance', auth.isAuthenticated, auth.isMaster, function(req,
     year: date.getFullYear(),
     month:   months[date.getMonth()],
     monthNumber: (date.getMonth()+1),
-    hour: date.getHours()
+    hour: date.getHours(),
   }
   req.session.date = date;
   Rent.getAllByMonth(date.month, date.year).then((rents) => {

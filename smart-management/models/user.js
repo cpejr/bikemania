@@ -116,7 +116,7 @@ class User {
    */
   static getByCpf(id) {
     return new Promise((resolve, reject) => {
-      UserModel.findOne({ cpf: id }).exec().then((result) => {
+      UserModel.find({ cpf: id }).exec().then((result) => {
         resolve(result);
       }).catch((err) => {
         reject(err);
