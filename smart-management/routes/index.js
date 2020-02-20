@@ -147,29 +147,25 @@ router.post('/signup', auth.isAuthenticated, function(req,res) {
     res.redirect('/signup');
   });
 });
+
 router.get('/returnName/:cpf', auth.isAuthenticated, function(req, res, next) {
-  var cpf = req.params._cpf;
+  var cpf = req.params.cpf;
   console.log(cpf);
   console.log("------------------------------------------------------------------------");
   Client.getByCpf(cpf).then((client) => {
     var name=client.name;
-    alert(name);
     console.log(name+"name");
     res.send(name);
 
   }).catch((error) => {
     console.log(error);
   });
-  res.send(null);
 
 });
 
 /* GET new Rent with CPF*/
 router.get('/newRent/:cpf', auth.isAuthenticated, function(req, res, next) {
   var cpf = req.params.cpf;
-  console.log(cpf);
-  console.log("------------------------------------------------------------------------");
-
   Client.getByCpf(cpf).then((client) => {
     var name=client.name;
     console.log(name+"name");
