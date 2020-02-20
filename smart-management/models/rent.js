@@ -44,6 +44,10 @@ const rentSchema = new mongoose.Schema({
   hasDiscount: {
     type: String,
     default: "Não"
+  },
+  atualization: {
+    type: String,
+    default: "Não atualizado"
   }
 
 }, { timestamps: true, static: false });

@@ -302,6 +302,7 @@ router.post('/dailyReport/edit/:_id', function(req, res, next) {
     console.log(id);
     console.log(rent);
     rent.discount = price;
+    rent.atualization = "Atualizado";
     Rent.update(id, rent).then((rent) => {
       res.redirect('/dailyReport');
     }).catch((error) => {
