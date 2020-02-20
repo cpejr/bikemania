@@ -34,6 +34,17 @@ class Equipament {
     });
   }
 
+  static getByNameI(name, i) {
+    return new Promise((resolve, reject) => {
+      EquipamentModel.findOne({name: name}).exec().then((result) => {
+        result.i = i;
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
   /**
    * Get a equipament by it's id
    * @param {string} id - equipament Id

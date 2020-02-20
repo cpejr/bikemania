@@ -186,6 +186,9 @@ router.post('/newRent', auth.isAuthenticated, function(req, res, next) {
   const rent  = req.body.rent;
   console.log("variáveis");
   console.log(rent);
+  var arrayEquipament = rent.equipamentName;
+  var arrayQuantity = rent.quantity;
+  var arrayLength = arrayEquipament.length;
   var date = new Date();
   var hour = date.getHours();
   var minutes = date.getMinutes();
@@ -209,39 +212,47 @@ router.post('/newRent', auth.isAuthenticated, function(req, res, next) {
     client.points = parseInt(client.points);
     client.points += rent.quantity;
     var clientId = client._id;
-
     if (client.points > 9) {
       client.points -= 10;
       rent.sale = "Ativado";
     }
-
     Client.update(clientId, client).then(() => {
-      var arrayEquipament = rent.equipamentName;
-      var arrayQuantity = rent.quantity;
-      console.log(arrayEquipament.length);
-      console.log(arrayQuantity);
-      console.log(arrayEquipament);
-      for (var i = 0; i < arrayEquipament.length; i++) {
-      Equipament.getByName(arrayEquipament[i]).then((equipament) => {
-        var aluguel = rent;
-        delete aluguel.equipamentName;
-        delete aluguel.quantity;
-        delete aluguel.remainingQuantity;
-        aluguel.equipament = equipament;
-        aluguel.quantity = arrayQuantity[i];
-        aluguel.remainingQuantity = arrayQuantity[i];
-        console.log(aluguel);
-          Rent.create(aluguel).then((aluguel) => {
-            res.redirect('/dashboard');
-          }).catch((error) => {
-            console.log(error);
-            res.redirect('error');
-          }); 
-        
-      }).catch((error) => {
-        console.log(error);
-        res.redirect('/error')
-      });
+      if (arrayEquipament[1].length == 1) {
+        arrayLength = 1;
+      }
+      for (var i = 0; i < arrayLength; i++) {
+        console.log("i");
+        console.log(i);
+        var nameeq = arrayEquipament[i];
+        var numeq = arrayQuantity[i];
+        console.log("numeq");
+        console.log(numeq);
+        if (arrayLength == 1) {
+          nameeq = arrayEquipament;
+          numeq = arrayQuantity;
+        }
+        Equipament.getByNameI(nameeq,i).then((equipament) => {
+          var ii = Number(equipament.i);
+          if (arrayLength > 1) {
+            numeq = arrayQuantity[ii]
+          }
+          var aluguel = rent;
+          delete aluguel.equipamentName;
+          delete aluguel.quantity;
+          delete aluguel.remainingQuantity;
+          aluguel.equipament = equipament;
+          aluguel.quantity = numeq;
+          aluguel.remainingQuantity = numeq;
+            Rent.create(aluguel).then((aluguel) => {
+              res.redirect('/dashboard');
+            }).catch((error) => {
+              console.log(error);
+              res.redirect('error');
+            });
+        }).catch((error) => {
+          console.log(error);
+          res.redirect('/error')
+        });
     }
     }).catch((error) => {
       console.log(error);
