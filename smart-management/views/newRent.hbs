@@ -1,3 +1,5 @@
+<script src="/javascripts/newrent.js"></script>
+<script src="/javascripts/jquery.js" charset="utf-8"></script>
 <nav class="navbar navbar-light bg-light" id="logobike"></nav>
 <div class="pl-lg-5 pr-lg-5">
   <button class="btn btn-default" onclick="location.href='/dashboard'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
@@ -5,16 +7,19 @@
     <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" >
       Lançamento de aluguéis
     </FONT>
+    <!-- <script>cpfname();</script> -->
   </div>
       <div class="pl-lg-5 pr-lg-5">
         <form action="/newRent" method="post">
           <div class="mt-3">
             <div class="cadastro">
               <div class="texto-centro">
-                <label for="InputEmail1" class="required"><FONT size="5" face="Swis721 LtEx BT" color="black" >CPF/CNPJ</FONT></label>
+                <label for="InputEmail1" class="required"><FONT size="5" face="Swis721 LtEx BT" color="black" >CPF</FONT></label>
               </div>
-              <input type="text" class="form-control" id="cpf" aria-describedby="emailHelp"  placeholder="Apenas números" name="rent[cpf]" value="{{cpf}}" required>
+              <input type="text" class="form-control" onkeyup="cpfname()" id="cpf" aria-describedby="emailHelp"  placeholder="Apenas números" name="rent[cpf]" value="{{cpf}}" required>
+              <input type="text"  class="form-control" id="name" aria-describedby="emailHelp"  placeholder="Nome" name="rent[name]" value=" {{name}}" required readonly>
             </div>
+
 
             <div class="cadastro mt-3">
               <div class="texto-centro">

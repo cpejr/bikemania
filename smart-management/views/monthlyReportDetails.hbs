@@ -10,9 +10,9 @@
     </FONT>
   </div>
 
-  <div class="col mt-3 text-center">
+  <div class= "columns" >
       <h3 class="pagamento"><b>Nome do cliente:</b> {{rent.client.name}}</h3>
-      <h3 class="pagamento"><b>CPF/CNPJ:</b> {{rent.client.cpf}}</h3>
+      <h3 class="pagamento"><b>CPF:</b> {{rent.client.cpf}}</h3>
       <h3 class="pagamento"><b>Hora de saída:</b> {{rent.startHour}}</h3>
       <h3 class="pagamento"><b>Local da saída: </b> {{rent.startLocal}}</h3>
       <h3 class="pagamento"><b>Hora de devolução:</b> {{rent.endHour}}</h3>
@@ -25,6 +25,7 @@
       <h3 class="pagamento"><b>Possui desconto: </b> {{rent.hasDiscount}}</h3>
       <h3 class="pagamento"><b>Justificativa: </b> {{rent.justification}}</h3>
       <form action="/monthlyReport/edit/{{rent._id}}" method="post">
+      </div>
        <div class="texto-centro mt-3">
         <label ><FONT size="4" color="black" >Valor Real</FONT></label>
         <input type="number" class="form-control col-2 offset-md-5" step="0.01" name="price" value="{{rent.discount}}">
@@ -33,5 +34,4 @@
         <button type="submit" class="btn_encerrar offset-md-3">Atualizar</button> </div>
       </form>
 
-  </div>
 </div>
