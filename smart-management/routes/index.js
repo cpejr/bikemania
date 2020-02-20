@@ -184,6 +184,8 @@ router.get('/newRent', auth.isAuthenticated, function(req, res, next) {
 /* POST new Rent */
 router.post('/newRent', auth.isAuthenticated, function(req, res, next) {
   const rent  = req.body.rent;
+  console.log("variáveis");
+  console.log(rent);
   var date = new Date();
   var hour = date.getHours();
   var minutes = date.getMinutes();
@@ -199,7 +201,6 @@ router.post('/newRent', auth.isAuthenticated, function(req, res, next) {
     minutes = "0" + minutes;
   }
   rent.startHour = hour + ":" + minutes;
-  rent.remainingQuantity = rent.quantity;
   Client.getByCpf(rent.cpf).then((client) => {
     rent.client = client;
     rent.quantity = parseInt(rent.quantity);
@@ -215,19 +216,33 @@ router.post('/newRent', auth.isAuthenticated, function(req, res, next) {
     }
 
     Client.update(clientId, client).then(() => {
-      Equipament.getByName(rent.equipamentName).then((equipament) => {
-        delete rent.equipamentName;
-        rent.equipament = equipament;
-        Rent.create(rent).then((rent) => {
-          res.redirect('/dashboard');
-        }).catch((error) => {
-          console.log(error);
-          res.redirect('error');
-        });
+      var arrayEquipament = rent.equipamentName;
+      var arrayQuantity = rent.quantity;
+      console.log(arrayEquipament.length);
+      console.log(arrayQuantity);
+      console.log(arrayEquipament);
+      for (var i = 0; i < arrayEquipament.length; i++) {
+      Equipament.getByName(arrayEquipament[i]).then((equipament) => {
+        var aluguel = rent;
+        delete aluguel.equipamentName;
+        delete aluguel.quantity;
+        delete aluguel.remainingQuantity;
+        aluguel.equipament = equipament;
+        aluguel.quantity = arrayQuantity[i];
+        aluguel.remainingQuantity = arrayQuantity[i];
+        console.log(aluguel);
+          Rent.create(aluguel).then((aluguel) => {
+            res.redirect('/dashboard');
+          }).catch((error) => {
+            console.log(error);
+            res.redirect('error');
+          }); 
+        
       }).catch((error) => {
         console.log(error);
         res.redirect('/error')
       });
+    }
     }).catch((error) => {
       console.log(error);
       res.redirect('error');
