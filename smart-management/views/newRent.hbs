@@ -16,9 +16,15 @@
               <div class="texto-centro">
                 <label for="InputEmail1" class="required"><FONT size="5" face="Swis721 LtEx BT" color="black" >CPF</FONT></label>
               </div>
-              <input type="text" class="form-control" onkeyup="cpfname()" id="cpf" aria-describedby="emailHelp"  placeholder="Apenas números" name="rent[cpf]" value="{{cpf}}" required>
-              <input type="text"  class="form-control" id="name" aria-describedby="emailHelp"  placeholder="Nome" name="rent[name]" value=" {{name}}" required readonly>
+              <div class="cadastro row">
+                <div class="col-lg-8">
+                  <input type="text" class="form-control" onkeyup="cpfname()" id="cpf" aria-describedby="emailHelp"  placeholder="Apenas números" name="rent[cpf]" value="{{cpf}}" required>
+                </div>
+                <div class="col-lg-4">
+                  <input type="text"  class="form-control" id="name" aria-describedby="emailHelp"  placeholder="Nome" name="rent[name]" value=" {{name}}" required readonly>
+                </div>
             </div>
+          </div>
 
 
             <div class="cadastro mt-3">
