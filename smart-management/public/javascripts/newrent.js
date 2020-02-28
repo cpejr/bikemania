@@ -17,3 +17,11 @@ function cpfname(){
       $('#name').val("");
   }
  }
+
+ function partialPrice(_id){
+   var partialPrice=$('#price').val();
+   var quantidade=$('#Quantidade').val();
+   $.get('/partialPrice/'+_id, (price) => {
+     price=price*quantidade;
+     $('#price').val(price);
+ }

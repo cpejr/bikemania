@@ -272,6 +272,22 @@ router.post('/delete/:_id', auth.isAuthenticated, function(req, res, next) {
   res.redirect(`/dashboard`);
 });
 
+/* GET partialPRICE */
+router.get('/partialPrice/:_id', function(req,res,next){
+  var id = req.params._id;
+  Rent.getById(id).then((rent) =>{
+    var sale = 1;
+    var date = new Date();
+    var now = date.getTime();
+    var rentTime = Math.trunc((now - rent.startTime)/60000);
+    var partialPrice = rent.equipament.price*rentTime*sale;
+    partialPrice = partialPrice.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+    res.send(partialPrice);
+  }). catch((error) =>{
+    console.log(error);
+  });
+});
+
 /* GET actualPrice Rent */
 router.get('/show/:_id' , auth.isAuthenticated, function(req, res, next) {
   const id = req.params._id;
@@ -289,7 +305,7 @@ router.get('/show/:_id' , auth.isAuthenticated, function(req, res, next) {
     unitPrice = unitPrice.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});;
     actualPrice = actualPrice.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
     partialPrice = partialPrice.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
-    res.render('show', { title: 'Visualizar', ...req.session, rent, rentTime, actualPrice, unitPrice, partialPrice, now});
+    res.render('show', { title: 'Visualizar', ...req.session, rent, rentTime, actualPrice, unitPrice, now});
   }).catch((error) => {
     console.log(error);
     res.redirect('/error')
