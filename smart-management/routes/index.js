@@ -273,22 +273,18 @@ router.post('/delete/:_id', auth.isAuthenticated, function(req, res, next) {
 });
 
 /* GET partialPRICE */
-router.get('/partialPrice/:_id', function(req,res,next){
+router.get('/partialPrice/:_id', function(req,res){
   var id = req.params;
   console.log(id);
   
   Rent.getById(id).then((rent) =>{
-    var sale = 1;
     var date = new Date();
     var now = date.getTime();
     var rentTime = Math.trunc((now - rent.startTime)/60000);
-    var partialPrice = rent.equipament.price*rentTime*sale;
-    // partialPrice = partialPrice.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
-    console.log(partialPrice);
-    res.send(partialPrice);
+    var price = rent.equipament.price;
+    res.send({price, rentTime});
   }).catch((error) =>{
     console.log("erro aqui");
-    
     console.log(error);
   });
 });

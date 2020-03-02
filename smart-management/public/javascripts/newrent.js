@@ -21,24 +21,17 @@ function cpfname() {
 function partialPrice() {
   var id = $('#_id');
   var text = id.text().split(":  ");;
- 
-
-  console.log(text);
   var _id = text[1];
-  
+
   var quantity = $('#quantity').val();
-  console.log(_id);
-  console.log(quantity);
-  
   $.get('/partialPrice/' + _id, (partialPrice) => {
-    console.log(partialPrice);
-    alert(partialPrice);
-    // partialPrice *= quantity;
-    // console.log("FOI::");
-    // console.log(partialPrice);
-
-
-    $('#price').val(partialPrice);
+    var totalTime = partialPrice.rentTime * quantity;
+    var price = partialPrice.price * totalTime;
+    price = price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+    $('#price').val(price);
+  }).catch((error) => {
+    console.log(error);
   });
-  // setTimeout('partialPrice()', 10000);
+  setTimeout('partialPrice()', 1000);
 }
+
