@@ -14,6 +14,9 @@ const clientSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  datePoints: [{
+    type: String,
+  }],
   rg: {
     type: String,
     required: true,
@@ -68,6 +71,21 @@ class Client {
   }
 
   /**
+   * Get a datePoints by it's id
+   * @param {string} id - User Id
+   * @returns {Object} - User Document Data
+   */
+  static getDatePointsById(id) {
+    return new Promise((resolve, reject) => {
+      ClientModel.findById(id).exec().then((result) => {
+        resolve(result.datePoints);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  /**
    * Create a new User
    * @param {Object} client - User Document Data
    * @returns {string} - New User Id
@@ -91,6 +109,22 @@ class Client {
   static update(id, client) {
     return new Promise((resolve, reject) => {
       ClientModel.findByIdAndUpdate(id, client).then(() => {
+        resolve();
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+    /**
+   * Update a User dataPoints
+   * @param {string} id - User Id
+   * @param {Object} Client - User Document Data
+   * @returns {null}
+   */
+  static updateDatePoints(id, datePoint) {
+    return new Promise((resolve, reject) => {
+      ClientModel.update({_id: id}, {$set:{datePoints: datePoint}}).then(() => {
         resolve();
       }).catch((err) => {
         reject(err);
