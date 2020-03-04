@@ -281,7 +281,7 @@ router.get('/partialPrice/:_id', function (req, res) {
   var id = req.params;
   console.log(id);
 
-  Rent.getById(id).then((rent) => {
+  Rent.getById(id).then((rent) =>{
     var date = new Date();
     var now = date.getTime();
     var rentTime = Math.trunc((now - rent.startTime) / 60000);
@@ -292,6 +292,7 @@ router.get('/partialPrice/:_id', function (req, res) {
     console.log(error);
   });
 });
+
 
 /* GET actualPrice Rent */
 router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
@@ -1165,3 +1166,14 @@ router.get('/client/:_id', auth.isAuthenticated, auth.isMaster, function (req, r
 });
 
 module.exports = router;
+
+/* GET aguardando Pagamento  */
+router.get('/aguardando/:_id', auth.isAuthenticated, function(req,res){
+  const id = req.params._id;
+  Rent.getById(id).then((rent) => {
+    res.render('aguardando', { title: 'Visualizar', ...req.session});
+  }).catch(error=>{
+    console.log(error);
+    res.redirect("/error")
+  });
+});

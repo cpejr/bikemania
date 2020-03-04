@@ -13,14 +13,20 @@
         <form action="/newRent" method="post">
           <div class="mt-3">
             <div class="cadastro">
-              <div class="texto-centro">
-                <label for="InputEmail1" class="required"><FONT size="5" face="Swis721 LtEx BT" color="black" >CPF</FONT></label>
-              </div>
-              <div class="cadastro row">
-                <div class="col-lg-8">
-                  <input type="text" class="form-control" onkeyup="cpfname()" id="cpf" aria-describedby="emailHelp"  placeholder="Apenas números" name="rent[cpf]" value="{{cpf}}" required>
+              <div class="Address-btn1">
+                <div class="texto-col-6">
+                  <label for="InputEmail1" class="required"><FONT size="5" face="Swis721 LtEx BT" color="black" >CPF</FONT></label>
                 </div>
-                <div class="col-lg-4">
+                  <div class="texto-col-6">
+                    <label for="InputEmail1" class="required"><FONT size="5" face="Swis721 LtEx BT" color="black" >Nome</FONT></label>
+                  </div>
+                </div>
+                  <div class="cadastro row">
+                    <div class="col-lg-6">
+                      <input type="text" class="form-control" onkeyup="cpfname()" id="cpf" aria-describedby="emailHelp"  placeholder="Apenas números" name="rent[cpf]" value="{{cpf}}" required>
+                    </div>
+
+                <div class="col-lg-6">
                   <input type="text"  class="form-control" id="name" aria-describedby="emailHelp"  placeholder="Nome" name="rent[name]" value="{{name}}" required readonly>
                 </div>
             </div>
@@ -39,6 +45,7 @@
                   <option value="Shopping Contagem">Shopping Contagem</option>
                 </select>
             </div>
+
 
             <p></p>
 
@@ -95,7 +102,7 @@
                 <div class="col-lg-8">
                     <div class="cadastro mt-4">
                       <div class="texto-centro">
-                        <button onclick="remove(this)" type="button">Remover</button>
+                        <button class="btn btn-default" onclick="remove(this)" type="button" aria-hidden="true"><img src="/images/minus.png" width="30px" height"30px"> </button>
                       </div>
                     </div>
                   </div>
@@ -105,7 +112,7 @@
             <tfoot>
             <tr>
               <td colspan="5" style="text-align: right;">
-                <button onclick="AddTableRow(this)" type="button">Adicionar</button>
+                <button class="btn btn-default" onclick="AddTableRow(this)" type="button"><img src="/images/plus.png" width="30px" height"30px"></button>
               </td>
             </tr>
             </tfoot>

@@ -1,0 +1,40 @@
+<script src="/javascripts/newrent.js"></script>
+<script src="/javascripts/jquery.js" charset="utf-8"></script>
+<script>partialPrice();</script>
+
+<nav class="navbar navbar-light bg-light" id="logobike"></nav>
+<div class="pl-lg-5 pr-lg-5">
+  <button class="btn btn-default" onclick="location.href='/dashboard'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
+  <div class="texto-centro mb-3">
+    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" >
+      Pagamento
+    </FONT>
+  </div>
+
+<h3 class="pagamento"><b>Preço a pagar: </b> {{partialPrice}}</h3>
+
+          <div class="cadastro">
+            <div class="texto-centro mt-3">
+              <label for="InputEquipamento" ><FONT size="4" face="Swis721 LtEx BT" color="black" >Forma de pagamento</FONT></label>
+              <select id="productCode" class="drowdownoptions form-control" name="close[payment]" required = "required">
+                <option value="Crédito">Crédito</option>
+                <option value="Débito">Débito</option>
+                <option value="Dinheiro">Dinheiro</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="cadastro">
+            <div class="mt-3">
+              <input type="checkbox" name="close[hasDiscount]" value="Sim"> Desconto</input>
+            </div>
+          </div>
+
+            <div class="mt-3">
+              <textarea name="close[justification]" placeholder="Detalhes do desconto" cols="93" rows="4"></textarea>
+            </div>
+
+        <div class="btntest mt-3 texto-centro">
+        <button type="submit" class="btn_encerrar">Encerrar aluguel</button> </div>
+      </form>
+    </div>

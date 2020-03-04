@@ -25,6 +25,7 @@ const rentSchema = new mongoose.Schema({
   day: String,
   month: String,
   year: String,
+  partialPrice: Number,
   receivedPrice: {
     type: Number,
     default: 0
