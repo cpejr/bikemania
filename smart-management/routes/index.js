@@ -6,7 +6,7 @@ const mongodb = require('../models/user');
 const Client = require('../models/client');
 const Equipament = require('../models/equipament');
 const Rent = require('../models/rent');
- 
+
 const moment = require('moment');
 
 /* GET login page. */
@@ -395,30 +395,30 @@ router.post('/close/:_id', function (req, res, next) {
     close.equipament = rent.equipament;
     close.quantity = close.returnQuantity;
     console.log(close.partialPrice);
-    
+
     var partialPriceNumber =close.partialPrice.replace("R$","");
-    partialPriceNumber = partialPriceNumber.replace(".",""); 
-    partialPriceNumber = Number(partialPriceNumber.replace(",",".")); 
+    partialPriceNumber = partialPriceNumber.replace(".","");
+    partialPriceNumber = Number(partialPriceNumber.replace(",","."));
     console.log(partialPriceNumber)
     close.partialPrice = partialPriceNumber
     close.receivedPrice = partialPriceNumber;
     if(renderaux == 2 ){
       rent.receivedPrice = partialPriceNumber;
     }
-    
+
     console.log("Novo close");
-    console.log(close);    
+    console.log(close);
 
     Rent.update(id,rent);
 
     if(renderaux == 2){
       console.log("Red 1");
-      
+
       res.redirect('/aguardando/'+id);
     }
     else if(renderaux == 1){
       console.log("Red 2");
-      
+
       Rent.create(close).then((closeID) => {
         res.redirect('/aguardando/'+closeID._id);
       }).catch((error) => {
@@ -1206,7 +1206,7 @@ router.get('/aguardando/:_id', auth.isAuthenticated, function(req,res){
   const id = req.params._id;
   res.render('aguardando', { title: 'Visualizar', ...req.session});
   // Rent.getById(id).then((rent) => {
-    
+
   // }).catch(error=>{
   //   console.log(error);
   //   res.redirect("/error")
