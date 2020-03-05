@@ -21,7 +21,7 @@
       <h3 class="pagamento"><b>Quantidade:</b> {{rent.quantity}}</h3>
       <h3 class="pagamento"><b>Preço por unidade por minuto:</b> {{unitPrice}}</h3>
       <h3 class="pagamento"><b>Preço total: </b> {{actualPrice}}</h3>
-      <input  class="form-control" id="price" max="{{rent.remainingQuantity}}" >
+      
       <h3 class="pagamento"><b>Acessórios: </b> {{rent.accessory}}</h3>
       <h3 class="pagamento"><b>Acessórios extras: </b> {{rent.extraAccessory}}</h3>
       <h3 class="pagamento"><b>Meio aluguel: </b> {{rent.sale}}</h3>
@@ -36,6 +36,7 @@
             <label for="InputNumerodepessoas" ><FONT size="4" face="Swis721 LtEx BT" color="black" >Quantidade devolvida</FONT></label>
           </div>
           <input type="number" class="form-control" id="quantity" name="close[returnQuantity]" max="{{rent.remainingQuantity}}" min="1" value="{{rent.remainingQuantity}}" onkeyup="partialPrice()">
+          <input  class="form-control" id="price" name="close[partialPrice]" max="{{rent.remainingQuantity}}" >
           <input type="hidden" class="form-control"  name="close[now]" value="{{now}}">
           <input type="hidden" class="form-control"  name="close[rentTime]" value="{{rentTime}}">
           <div class="cadastro">
