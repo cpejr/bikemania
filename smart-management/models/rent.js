@@ -8,7 +8,6 @@ const rentSchema = new mongoose.Schema({
   quantity: Number,
   remainingQuantity: Number,
   accessory: Number,
-  extraAccessory: Number,
   equipament: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Equipament'

@@ -213,13 +213,7 @@ router.post('/newRent', auth.isAuthenticated, function (req, res, next) {
     rent.quantity = parseInt(rent.quantity);
     client.equipamentRents = parseInt(client.equipamentRents);
     client.equipamentRents += rent.quantity;
-    client.points = parseInt(client.points);
-    client.points += rent.quantity;
     var clientId = client._id;
-    if (client.points > 9) {
-      client.points -= 10;
-      rent.sale = "Ativado";
-    }
     Client.update(clientId, client).then(() => {
       if (arrayEquipament[1].length == 1) {
         arrayLength = 1;
@@ -322,16 +316,18 @@ router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
 
 /* GET close Rent */
 router.post('/close/:_id', function (req, res, next) {
+  // Pontos de Fidelidade
   var atualDate = new Date();
   var day = atualDate.getDate();
   var month = atualDate.getMonth();
   month++;
   var year = atualDate.getFullYear();
   var fulldate = year+"-"+month+"-"+day;
-
+  // ---------------------------------------------
   const id = req.params._id;
   const close = req.body.close;
   Rent.getById(id).then((rent) => {
+    // Pontos de Fidelidade
     Client.getDatePointsById(rent.client.id).then((datePoints) => {
       var aux = true;
       for(var i = 0; i < datePoints.length; i++) {
@@ -357,19 +353,19 @@ router.post('/close/:_id', function (req, res, next) {
       console.log("erro aqui");
       console.log(error);
     });
-  
-    var sale = 1;
-    if (rent.sale == "Ativado") {
-      sale = 0.5;
-    }
+    // ---------------------------------------------------------------------------
     rent.endLocal = close.endLocal;
-    rent.payment = close.payment;
+    // rent.payment = close.payment;
     rent.remainingQuantity -= close.returnQuantity;
+    var renderaux = 1;
     if (rent.remainingQuantity === 0) {
       rent.status = "Aguardando pagamento";
+      rent.quantity = close.returnQuantity;
+      rent.remainingQuantity = close.returnQuantity;
+      renderaux = 2;
     }
     var time = parseInt(close.rentTime);
-    rent.receivedPrice += close.returnQuantity * rent.equipament.price * time * sale;
+    // rent.receivedPrice += close.returnQuantity * rent.equipament.price * time * sale;
     var date = new Date();
     var hour = date.getHours();
     var minutes = date.getMinutes();
@@ -379,20 +375,58 @@ router.post('/close/:_id', function (req, res, next) {
     if (minutes < "10") {
       minutes = "0" + minutes;
     }
-    rent.discount = rent.receivedPrice;
-    rent.hasDiscount = close.hasDiscount;
-    rent.justification = close.justification;
+
     rent.endHour = hour + ":" + minutes;
     rent.endTime = date.getTime();
     rent.totalTime = Math.trunc((rent.endTime - rent.startTime) / 60000);
+    console.log("Rent");
     console.log(rent);
+    console.log("Close");
+    console.log(close);
+    close.status = "Aguardando Pagamento";
+    close.startLocal = rent.startLocal;
+    close.endLocal = rent.endLocal;
+    close.year = rent.year;
+    close.month = rent.month;
+    close.day = rent.day;
+    close.startHour = rent.startHour;
+    close.endHour = rent.endHour;
+    close.client = rent.client;
+    close.equipament = rent.equipament;
+    close.quantity = close.returnQuantity;
+    console.log(close.partialPrice);
+    
+    var partialPriceNumber =close.partialPrice.replace("R$","");
+    partialPriceNumber = partialPriceNumber.replace(".",""); 
+    partialPriceNumber = Number(partialPriceNumber.replace(",",".")); 
+    console.log(partialPriceNumber)
+    close.partialPrice = partialPriceNumber
+    close.receivedPrice = partialPriceNumber;
+    if(renderaux == 2 ){
+      rent.receivedPrice = partialPriceNumber;
+    }
+    
+    console.log("Novo close");
+    console.log(close);    
 
-    Rent.update(id, rent).then((rent) => {
+    Rent.update(id,rent);
+
+    if(renderaux == 2){
+      console.log("Red 1");
+      
       res.redirect('/aguardando/'+id);
-    }).catch((error) => {
-      console.log(error);
-      res.redirect('/error')
-    });
+    }
+    else if(renderaux == 1){
+      console.log("Red 2");
+      
+      Rent.create(close).then((closeID) => {
+        res.redirect('/aguardando/'+closeID._id);
+      }).catch((error) => {
+        console.log(error);
+        res.redirect('/error')
+      });
+    }
+
   }).catch((error) => {
     console.log(error);
     res.redirect('/error')
@@ -1165,15 +1199,20 @@ router.get('/client/:_id', auth.isAuthenticated, auth.isMaster, function (req, r
   });
 });
 
-module.exports = router;
+
 
 /* GET aguardando Pagamento  */
 router.get('/aguardando/:_id', auth.isAuthenticated, function(req,res){
   const id = req.params._id;
-  Rent.getById(id).then((rent) => {
-    res.render('aguardando', { title: 'Visualizar', ...req.session});
-  }).catch(error=>{
-    console.log(error);
-    res.redirect("/error")
-  });
+  res.render('aguardando', { title: 'Visualizar', ...req.session});
+  // Rent.getById(id).then((rent) => {
+    
+  // }).catch(error=>{
+  //   console.log(error);
+  //   res.redirect("/error")
+  // });
 });
+
+
+
+module.exports = router;
