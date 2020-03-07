@@ -277,9 +277,11 @@ router.get('/partialPrice/:_id', function (req, res) {
 
   Rent.getById(id).then((rent) =>{
     var date = new Date();
+    var size = rent.client.datePoints;
+    var loyaltyPoints = size.length;
     var now = date.getTime();
     var rentTime = Math.trunc((now - rent.startTime) / 60000);
-    var price = rent.equipament.price;
+    var price = rent.equipament.price; 
     res.send({ price, rentTime });
   }).catch((error) => {
     console.log("erro aqui");
@@ -294,6 +296,8 @@ router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
 
   Rent.getById(id).then((rent) => {
     console.log(rent.client);
+      var size = rent.client.datePoints;
+      var points = size.length;
       var sale = 1;
       var date = new Date();
       var now = date.getTime();
@@ -307,7 +311,7 @@ router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
       unitPrice = unitPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });;
       actualPrice = actualPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
       partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-      res.render('show', { title: 'Visualizar', ...req.session, rent, rentTime, actualPrice, unitPrice, now, id });
+      res.render('show', { title: 'Visualizar', ...req.session, rent, points, rentTime, actualPrice, unitPrice, now, id });
   }).catch((error) => {
     console.log(error);
     res.redirect('/error')
