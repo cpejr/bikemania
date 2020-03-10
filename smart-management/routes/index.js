@@ -351,7 +351,14 @@ router.post('/close/:_id', function (req, res, next) {
       if(aux == true) {
       datePoints.push(fulldate);
       console.log(datePoints);
-    }
+      }
+      var size = datePoints.length;
+      for(var i = 0; i < size - 1; i++){
+        if (size == 11) {
+          datePoints.shift();
+        }
+      }
+      
       Client.updateDatePoints(rent.client.id, datePoints);
     }).catch((error) => {
       console.log("erro aqui");
