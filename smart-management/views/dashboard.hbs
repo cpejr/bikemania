@@ -25,9 +25,7 @@
         <thead class="thead-CPE-white">
           <tr>
             <th class="text-center">Nome</th>
-            <th class="text-center">Equipamento</th>
-            <th class="text-center">Quantidade</th>
-            <th class="text-center">Status</th>
+            <th class="text-center">CPF</th>
             <th class="text-center">Opções</th>
           </tr>
         </thead>
@@ -35,11 +33,9 @@
           {{#each rents}}
           <tr>
             <td scope="row" class="text-center align-middle font-weight-bold">{{client.name}}</td>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{equipament.name}}</td>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{remainingQuantity}}</td>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{status}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{cpf}}</td>
             <td scope="row" class="text-center">
-              <form action="/dashboardClient/{{id}}" method="get">
+              <form action="/dashboardClient/{{cpf}}" method="get">
               <button class="btn text-white orange-button" type="submit">Ver</button>
             </form>
             </td>

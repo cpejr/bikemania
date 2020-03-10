@@ -5,6 +5,11 @@ const rentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Client'
   },
+  cpf: {
+    type: String,
+    required: true,
+    unique: true
+  },
   quantity: Number,
   remainingQuantity: Number,
   accessory: Number,
@@ -193,6 +198,16 @@ class Rent {
   static getAllByMonthAndStartLocal(startLocal, month, year) {
     return new Promise((resolve, reject) => {
       RentModel.find({startLocal: startLocal, month: month, year: year, status: "Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  static getByCpf(cpf) {
+    return new Promise((resolve, reject) => {
+    RentModel.find({cpf: cpf}).populate('client').populate('equipament').exec().then((result) => {
         resolve(result);
       }).catch((err) => {
         reject(err);
