@@ -100,12 +100,13 @@ router.post('/dashboardContagem', auth.isAuthenticated, function (req, res, next
 /* GET Dashboard page */
 router.get('/dashboard', auth.isAuthenticated, function (req, res, next) {
   var unity = req.session.unidade;
+  var cpf = req.body.cpf;
   Rent.getAllByStartLocal(unity).then((rents) => {
     if (req.session.logado.type == 'Master') {
-      res.render('dashboardMaster', { title: 'Dashboard Master', ...req.session, rents });
+      res.render('dashboardMaster', { title: 'Dashboard Master', ...req.session, rents, cpf});
     }
     else {
-      res.render('dashboard', { title: 'Dashboard', ...req.session, rents });
+      res.render('dashboard', { title: 'Dashboard', ...req.session, rents, cpf });
     }
   }).catch((error) => {
     console.log(error);
@@ -190,6 +191,7 @@ router.post('/newRent', auth.isAuthenticated, function (req, res, next) {
   const rent = req.body.rent;
   console.log("variáveis");
   console.log(rent);
+  var cpf = rent.cpf;
   var arrayEquipament = rent.equipamentName;
   var arrayQuantity = rent.quantity;
   var arrayLength = arrayEquipament.length;
@@ -1179,11 +1181,13 @@ router.get('/equipamentBalance/next', auth.isAuthenticated, auth.isMaster, funct
 });
 
 /* GET dashboardClient */
-router.get('/dashboardClient/:_id', auth.isAuthenticated, function (req, res, next) {
-  const id = req.params._id;
-
-  Rent.getById(id).then((rent) => {
-    res.render('dashboardClient', { title: 'Visualizar', ...req.session, rent, id});
+router.get('/dashboardClient/:cpf', auth.isAuthenticated, function (req, res, next) {
+  var cpf = req.params.cpf;
+  Rent.getByCpf(cpf).then((rent) => {
+    console.log(rent);
+    console.log(rent.client);
+    console.log(rent.equipament);
+    res.render('dashboardClient', { title: 'Visualizar', ...req.session, cpf, rent});
 
   }).catch((error) => {
     console.log(error);
