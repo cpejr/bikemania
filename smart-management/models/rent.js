@@ -139,6 +139,16 @@ class Rent {
     });
   }
 
+  static getAllByEndLocalWaiting(value) {
+    return new Promise((resolve, reject) => {
+      RentModel.find({ endLocal: value , status:"Aguardando Pagamento" }).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+      });
+    }
+
   static getAllByEndLocal(value) {
     return new Promise((resolve, reject) => {
       RentModel.find({ endLocal: value , status:"Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
