@@ -99,53 +99,53 @@ router.post('/dashboardContagem', auth.isAuthenticated, function (req, res, next
 
 /* GET Dashboard page */
 router.get('/dashboard', auth.isAuthenticated, function (req, res, next) {
-    var unity = req.session.unidade;
-    Rent.getAllByStartLocal(unity).then((rents) => {
-      Rent.getAllByEndLocalWaiting(unity).then((rentsWaiting) => {
+  var unity = req.session.unidade;
+  Rent.getAllByStartLocal(unity).then((rents) => {
+    Rent.getAllByEndLocalWaiting(unity).then((rentsWaiting) => {
       var clientsRunning = [];
-      if(rents.length > 0){
-      rents.forEach(rent => {
-        var aux = true;
-        for(var i = 0; i < clientsRunning.length; i++) {
-          if(rent.client.cpf == clientsRunning[i].cpf) {
-            aux = false;
+      if (rents.length > 0) {
+        rents.forEach(rent => {
+          var aux = true;
+          for (var i = 0; i < clientsRunning.length; i++) {
+            if (rent.client.cpf == clientsRunning[i].cpf) {
+              aux = false;
+            }
           }
-        }
-        if(aux == true) {
-          clientsRunning.push(rent.client);
-        }
-      });
-      console.log(clientsRunning);
-    }
-    if(rentsWaiting.length > 0){
-      rentsWaiting.forEach(rentWaiting => {
-        var aux = true;
-        for(var i = 0; i < clientsRunning.length; i++) {
-          if(rentWaiting.client.cpf == clientsRunning[i].cpf) {
-            aux = false;
+          if (aux == true) {
+            clientsRunning.push(rent.client);
           }
-        }
-        if(aux == true) {
-          clientsRunning.push(rentWaiting.client);
-        }
-      });
-      console.log(clientsRunning);
-    }
-      if(req.session.logado.type == 'Master') {
+        });
+        console.log(clientsRunning);
+      }
+      if (rentsWaiting.length > 0) {
+        rentsWaiting.forEach(rentWaiting => {
+          var aux = true;
+          for (var i = 0; i < clientsRunning.length; i++) {
+            if (rentWaiting.client.cpf == clientsRunning[i].cpf) {
+              aux = false;
+            }
+          }
+          if (aux == true) {
+            clientsRunning.push(rentWaiting.client);
+          }
+        });
+        console.log(clientsRunning);
+      }
+      if (req.session.logado.type == 'Master') {
         res.render('dashboardMaster', { title: 'Dashboard Master', ...req.session, clientsRunning });
       }
       else {
         res.render('dashboard', { title: 'Dashboard', ...req.session, clientsRunning });
       }
-     
-      }).catch((error) => {
-        console.log(error);
-        res.redirect('/error')
-      });
+
     }).catch((error) => {
       console.log(error);
       res.redirect('/error')
     });
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
 });
 
 /* GET logout */
@@ -277,6 +277,7 @@ router.post('/newRent', auth.isAuthenticated, function (req, res, next) {
           aluguel.equipament = equipament;
           aluguel.quantity = numeq;
           aluguel.remainingQuantity = numeq;
+          aluguel.statusredirect = "show";
           Rent.create(aluguel).then((aluguel) => {
             res.redirect('/dashboard');
           }).catch((error) => {
@@ -311,13 +312,13 @@ router.get('/partialPrice/:_id', function (req, res) {
   var id = req.params;
   console.log(id);
 
-  Rent.getById(id).then((rent) =>{
+  Rent.getById(id).then((rent) => {
     var date = new Date();
     var size = rent.client.datePoints;
     var loyaltyPoints = size.length;
     var now = date.getTime();
     var rentTime = Math.trunc((now - rent.startTime) / 60000);
-    var price = rent.equipament.price; 
+    var price = rent.equipament.price;
     res.send({ price, rentTime });
   }).catch((error) => {
     console.log("erro aqui");
@@ -332,22 +333,22 @@ router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
 
   Rent.getById(id).then((rent) => {
     console.log(rent.client);
-      var size = rent.client.datePoints;
-      var points = size.length;
-      var sale = 1;
-      var date = new Date();
-      var now = date.getTime();
-      var rentTime = Math.trunc((now - rent.startTime) / 60000);
-      if (rent.sale == "Ativado") {
-        sale = 0.5;
-      }
-      var actualPrice = rent.quantity * rent.equipament.price * rentTime * sale;
-      var unitPrice = rent.equipament.price;
-      var partialPrice = rent.equipament.price * rentTime * sale;
-      unitPrice = unitPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });;
-      actualPrice = actualPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-      partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-      res.render('show', { title: 'Visualizar', ...req.session, rent, points, rentTime, actualPrice, unitPrice, now, id });
+    var size = rent.client.datePoints;
+    var points = size.length;
+    var sale = 1;
+    var date = new Date();
+    var now = date.getTime();
+    var rentTime = Math.trunc((now - rent.startTime) / 60000);
+    if (rent.sale == "Ativado") {
+      sale = 0.5;
+    }
+    var actualPrice = rent.quantity * rent.equipament.price * rentTime * sale;
+    var unitPrice = rent.equipament.price;
+    var partialPrice = rent.equipament.price * rentTime * sale;
+    unitPrice = unitPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });;
+    actualPrice = actualPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    res.render('show', { title: 'Visualizar', ...req.session, rent, points, rentTime, actualPrice, unitPrice, now, id });
   }).catch((error) => {
     console.log(error);
     res.redirect('/error')
@@ -362,17 +363,21 @@ router.post('/close/:_id', function (req, res, next) {
   var month = atualDate.getMonth();
   month++;
   var year = atualDate.getFullYear();
-  var fulldate = year+"-"+month+"-"+day;
+  var fulldate = year + "-" + month + "-" + day;
   // ---------------------------------------------
   const id = req.params._id;
   const close = req.body.close;
   Rent.getById(id).then((rent) => {
     // Pontos de Fidelidade
+    console.log("Client ID");
+    console.log(rent.client.id);
+    
+    
     Client.getDatePointsById(rent.client.id).then((datePoints) => {
       var aux = true;
-      for(var i = 0; i < datePoints.length; i++) {
+      for (var i = 0; i < datePoints.length; i++) {
         var date = new Date(datePoints[i]);
-        if(day == date.getDate() && month == (date.getMonth() + 1) && year == date.getFullYear()) {
+        if (day == date.getDate() && month == (date.getMonth() + 1) && year == date.getFullYear()) {
           console.log("Entrou");
           aux = false;
         }
@@ -380,17 +385,17 @@ router.post('/close/:_id', function (req, res, next) {
         var msDate = date.getTime();
         const diff = Math.abs(msAtualDate - msDate);
         const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-        if(days > 180) {
+        if (days > 180) {
           datePoints.splice(i, 1);
         }
       }
-      if(aux == true) {
-      datePoints.push(fulldate);
-      console.log(datePoints);
+      if (aux == true) {
+        datePoints.push(fulldate);
+        console.log(datePoints);
       }
       var size = datePoints.length;
-      for(var i = 0; i < size - 1; i++){
-        if(size == 11){
+      for (var i = 0; i < size - 1; i++) {
+        if (size == 11) {
           datePoints.shift();
         }
       }
@@ -406,6 +411,7 @@ router.post('/close/:_id', function (req, res, next) {
     var renderaux = 1;
     if (rent.remainingQuantity === 0) {
       rent.status = "Aguardando pagamento";
+      rent.statusredirect = "aguardando";
       rent.quantity = close.returnQuantity;
       rent.remainingQuantity = close.returnQuantity;
       renderaux = 2;
@@ -430,6 +436,7 @@ router.post('/close/:_id', function (req, res, next) {
     console.log("Close");
     console.log(close);
     close.status = "Aguardando Pagamento";
+    close.statusredirect = "aguardando";
     close.startLocal = rent.startLocal;
     close.endLocal = rent.endLocal;
     close.year = rent.year;
@@ -440,33 +447,37 @@ router.post('/close/:_id', function (req, res, next) {
     close.client = rent.client;
     close.equipament = rent.equipament;
     close.quantity = close.returnQuantity;
+    close.remainingQuantity = close.quantity;
+    close.cpf = rent.cpf;
     console.log(close.partialPrice);
 
-    var partialPriceNumber = close.partialPrice.replace("R$","");
-    partialPriceNumber = partialPriceNumber.replace(".","");
-    partialPriceNumber = Number(partialPriceNumber.replace(",","."));
-    console.log(partialPriceNumber)
-    close.partialPrice = partialPriceNumber
+    var partialPriceNumber = close.partialPrice.replace("R$", "");
+    partialPriceNumber = partialPriceNumber.replace(".", "");
+    partialPriceNumber = Number(partialPriceNumber.replace(",", "."));
+    console.log(partialPriceNumber);
+    close.partialPrice = partialPriceNumber;
     close.receivedPrice = partialPriceNumber;
-    if(renderaux == 2 ){
+    rent.partialPrice = partialPriceNumber;
+    if (renderaux == 2) {
       rent.receivedPrice = partialPriceNumber;
+      rent.partialPrice = partialPriceNumber;
     }
 
     console.log("Novo close");
     console.log(close);
 
-    Rent.update(id,rent);
+    Rent.update(id, rent);
 
-    if(renderaux == 2){
+    if (renderaux == 2) {
       console.log("Red 1");
 
-      res.redirect('/aguardando/'+id);
+      res.redirect('/aguardando/' + id);
     }
-    else if(renderaux == 1){
+    else if (renderaux == 1) {
       console.log("Red 2");
 
       Rent.create(close).then((closeID) => {
-        res.redirect('/aguardando/'+closeID._id);
+        res.redirect('/aguardando/' + closeID._id);
       }).catch((error) => {
         console.log(error);
         res.redirect('/error')
@@ -1231,7 +1242,7 @@ router.get('/dashboardClient/:cpf', auth.isAuthenticated, function (req, res, ne
     console.log(rent);
     console.log(rent.client);
     console.log(rent.equipament);
-    res.render('dashboardClient', { title: 'Visualizar', ...req.session, cpf, rent});
+    res.render('dashboardClient', { title: 'Visualizar', ...req.session, cpf, rent });
 
   }).catch((error) => {
     console.log(error);
@@ -1263,27 +1274,17 @@ router.get('/client/:_id', auth.isAuthenticated, auth.isMaster, function (req, r
 
 
 /* GET aguardando Pagamento  */
-router.get('/aguardando/:_id', auth.isAuthenticated, function(req,res){
+router.get('/aguardando/:_id', auth.isAuthenticated, function (req, res) {
   const id = req.params._id;
 
   Rent.getById(id).then((rent) => {
-    console.log(rent.client);
-      var sale = 1;
-      var date = new Date();
-      var now = date.getTime();
-      var rentTime = Math.trunc((now - rent.startTime) / 60000);
-      if (rent.sale == "Ativado") {
-        sale = 0.5;
-      }
-      var actualPrice = rent.quantity * rent.equipament.price * rentTime * sale;
-      var unitPrice = rent.equipament.price;
-      var partialPrice = rent.equipament.price * rentTime * sale;
-      unitPrice = unitPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });;
-      actualPrice = actualPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-      rent.partialPrice = rent.partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    console.log(rent);
+    rent.partialPrice = rent.partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    console.log(rent.partialPrice);
+    
 
-res.render('aguardando', { title: 'Visualizar', ...req.session,rent,rentTime, actualPrice, unitPrice, now, id});
-  }).catch(error=>{
+    res.render('aguardando', { title: 'Visualizar', ...req.session, rent, id });
+  }).catch(error => {
     console.log(error);
     res.redirect("/error")
   });
