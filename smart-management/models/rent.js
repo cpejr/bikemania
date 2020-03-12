@@ -8,7 +8,6 @@ const rentSchema = new mongoose.Schema({
   cpf: {
     type: String,
     required: true,
-    unique: true
   },
   quantity: Number,
   remainingQuantity: Number,
@@ -21,6 +20,7 @@ const rentSchema = new mongoose.Schema({
     type: String,
     default: "Rodando"
   },
+  statusredirect: String,
   startTime: String,
   startHour: String,
   endTime: String,
