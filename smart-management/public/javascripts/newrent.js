@@ -25,7 +25,18 @@ function partialPrice() {
 
   var quantity = $('#quantity').val();
   $.get('/partialPrice/' + _id, (partialPrice) => {
+    var loyaltyPoints = $('#_loyaltyPoints');
+    var loyalty = loyaltyPoints.text().split(":  ");
+    var _loyaltyPoints = Number(loyalty[1]);
     var totalTime = partialPrice.rentTime * quantity;
+    var time = `<b>Tempo de aluguel:</b> ${partialPrice.rentTime} minutos`;
+    $('#time').html(time);
+    if(_loyaltyPoints == 10) {
+      totalTime -= 60;
+    }
+    if(totalTime < 0){
+      totalTime = 0;
+    }
     var price = partialPrice.price * totalTime;
     price = price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
     $('#price').val(price);

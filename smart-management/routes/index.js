@@ -99,19 +99,53 @@ router.post('/dashboardContagem', auth.isAuthenticated, function (req, res, next
 
 /* GET Dashboard page */
 router.get('/dashboard', auth.isAuthenticated, function (req, res, next) {
-  var unity = req.session.unidade;
-  var cpf = req.body.cpf;
-  Rent.getAllByStartLocal(unity).then((rents) => {
-    if (req.session.logado.type == 'Master') {
-      res.render('dashboardMaster', { title: 'Dashboard Master', ...req.session, rents, cpf});
+    var unity = req.session.unidade;
+    Rent.getAllByStartLocal(unity).then((rents) => {
+      Rent.getAllByEndLocalWaiting(unity).then((rentsWaiting) => {
+      var clientsRunning = [];
+      if(rents.length > 0){
+      rents.forEach(rent => {
+        var aux = true;
+        for(var i = 0; i < clientsRunning.length; i++) {
+          if(rent.client.cpf == clientsRunning[i].cpf) {
+            aux = false;
+          }
+        }
+        if(aux == true) {
+          clientsRunning.push(rent.client);
+        }
+      });
+      console.log(clientsRunning);
     }
-    else {
-      res.render('dashboard', { title: 'Dashboard', ...req.session, rents, cpf });
+    if(rentsWaiting.length > 0){
+      rentsWaiting.forEach(rentWaiting => {
+        var aux = true;
+        for(var i = 0; i < clientsRunning.length; i++) {
+          if(rentWaiting.client.cpf == clientsRunning[i].cpf) {
+            aux = false;
+          }
+        }
+        if(aux == true) {
+          clientsRunning.push(rentWaiting.client);
+        }
+      });
+      console.log(clientsRunning);
     }
-  }).catch((error) => {
-    console.log(error);
-    res.redirect('/error')
-  });
+      if(req.session.logado.type == 'Master') {
+        res.render('dashboardMaster', { title: 'Dashboard Master', ...req.session, clientsRunning });
+      }
+      else {
+        res.render('dashboard', { title: 'Dashboard', ...req.session, clientsRunning });
+      }
+     
+      }).catch((error) => {
+        console.log(error);
+        res.redirect('/error')
+      });
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('/error')
+    });
 });
 
 /* GET logout */
@@ -279,9 +313,11 @@ router.get('/partialPrice/:_id', function (req, res) {
 
   Rent.getById(id).then((rent) =>{
     var date = new Date();
+    var size = rent.client.datePoints;
+    var loyaltyPoints = size.length;
     var now = date.getTime();
     var rentTime = Math.trunc((now - rent.startTime) / 60000);
-    var price = rent.equipament.price;
+    var price = rent.equipament.price; 
     res.send({ price, rentTime });
   }).catch((error) => {
     console.log("erro aqui");
@@ -296,6 +332,8 @@ router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
 
   Rent.getById(id).then((rent) => {
     console.log(rent.client);
+      var size = rent.client.datePoints;
+      var points = size.length;
       var sale = 1;
       var date = new Date();
       var now = date.getTime();
@@ -309,7 +347,7 @@ router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
       unitPrice = unitPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });;
       actualPrice = actualPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
       partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-      res.render('show', { title: 'Visualizar', ...req.session, rent, rentTime, actualPrice, unitPrice, now, id });
+      res.render('show', { title: 'Visualizar', ...req.session, rent, points, rentTime, actualPrice, unitPrice, now, id });
   }).catch((error) => {
     console.log(error);
     res.redirect('/error')
@@ -349,7 +387,13 @@ router.post('/close/:_id', function (req, res, next) {
       if(aux == true) {
       datePoints.push(fulldate);
       console.log(datePoints);
-    }
+      }
+      var size = datePoints.length;
+      for(var i = 0; i < size - 1; i++){
+        if(size == 11){
+          datePoints.shift();
+        }
+      }
       Client.updateDatePoints(rent.client.id, datePoints);
     }).catch((error) => {
       console.log("erro aqui");
