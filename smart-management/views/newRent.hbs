@@ -2,22 +2,24 @@
 <script src="/javascripts/jquery.js" charset="utf-8"></script>
 <nav class="navbar navbar-light bg-light" id="logobike"></nav>
 <div class="pl-lg-5 pr-lg-5">
-  <button class="btn btn-default" onclick="location.href='/dashboard'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
+  <button class="btn btn-default" onclick="location.href='/dashboard'"> <i class="fa fa-shield fa-rotate-90 fa-3x"
+      aria-hidden="true"></i> </button>
   <div class="texto-centro mb-3">
-    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" >
+    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE">
       Lançamento de aluguéis
     </FONT>
     <!-- <script>cpfname();</script> -->
   </div>
+<<<<<<< Updated upstream
       <div class="pl-lg-5 pr-lg-5">
         <form action="/newRent" method="post">
           <div class="mt-3">
             <div class="cadastro">
               <div class="Address-btn1">
-                <div class="texto-col-6">
+                <div class="col-6">
                   <label for="InputEmail1" class="required"><FONT size="5" face="Swis721 LtEx BT" color="black" >CPF</FONT></label>
                 </div>
-                  <div class="texto-col-6">
+                  <div class="col-6">
                     <label for="InputEmail1" class="required"><FONT size="5" face="Swis721 LtEx BT" color="black" >Nome</FONT></label>
                   </div>
                 </div>
@@ -25,43 +27,75 @@
                     <div class="col-lg-6">
                       <input type="text" class="form-control" onkeyup="cpfname()" id="cpf" aria-describedby="emailHelp"  placeholder="Apenas números" name="rent[cpf]" value="{{cpf}}" required>
                     </div>
-
-                <div class="col-lg-6">
-                  <input type="text"  class="form-control" id="name" aria-describedby="emailHelp"  placeholder="Nome" name="rent[name]" value="{{name}}" required readonly>
-                </div>
+=======
+  <div class="pl-lg-5 pr-lg-5">
+    <form action="/newRent" method="post">
+      <div class="mt-3">
+        <div class="cadastro">
+          <div class="Address-btn1">
+            <div class="texto-col-6">
+              <label for="InputEmail1" class="required">
+                <FONT size="5" face="Swis721 LtEx BT" color="black">CPF</FONT>
+              </label>
+            </div>
+            <div class="texto-col-6">
+              <label for="InputEmail1" class="required">
+                <FONT size="5" face="Swis721 LtEx BT" color="black">Nome</FONT>
+              </label>
             </div>
           </div>
-
-
-            <div class="cadastro mt-3">
-              <div class="texto-centro">
-                <label ><FONT size="4" face="Swis721 LtEx BT" color="black" >Local de retirada</FONT></label>
-              </div>
-                <select class="drowdownoptions form-control" name="rent[startLocal]" required = "required">
-                  <option value disabled selected>Loja de retirada</option>
-                  <option value="Bem-Te-Vi">Bem-Te-Vi</option>
-                  <option value="Matriz">Matriz</option>
-                  <option value="Vila Pampulha">Vila Pampulha</option>
-                  <option value="Shopping Contagem">Shopping Contagem</option>
-                </select>
+          <div class="cadastro row">
+            <div class="col-lg-6">
+              <input type="text" class="form-control" onkeyup="cpfname()" id="cpf" aria-describedby="emailHelp"
+                placeholder="Apenas números" name="rent[cpf]" value="{{cpf}}" required>
             </div>
+>>>>>>> Stashed changes
+
+            <div class="col-lg-6">
+              <input type="text" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Nome"
+                name="rent[name]" value="{{name}}" required readonly>
+            </div>
+          </div>
+        </div>
 
 
-            <p></p>
+        <div class="cadastro mt-3">
+          <div class="texto-centro">
+            <label>
+              <FONT size="4" face="Swis721 LtEx BT" color="black">Local de retirada</FONT>
+            </label>
+          </div>
+          <select class="drowdownoptions form-control" name="rent[startLocal]" required="required">
+            <option value disabled selected>Loja de retirada</option>
+            <option value="Bem-Te-Vi">Bem-Te-Vi</option>
+            <option value="Matriz">Matriz</option>
+            <option value="Vila Pampulha">Vila Pampulha</option>
+            <option value="Shopping Contagem">Shopping Contagem</option>
+          </select>
+        </div>
 
-            <table id="details-table" class="table table-bordered">
-            <tbody>
+
+        <p></p>
+
+        <table id="details-table" class="table table-bordered">
+          <tbody>
             <tr>
-              <td><label><FONT size="4" face="Swis721 LtEx BT" color="black" >Equipamento</FONT></label></td>
-              <td><label><FONT size="4" face="Swis721 LtEx BT" color="black" >Quantidade</FONT></label></td>
-              <td><label><FONT size="4" face="Swis721 LtEx BT" color="black" >Opções</FONT></label></td>
+              <td><label>
+                  <FONT size="4" face="Swis721 LtEx BT" color="black">Equipamento</FONT>
+                </label></td>
+              <td><label>
+                  <FONT size="4" face="Swis721 LtEx BT" color="black">Quantidade</FONT>
+                </label></td>
+              <td><label>
+                  <FONT size="4" face="Swis721 LtEx BT" color="black">Opções</FONT>
+                </label></td>
             </tr>
             <tr>
               <td>&nbsp;
                 <div class="col-lg-8">
-                    <div class="cadastro mt-1">
-                      <div class="texto-centro">
-                        <select class="drowdownoptions form-control" name="rent[equipamentName]" required = "required">
+                  <div class="cadastro mt-1">
+                    <div class="texto-centro">
+                      <select class="drowdownoptions form-control" name="rent[equipamentName]" required="required">
                         <option value disabled selected> Tipo</option>
                         <option value="Bicicleta com marcha aro 26">Bicicleta com marcha aro 26</option>
                         <option value="Bicicleta com marcha aro 29">Bicicleta com marcha aro 29</option>
@@ -84,55 +118,67 @@
                         <option value="Patins">Patins</option>
                         <option value="Capacete">Capacete</option>
                         <option value="Kit de Segurança">Kit de Segurança</option>
-                        </select>
-                      </div>
+                      </select>
                     </div>
                   </div>
-                </td>
+                </div>
+              </td>
               <td>&nbsp;
                 <div class="col-lg-4">
                   <div class="cadastro mt-1">
                     <div class="texto-centro">
-                      <input type="number" class="form-control" name="rent[quantity]" min="1" value="1" required = "required">
+                      <input type="number" class="form-control" name="rent[quantity]" min="1" value="1"
+                        required="required">
                     </div>
                   </div>
                 </div>
               </td>
               <td>
                 <div class="col-lg-8">
+<<<<<<< Updated upstream
                     <div class="cadastro mt-4">
                       <div class="texto-centro">
-                        <button class="btn btn-default" onclick="remove(this)" type="button" aria-hidden="true"><img src="/images/minus.png" width="30px" height"30px"> </button>
+                        {{!-- <button class="btn btn-default" onclick="remove(this)" type="button" aria-hidden="true"><img src="/images/minus.png" width="30px" height"30px"> </button> --}}
                       </div>
+=======
+                  <div class="cadastro mt-4">
+                    <div class="texto-centro">
+                      <button class="btn btn-default" onclick="remove(this)" type="button" aria-hidden="true"><img
+                          src="/images/minus.png" width="30px" height"30px"> </button>
+>>>>>>> Stashed changes
                     </div>
                   </div>
+                </div>
               </td>
             </tr>
-            </tbody>
-            <tfoot>
+          </tbody>
+          <tfoot>
             <tr>
               <td colspan="5" style="text-align: right;">
-                <button class="btn btn-default" onclick="AddTableRow(this)" type="button"><img src="/images/plus.png" width="30px" height"30px"></button>
+                <button class="btn btn-default" onclick="AddTableRow(this)" type="button"><img src="/images/plus.png"
+                    width="30px" height"30px"></button>
               </td>
             </tr>
-            </tfoot>
-            </table>
+          </tfoot>
+        </table>
 
-          <div class="cadastro mt-3">
-            <div class="texto-centro">
-              <label><FONT size="4" face="Swis721 LtEx BT" color="black" >Quantidade de acessórios</FONT></label>
-            </div>
-            <input type="number" maxlength="11" class="form-control" name="rent[accessory]" min="0" value=0></input>
+        <div class="cadastro mt-3">
+          <div class="texto-centro">
+            <label>
+              <FONT size="4" face="Swis721 LtEx BT" color="black">Quantidade de acessórios</FONT>
+            </label>
           </div>
+          <input type="number" maxlength="11" class="form-control" name="rent[accessory]" min="0" value=0></input>
         </div>
-
-        </div>
-          <div class="texto-centro mt-3">
-            <button type="submit" class="btncadastrar">Iniciar</button>
-          </div>
-
-        </form>
       </div>
+
+  </div>
+  <div class="texto-centro mt-3">
+    <button type="submit" class="btncadastrar">Iniciar</button>
+  </div>
+
+  </form>
+</div>
 
 <script type="text/javascript" src="/javascripts/jquery.mask.min.js"></script>
 <script src="/javascripts/mask.js" charset="utf-8"></script>

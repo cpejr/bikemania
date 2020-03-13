@@ -5,6 +5,9 @@ const rentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Client'
   },
+  cpf: {
+    type: String,
+  },
   quantity: Number,
   remainingQuantity: Number,
   accessory: Number,
@@ -16,6 +19,7 @@ const rentSchema = new mongoose.Schema({
     type: String,
     default: "Rodando"
   },
+  statusredirect: String,
   startTime: String,
   startHour: String,
   endTime: String,
@@ -139,6 +143,16 @@ class Rent {
     });
   }
 
+  static getAllByEndLocalWaiting(value) {
+    return new Promise((resolve, reject) => {
+      RentModel.find({ endLocal: value , status:"Aguardando Pagamento" }).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+      });
+    }
+
   static getAllByEndLocal(value) {
     return new Promise((resolve, reject) => {
       RentModel.find({ endLocal: value , status:"Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
@@ -193,6 +207,16 @@ class Rent {
   static getAllByMonthAndStartLocal(startLocal, month, year) {
     return new Promise((resolve, reject) => {
       RentModel.find({startLocal: startLocal, month: month, year: year, status: "Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  static getByCpf(cpf) {
+    return new Promise((resolve, reject) => {
+    RentModel.find({cpf: cpf}).populate('client').populate('equipament').exec().then((result) => {
         resolve(result);
       }).catch((err) => {
         reject(err);
