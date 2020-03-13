@@ -28,19 +28,19 @@
         <thead class="thead-CPE-white">
           <tr>
             <th class="text-center">Nome</th>
-            <th class="text-center">CPF</th>
-            <th class="text-center">RG</th>
+            <th class="text-center">Equipamento</th>
+            <th class="text-center">Quantidade</th>
             <th class="text-center">Opções</th>
           </tr>
         </thead>
         <tbody id="table">
-          {{#each clientsRunning}}
+          {{#each rents}}
           <tr>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{name}}</td>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{cpf}}</td>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{rg}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{client.name}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{equipament.name}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{remainingQuantity}}</td>
             <td scope="row" class="text-center">
-                <form action="/dashboardClient/{{cpf}}" method="get">
+                <form action="/show/{{id}}" method="get">
                   <button class="btn text-white orange-button" type="submit">Ver</button>
                 </form>
                 <form action="/delete/{{id}}" method="POST">

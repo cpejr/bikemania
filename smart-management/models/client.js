@@ -35,8 +35,7 @@ const clientSchema = new mongoose.Schema({
   points: {
     type: Number,
     default: 0
-  },
-
+  }
 
 }, { timestamps: true, static: false });
 const ClientModel = mongoose.model('Client', clientSchema);
@@ -163,6 +162,5 @@ class Client {
    });
  }
 
- 
 }
 module.exports = Client;
