@@ -7,7 +7,6 @@ const rentSchema = new mongoose.Schema({
   },
   cpf: {
     type: String,
-    required: true,
   },
   quantity: Number,
   remainingQuantity: Number,

@@ -444,6 +444,9 @@ router.post('/close/:_id', function (req, res, next) {
     close.day = rent.day;
     close.startHour = rent.startHour;
     close.endHour = rent.endHour;
+    close.totalTime = rent.totalTime;
+    close.startTime = rent.startTime;
+    close.endTime = rent.endTime;
     close.client = rent.client;
     close.equipament = rent.equipament;
     close.quantity = close.returnQuantity;
@@ -457,10 +460,12 @@ router.post('/close/:_id', function (req, res, next) {
     console.log(partialPriceNumber);
     close.partialPrice = partialPriceNumber;
     close.receivedPrice = partialPriceNumber;
+    close.discount = partialPriceNumber;
     rent.partialPrice = partialPriceNumber;
     if (renderaux == 2) {
       rent.receivedPrice = partialPriceNumber;
       rent.partialPrice = partialPriceNumber;
+      rent.discount = partialPriceNumber;
     }
 
     console.log("Novo close");
@@ -1279,7 +1284,7 @@ router.get('/aguardando/:_id', auth.isAuthenticated, function (req, res) {
 
   Rent.getById(id).then((rent) => {
     console.log(rent);
-    rent.partialPrice = rent.partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    // rent.partialPrice = rent.partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
     console.log(rent.partialPrice);
     
 
@@ -1289,5 +1294,22 @@ router.get('/aguardando/:_id', auth.isAuthenticated, function (req, res) {
     res.redirect("/error")
   });
 });
+
+router.post('/end/:_id', function(req,res) {
+  const id = req.params._id;
+  var end = req.body.end;
+  Rent.getById(id).then((rent) =>{
+    rent.status = "Finalizado";
+    rent.payment = end.payment;
+    rent.hasDiscount = end.hasDiscount;
+    rent.justification = end.justification;
+
+    Rent.update(id,rent);
+    res.redirect('/dashboard');
+  }).catch(error => {
+    console.log(error);
+    res.redirect("/error")
+  });
+})
 
 module.exports = router;
