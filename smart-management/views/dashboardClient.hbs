@@ -1,7 +1,6 @@
 <script scr="/javascripts/rent.js"> </script>
 <script src="/javascripts/jquery.js" charset="utf-8"></script>
 <nav class="navbar navbar-light bg-light" id="logobike"></nav>
-<main class="full-screen">
   <article class="justify-content-center mx-0">
     <div class="bg-CPE-white Address-btn1">
       <button class="btn btn-default" onclick="location.href='/dashboard'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
@@ -35,14 +34,17 @@
               <form action="/show/{{id}}" method="get">
               <button class="btn text-white orange-button" type="submit">Ver</button>
             </form>
+            <form action="/delete/{{id}}" method="POST">
+              <button class="btn text-white orange-button mt-1" id = "confirmClickActionElementId"  type="submit" >Cancelar</button>
+            </form>
             </td>
           </tr>
           {{/each}}
         </tbody>
       </table>
     </section>
+    <button type="button" id="btnencerrar" onclick="location.href='/dashboard'" class="btn orange-button btn-lg mt-4 justify-content-right" style="width: 100px; height: 40px">Encerrar</button>
   </article>
-</main>
 <script src="/javascripts/jquery.js" charset="utf-8"></script>
 <script src="/javascripts/moment-with-locales.min.js"></script>
 <script src="/javascripts/search-table.js"></script>
