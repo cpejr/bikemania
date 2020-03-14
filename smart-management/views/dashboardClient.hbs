@@ -5,7 +5,8 @@
 <main class="full-screen">
   <article class="justify-content-center mx-0">
     <div class="bg-CPE-white Address-btn1">
-      <button class="btn btn-default" onclick="location.href='/dashboard'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
+      <button class="btn btn-default" onclick="location.href='/dashboard'"> <i class="fa fa-shield fa-rotate-90 fa-3x"
+          aria-hidden="true"></i> </button>
       <div class="acomp-header text-center">
         <h3 class="text-CPE-orange">Acompanhamento de Alugueis</h3>
         <h3 class="text-CPE-orange">{{unidade}}</h3>
@@ -31,12 +32,12 @@
             <td scope="row" class="text-center align-middle font-weight-bold">{{client.name}}</td>
             <td scope="row" class="text-center align-middle font-weight-bold">{{equipament.name}}</td>
             <td scope="row" class="text-center align-middle font-weight-bold">{{remainingQuantity}}</td>
-            <td scope="row" id="status"class="text-center align-middle font-weight-bold">{{status}}</td>
+            <td scope="row" id="status" class="text-center align-middle font-weight-bold">{{status}}</td>
             <td scope="row" class="text-center">
-            
+
               <form action="/{{statusredirect}}/{{id}}" method="get">
-              <button class="btn text-white orange-button" id="showbutton"type="submit">Ver</button>
-            </form>
+                <button class="btn text-white orange-button" id="showbutton" type="submit">Ver</button>
+              </form>
             </td>
           </tr>
           {{/each}}
@@ -50,4 +51,3 @@
 <script src="/javascripts/moment-with-locales.min.js"></script>
 <script src="/javascripts/search-table.js"></script>
 <script src="/javascripts/index.js"></script>
-

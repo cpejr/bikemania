@@ -23,10 +23,16 @@
     {{#each equipaments}}
         <tr>
             <td scope="row">{{name}}</td>
-            <td scope="row">{{price}}</td>
+            <td scope="row">{{priceR$}}</td>
             <td scope="row">{{value}}</td>
             <td scope="row">{{rents}}</td>
         </tr>
     {{/each}}
+    <tr>
+      <td scope="row"></td>
+      <td scope="row">Total</td>
+      <td scope="row">{{totalProfit}}</td>
+      <td scope="row">{{totalUnits}}</td>
+    </tr>
   </tbody>
 </table>

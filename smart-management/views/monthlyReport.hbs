@@ -1,8 +1,9 @@
 <nav class="navbar navbar-light bg-light" id="logobike"></nav>
 <div class="pl-lg-5 pr-lg-5">
-  <button class="btn btn-default" onclick="location.href='/monthlyBalance'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
+  <button class="btn btn-default" onclick="location.href='/monthlyBalance'"> <i class="fa fa-shield fa-rotate-90 fa-3x"
+      aria-hidden="true"></i> </button>
   <div class="texto-centro mb-3">
-    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" >
+    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE">
       Relatório Mensal - {{monthNumber}}/{{year}}
     </FONT>
   </div>
@@ -25,7 +26,7 @@
         <form action="/monthlyReportDetails/{{id}}" method="get">
           <button class="btn text-white orange-button" type="submit">Ver</button>
         </form>
-      </tr>
+    </tr>
     {{/each}}
   </tbody>
 </table>

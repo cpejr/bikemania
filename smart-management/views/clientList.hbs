@@ -2,7 +2,8 @@
 <main class="full-screen">
   <article class="justify-content-center mx-0">
     <div class="bg-CPE-white Address-btn1">
-      <button class="btn btn-default" onclick="location.href='/home'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
+      <button class="btn btn-default" onclick="location.href='/home'"> <i class="fa fa-shield fa-rotate-90 fa-3x"
+          aria-hidden="true"></i> </button>
       <div class="acomp-header text-center">
         <h3 class="text-CPE-orange">Lista de Clientes</h3>
         <h3 class="text-CPE-orange">{{unidade}}</h3>
@@ -26,8 +27,8 @@
             <td scope="row" class="text-center align-middle font-weight-bold">{{equipamentRents}}</td>
             <td scope="row" class="text-center">
               <form action="/client/{{id}}" method="get">
-              <button class="btn text-white orange-button" type="submit">Ver</button>
-            </form>
+                <button class="btn text-white orange-button" type="submit">Ver</button>
+              </form>
             </td>
           </tr>
           {{/each}}
