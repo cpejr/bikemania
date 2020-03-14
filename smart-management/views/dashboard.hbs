@@ -15,6 +15,9 @@
           <button type="button" id="yellow-beach-btn" onclick="location.href='/signup'" class="btn orange-button btn-lg mt-4">Cadastro</button>
           <button type="button" id="yellow-beach-btn" onclick="location.href='/newRent'" class="btn orange-button btn-lg mt-4">Venda</button>
       </div>
+      <div class="text-center">
+        <button onclick="location.href = '/logout'" class="btn orange-button btn-lg mt-4">Deslogar</button>
+      </div>
     </section>
     <br>
     <section class="container">
@@ -22,17 +25,19 @@
         <thead class="thead-CPE-white">
           <tr>
             <th class="text-center">Nome</th>
-            <th class="text-center">CPF</th>
+            <th class="text-center">Equipamento</th>
+            <th class="text-center">Quantidade</th>
             <th class="text-center">Opções</th>
           </tr>
         </thead>
         <tbody id="table">
-          {{#each clientsRunning}}
+          {{#each rents}}
           <tr>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{name}}</td>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{cpf}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{client.name}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{equipament.name}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{remainingQuantity}}</td>
             <td scope="row" class="text-center">
-              <form action="/dashboardClient/{{cpf}}" method="get">
+              <form action="/show/{{id}}" method="get">
               <button class="btn text-white orange-button" type="submit">Ver</button>
             </form>
             </td>
