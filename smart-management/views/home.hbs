@@ -1,65 +1,65 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Home</title>
-    <link rel='stylesheet' href='/stylesheets/style.css'>
-    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  </head>
-  <body>
-    <nav class="navbar navbar-light bg-light" id="logobike"></nav>
-    <div class="home-title">
-      <FONT size="5" face="Segoe UI Symbol" color="black" >
-        Selecione a loja:
-      </FONT>
-    </div>
+<head>
+  <title>Home</title>
+  <link rel='stylesheet' href='/stylesheets/style.css'>
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
 
-    <div class = "container">
-      <div class="row justify-content-center">
-        <div class="col-xs-12 col-sm-12 col-md-3 btnunidade" position="center" >
-          <form action="/dashboardMirante" method="post">
-            <button type="submit" class="font-botao" >
-              <FONT size="6" face="Poppins" color="black" >
-                Bem-Te-Vi
-              </FONT>
-            </button>
-          </form>
-        </div>
-        <br>
-        <div class="col-xs-12 col-sm-12 col-md-3 btnunidade" position="center">
-          <form action="/dashboardMatriz" method="post">
-            <button type="submit" class="font-botao" >
-              <FONT size="6" face="Poppins" color="black" >
-                Matriz
-              </FONT>
-            </button>
-          </form>
-        </div>
-        <br>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+
+<body>
+  <nav class="navbar navbar-light bg-light" id="logobike"></nav>
+  <div class="text-left">
+    <button onclick="location.href = '/logout'" class="btn orange-button btn-lg mt-4">Deslogar</button>
+  </div>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-xs-12 col-sm-12 col-md-3 btnunidade" position="center">
+        <form action="/dashboardMirante" method="post">
+          <button type="submit" class="font-botao">
+            <FONT size="6" face="Poppins" color="black">
+              Bem-Te-Vi
+            </FONT>
+          </button>
+        </form>
       </div>
+      <br>
+      <div class="col-xs-12 col-sm-12 col-md-3 btnunidade" position="center">
+        <form action="/dashboardMatriz" method="post">
+          <button type="submit" class="font-botao">
+            <FONT size="6" face="Poppins" color="black">
+              Matriz
+            </FONT>
+          </button>
+        </form>
+      </div>
+      <br>
+    </div>
 
     <div class="row justify-content-center">
       <div class="col-xs-12 col-sm-12 col-md-3 btnunidade" position="center">
-          <form action="/dashboardVila" method="post">
-            <button type="submit" class="font-botao" >
-              <FONT size="6" face="Poppins" color="black" >
-                Vila Pampulha
-              </FONT>
-            </button>
-          </form>
+        <form action="/dashboardVila" method="post">
+          <button type="submit" class="font-botao">
+            <FONT size="6" face="Poppins" color="black">
+              Vila Pampulha
+            </FONT>
+          </button>
+        </form>
       </div>
 
       <div class="col-xs-12 col-sm-12 col-md-3 btnunidade" position="center">
         <form action="/dashboardContagem" method="post">
-          <button type="submit" class="font-botao" >
-            <FONT size="6" face="Poppins" color="black" >
+          <button type="submit" class="font-botao">
+            <FONT size="6" face="Poppins" color="black">
               Shopping Contagem
             </FONT>
           </button>
         </form>
       </div>
-      </div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>

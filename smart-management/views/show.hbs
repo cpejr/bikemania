@@ -4,15 +4,16 @@
 
 <nav class="navbar navbar-light bg-light" id="logobike"></nav>
 <div class="pl-lg-5 pr-lg-5">
-  <button class="btn btn-default" onclick="location.href='/dashboard'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
+  <button class="btn btn-default" onclick="location.href='/dashboardClient/{{rent.client.cpf}}'"> <i
+      class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
   <div class="texto-centro mb-3">
-    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" >
+    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE">
       Resumo do Aluguel
     </FONT>
   </div>
 
   <div class="row mt-3">
-    <div class = "col-lg-6">
+    <div class="col-lg-6">
       <h3 class="pagamento"><b>Nome do cliente:</b> {{rent.client.name}}</h3>
       <h3 class="pagamento"><b>CPF:</b> {{rent.client.cpf}}</h3>
       <h3 class="pagamento"><b>Hora de chegada:</b> {{rent.startHour}}</h3>
@@ -31,50 +32,36 @@
     <div class="col-lg-6 mt-sm-3">
       <form action="/close/{{rent.id}}" method="post">
         <h3 class="text-CPE-orange texto-centro">Forma de pagamento</h3>
-
+        <div class="Address-btn1">
+          <label for="InputNumerodepessoas">
+            <FONT size="4" face="Swis721 LtEx BT" color="black">Quantidade devolvida</FONT>
+          </label>
+          <div class="col-lg-2">
+            <input type="number" class="form-control" id="quantity" name="close[returnQuantity]"
+              max="{{rent.remainingQuantity}}" min="1" value="{{rent.remainingQuantity}}" onkeyup="partialPrice()">
+          </div>
+          <div class="col-lg-6">
+            <input class="form-control" id="price" name="close[partialPrice]">
+            {{!-- <input type="hidden" class="form-control"  name="close[now]" value="{{now}}"> --}}
+            {{!-- <input type="hidden" class="form-control"  name="close[rentTime]" value="{{rentTime}}"> --}}
+          </div>
+        </div>
+        <div class="cadastro">
           <div class="texto-centro mt-3">
-            <label for="InputNumerodepessoas" ><FONT size="4" face="Swis721 LtEx BT" color="black" >Quantidade devolvida</FONT></label>
+            <label for="InputEquipamento">
+              <FONT size="4" face="Swis721 LtEx BT" color="black">Local de devolução</FONT>
+            </label>
+            <select id="productCode" class="drowdownoptions form-control" name="close[endLocal]" required="required">
+              <option value="{{{rent.startLocal}}}">{{{rent.startLocal}}}</option>
+              <option value="Bem-Te-Vi">Bem-Te-Vi</option>
+              <option value="Matriz">Matriz</option>
+              <option value="Vila Pampulha">Vila Pampulha</option>
+              <option value="Shopping Contagem">Shopping Contagem</option>
+            </select>
           </div>
-          <input type="number" class="form-control" id="quantity" name="close[returnQuantity]" max="{{rent.remainingQuantity}}" min="1" value="{{rent.remainingQuantity}}" onkeyup="partialPrice()">
-          <input  class="form-control" id="price" name="close[partialPrice]" max="{{rent.remainingQuantity}}" >
-          <input type="hidden" class="form-control"  name="close[now]" value="{{now}}">
-          <input type="hidden" class="form-control"  name="close[rentTime]" value="{{rentTime}}">
-          <div class="cadastro">
-            <div class="texto-centro mt-3">
-              <label for="InputEquipamento" ><FONT size="4" face="Swis721 LtEx BT" color="black" >Local de devolução</FONT></label>
-              <select id="productCode" class="drowdownoptions form-control" name="close[endLocal]" required = "required">
-                <option value="{{{rent.startLocal}}}">{{{rent.startLocal}}}</option>
-                <option value="Bem-Te-Vi">Bem-Te-Vi</option>
-                <option value="Matriz">Matriz</option>
-                <option value="Vila Pampulha">Vila Pampulha</option>
-                <option value="Shopping Contagem">Shopping Contagem</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="cadastro">
-            <div class="texto-centro mt-3">
-              <label for="InputEquipamento" ><FONT size="4" face="Swis721 LtEx BT" color="black" >Forma de pagamento</FONT></label>
-              <select id="productCode" class="drowdownoptions form-control" name="close[payment]" required = "required">
-                <option value="Crédito">Crédito</option>
-                <option value="Débito">Débito</option>
-                <option value="Dinheiro">Dinheiro</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="cadastro">
-            <div class="mt-3">
-              <input type="checkbox" name="close[hasDiscount]" value="Sim"> Desconto</input>
-            </div>
-          </div>
-
-            <div class="mt-3">
-              <textarea name="close[justification]" placeholder="Detalhes do desconto" cols="93" rows="4"></textarea>
-            </div>
-
-        <div class="btntest mt-3 texto-centro">
-        <button type="submit" class="btn_encerrar">Encerrar aluguel</button> </div>
+        </div>
+        <div class="btntest mt-4 texto-centro">
+          <button type="submit" class="btn_encerrar">Encerrar aluguel</button> </div>
       </form>
     </div>
   </div>
