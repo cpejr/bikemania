@@ -38,6 +38,14 @@ function partialPrice() {
       totalTime = 0;
     }
     var price = partialPrice.price * totalTime;
+
+    if(partialPrice.name == "Kit de Segurança" || partialPrice.name == "Capacete") {
+      price = 5 * quantity;
+      partialPrice.priceEquipament = price;
+    }
+
+console.log(partialPrice);
+
     price = price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
     $('#price').val(price);
   }).catch((error) => {
