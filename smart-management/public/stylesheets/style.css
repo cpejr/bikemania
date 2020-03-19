@@ -8939,13 +8939,6 @@ ul ul a {
 #content {
   width: 100vw; }
 
-#encerrar {
-  float: right;
-  width: 150px;
-  height: 40px;
-  font-size: 16px;
-  margin-right: 60px; }
-
 .table-responsive-sm {
   margin-right: 0px;
   margin-left: 0px; }
@@ -8961,10 +8954,9 @@ ul ul a {
   #title {
     font-size: 20px;
     width: 300px; }
-  #table {
-    font-size: 19px; }
-  #status {
-    font-size: 18px; } }
+  #btnencerrar {
+    float: right;
+    margin: 15px; } }
 
 @media (max-width: 550px) {
   #title {
@@ -8976,11 +8968,7 @@ ul ul a {
   .text-center {
     font-size: 25px; }
   #yellow-beach-btn {
-    font-size: 20px; }
-  #table {
-    font-size: 18px; }
-  #status {
-    font-size: 16px; } }
+    font-size: 20px; } }
 
 .p-alert {
   margin-bottom: 0 !important; }
