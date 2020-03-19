@@ -319,7 +319,9 @@ router.get('/partialPrice/:_id', function (req, res) {
     var now = date.getTime();
     var rentTime = Math.trunc((now - rent.startTime) / 60000);
     var price = rent.equipament.price;
-    res.send({ price, rentTime });
+    var name = rent.equipament.name;
+    var priceEquipament;
+    res.send({ price, rentTime, name, priceEquipament });
   }).catch((error) => {
     console.log("erro aqui");
     console.log(error);
@@ -1222,6 +1224,21 @@ router.get('/dashboardClient/:cpf', auth.isAuthenticated, function (req, res, ne
     console.log(rent.client);
     console.log(rent.equipament);
     res.render('dashboardClient', { title: 'Visualizar', ...req.session, cpf, rent });
+
+  }).catch((error) => {
+    console.log(error);
+    res.redirect("/error")
+  });
+});
+
+/* GET dashboardClientFunc */
+router.get('/dashboardClientFunc/:cpf', auth.isAuthenticated, function (req, res, next) {
+  var cpf = req.params.cpf;
+  Rent.getByCpf(cpf).then((rent) => {
+    console.log(rent);
+    console.log(rent.client);
+    console.log(rent.equipament);
+    res.render('dashboardClientFunc', { title: 'VisualizarAluguel', ...req.session, cpf, rent });
 
   }).catch((error) => {
     console.log(error);

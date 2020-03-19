@@ -8939,6 +8939,49 @@ ul ul a {
 #content {
   width: 100vw; }
 
+#encerrar {
+  float: right;
+  width: 150px;
+  height: 40px;
+  font-size: 16px;
+  margin-right: 60px; }
+
+.table-responsive-sm {
+  margin-right: 0px;
+  margin-left: 0px; }
+
+@media (min-width: 700px) {
+  #title3 {
+    font-size: 20px;
+    width: 190px; }
+  #yellow-beach-btn {
+    font-size: 22px; }
+  .text-center {
+    font-size: 18px; }
+  #title {
+    font-size: 20px;
+    width: 300px; }
+  #table {
+    font-size: 19px; }
+  #status {
+    font-size: 18px; } }
+
+@media (max-width: 550px) {
+  #title {
+    font-size: 20px;
+    width: 280px; }
+  #title3 {
+    font-size: 20px;
+    width: 160px; }
+  .text-center {
+    font-size: 25px; }
+  #yellow-beach-btn {
+    font-size: 20px; }
+  #table {
+    font-size: 18px; }
+  #status {
+    font-size: 16px; } }
+
 .p-alert {
   margin-bottom: 0 !important; }
 
