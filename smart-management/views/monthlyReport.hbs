@@ -3,7 +3,7 @@
   <button class="btn btn-default" onclick="location.href='/monthlyBalance'"> <i class="fa fa-shield fa-rotate-90 fa-3x"
       aria-hidden="true"></i> </button>
   <div class="texto-centro mb-3">
-    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE">
+    <FONT id="date" size="6" face="Segoe UI Symbol" color="#3CB1FE">
       Relatório Mensal - {{monthNumber}}/{{year}}
     </FONT>
   </div>
@@ -12,13 +12,13 @@
 <table class="table table-hover mt-3">
   <thead>
     <tr>
-      <th scope="col">Cliente</th>
-      <th scope="col">Valor</th>
-      <th scope="col">Dados</th>
+      <th scope="col">Dia</th>
+      <th scope="col">Quantidade de aluguéis</th>
+      <th scope="col">Faturamento</th>
     </tr>
   </thead>
-  <tbody>
-    {{#each rents}}
+  <tbody id="table-body">
+    {{!-- {{#each rents}}
     <tr>
       <td>{{client.name}}</td>
       <td>{{discount}}</td>
@@ -27,6 +27,10 @@
           <button class="btn text-white orange-button" type="submit">Ver</button>
         </form>
     </tr>
-    {{/each}}
+    {{/each}} --}}
   </tbody>
 </table>
+
+<script src="/javascripts/report.js"></script>
+<script src="/javascripts/jquery.js" charset="utf-8"></script>
+<script>tablereport()</script>

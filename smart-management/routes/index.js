@@ -805,6 +805,42 @@ router.get('/dailyReportDetails/:_id', auth.isAuthenticated, auth.isMaster, func
   });
 });
 
+router.get('/getdailyBalance/::month::year::local', function (req, res, next) {
+  var id = req.params;
+  var day = [];
+  var Profit = [];
+  var Units = [];
+  Rent.getAllByMonthAndEndLocal(id.local, id.month, id.year).then((Rents) => {
+    Rents.forEach(rent => {
+      var aux = 0;
+      if (day.length == 0) {
+        day.push(rent.day);
+        Profit.push(rent.discount);
+        Units.push(rent.quantity);
+      }
+      for (var i = 0; i < day.length; i++) {
+        if (day[i] == rent.day) {
+          Profit[i] += rent.discount;
+          Units[i] += rent.quantity;
+          aux = 1;
+        }
+      }
+      if (aux == 0) {
+        day.push(rent.day);
+        Profit.push(rent.discount);
+        Units.push(rent.quantity);
+      }
+    });
+    Profit.forEach(aux =>{
+      aux = aux.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+    })
+    console.log(day);
+    console.log(Profit);
+    console.log(Units);
+    res.send({day, Profit, Units});
+  });
+});
+
 /* GET dailyBalance */
 router.get('/monthlyBalance', auth.isAuthenticated, auth.isMaster, function (req, res, next) {
   var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

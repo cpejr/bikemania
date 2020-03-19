@@ -20,7 +20,7 @@ function cpfname() {
 
 function partialPrice() {
   var id = $('#_id');
-  var text = id.text().split(":  ");;
+  var text = id.text().split(":  ");
   var _id = text[1];
 
   var quantity = $('#quantity').val();
