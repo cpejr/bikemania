@@ -100,6 +100,8 @@ router.post('/dashboardContagem', auth.isAuthenticated, function (req, res, next
 /* GET Dashboard page */
 router.get('/dashboard', auth.isAuthenticated, function (req, res, next) {
   var unity = req.session.unidade;
+  console.log(unity);
+  
   Rent.getAllByStartLocal(unity).then((rents) => {
     Rent.getAllByEndLocalWaiting(unity).then((rentsWaiting) => {
       var clientsRunning = [];
@@ -115,7 +117,7 @@ router.get('/dashboard', auth.isAuthenticated, function (req, res, next) {
             clientsRunning.push(rent.client);
           }
         });
-        console.log(clientsRunning);
+        // console.log(clientsRunning);
       }
       if (rentsWaiting.length > 0) {
         rentsWaiting.forEach(rentWaiting => {

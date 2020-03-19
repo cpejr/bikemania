@@ -32,15 +32,12 @@
             <td scope="row" class="text-center align-middle font-weight-bold">{{status}}</td>
             <td scope="row" class="text-center">
 
-              <form action="/show/{{id}}" method="get">
+              <form action="/{{statusredirect}}/{{id}}" method="get">
                 <button class="btn text-white orange-button" id="showbutton" type="submit">Ver</button>
               </form>
               <form action="/delete/{{id}}" method="POST">
               <button class="btn text-white orange-button mt-1" id="confirmClickActionElementId"
                 type="submit">Cancelar</button>
-            </form>
-            <form action="/delete/{{id}}" method="POST">
-              <button class="btn text-white orange-button mt-1" id = "confirmClickActionElementId"  type="submit" >Cancelar</button>
             </form>
             </td>
           </tr>
