@@ -2,22 +2,23 @@
 <div class="pl-lg-5 pr-lg-5">
   <form action="/clientList" method="get">
     <input type="hidden" class="form-control" name="local" value={{rent.startLocal}}>
-    <button class="btn btn-default" type="submit"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
+    <button class="btn btn-default" type="submit"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i>
+    </button>
   </form>
   <div class="texto-centro mb-3">
-    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" >
+    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE">
       Dados do Cliente
     </FONT>
   </div>
 
-  <div class="col mt-3 text-center">    
-      <h3 class="pagamento"><b>Nome do cliente:</b> {{client.name}}</h3>
-      <h3 class="pagamento"><b>CPF/CNPJ:</b> {{client.cpf}}</h3>
-      <h3 class="pagamento"><b>RG:</b> {{client.rg}}</h3>
-      <h3 class="pagamento"><b>Email:</b> {{client.email}}</h3>
-      <h3 class="pagamento"><b>Telefone:</b> {{client.phone}}</h3>
-      <h3 class="pagamento"><b>Endereço:</b> {{client.address}}</h3>
-      <h3 class="pagamento"><b>Quantidade de Aluguéis:</b> {{client.equipamentRents}}</h3>
-      <h3 class="pagamento"><b>Pontos acumulados:</b> {{client.points}}</h3>
-  </div>  
+  <div class="col mt-3 text-center">
+    <h3 class="pagamento"><b>Nome do cliente:</b> {{client.name}}</h3>
+    <h3 class="pagamento"><b>CPF/CNPJ:</b> {{client.cpf}}</h3>
+    <h3 class="pagamento"><b>RG:</b> {{client.rg}}</h3>
+    <h3 class="pagamento"><b>Email:</b> {{client.email}}</h3>
+    <h3 class="pagamento"><b>Telefone:</b> {{client.phone}}</h3>
+    <h3 class="pagamento"><b>Endereço:</b> {{client.address}}</h3>
+    <h3 class="pagamento"><b>Quantidade de Aluguéis:</b> {{client.equipamentRents}}</h3>
+    <h3 class="pagamento"><b>Pontos acumulados:</b> {{client.points}}</h3>
+  </div>
 </div>

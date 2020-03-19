@@ -6,7 +6,7 @@ const mongodb = require('../models/user');
 const Client = require('../models/client');
 const Equipament = require('../models/equipament');
 const Rent = require('../models/rent');
- 
+
 const moment = require('moment');
 
 /* GET login page. */
@@ -101,12 +101,47 @@ router.post('/dashboardContagem', auth.isAuthenticated, function (req, res, next
 router.get('/dashboard', auth.isAuthenticated, function (req, res, next) {
   var unity = req.session.unidade;
   Rent.getAllByStartLocal(unity).then((rents) => {
-    if (req.session.logado.type == 'Master') {
-      res.render('dashboardMaster', { title: 'Dashboard Master', ...req.session, rents });
-    }
-    else {
-      res.render('dashboard', { title: 'Dashboard', ...req.session, rents });
-    }
+    Rent.getAllByEndLocalWaiting(unity).then((rentsWaiting) => {
+      var clientsRunning = [];
+      if (rents.length > 0) {
+        rents.forEach(rent => {
+          var aux = true;
+          for (var i = 0; i < clientsRunning.length; i++) {
+            if (rent.client.cpf == clientsRunning[i].cpf) {
+              aux = false;
+            }
+          }
+          if (aux == true) {
+            clientsRunning.push(rent.client);
+          }
+        });
+        console.log(clientsRunning);
+      }
+      if (rentsWaiting.length > 0) {
+        rentsWaiting.forEach(rentWaiting => {
+          var aux = true;
+          for (var i = 0; i < clientsRunning.length; i++) {
+            if (rentWaiting.client.cpf == clientsRunning[i].cpf) {
+              aux = false;
+            }
+          }
+          if (aux == true) {
+            clientsRunning.push(rentWaiting.client);
+          }
+        });
+        console.log(clientsRunning);
+      }
+      if (req.session.logado.type == 'Master') {
+        res.render('dashboardMaster', { title: 'Dashboard Master', ...req.session, clientsRunning });
+      }
+      else {
+        res.render('dashboard', { title: 'Dashboard', ...req.session, clientsRunning });
+      }
+
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('/error')
+    });
   }).catch((error) => {
     console.log(error);
     res.redirect('/error')
@@ -190,6 +225,7 @@ router.post('/newRent', auth.isAuthenticated, function (req, res, next) {
   const rent = req.body.rent;
   console.log("variáveis");
   console.log(rent);
+  var cpf = rent.cpf;
   var arrayEquipament = rent.equipamentName;
   var arrayQuantity = rent.quantity;
   var arrayLength = arrayEquipament.length;
@@ -241,6 +277,7 @@ router.post('/newRent', auth.isAuthenticated, function (req, res, next) {
           aluguel.equipament = equipament;
           aluguel.quantity = numeq;
           aluguel.remainingQuantity = numeq;
+          aluguel.statusredirect = "show";
           Rent.create(aluguel).then((aluguel) => {
             res.redirect('/dashboard');
           }).catch((error) => {
@@ -275,8 +312,10 @@ router.get('/partialPrice/:_id', function (req, res) {
   var id = req.params;
   console.log(id);
 
-  Rent.getById(id).then((rent) =>{
+  Rent.getById(id).then((rent) => {
     var date = new Date();
+    var size = rent.client.datePoints;
+    var loyaltyPoints = size.length;
     var now = date.getTime();
     var rentTime = Math.trunc((now - rent.startTime) / 60000);
     var price = rent.equipament.price;
@@ -294,20 +333,22 @@ router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
 
   Rent.getById(id).then((rent) => {
     console.log(rent.client);
-      var sale = 1;
-      var date = new Date();
-      var now = date.getTime();
-      var rentTime = Math.trunc((now - rent.startTime) / 60000);
-      if (rent.sale == "Ativado") {
-        sale = 0.5;
-      }
-      var actualPrice = rent.quantity * rent.equipament.price * rentTime * sale;
-      var unitPrice = rent.equipament.price;
-      var partialPrice = rent.equipament.price * rentTime * sale;
-      unitPrice = unitPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });;
-      actualPrice = actualPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-      partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-      res.render('show', { title: 'Visualizar', ...req.session, rent, rentTime, actualPrice, unitPrice, now, id });
+    var size = rent.client.datePoints;
+    var points = size.length;
+    var sale = 1;
+    var date = new Date();
+    var now = date.getTime();
+    var rentTime = Math.trunc((now - rent.startTime) / 60000);
+    if (rent.sale == "Ativado") {
+      sale = 0.5;
+    }
+    var actualPrice = rent.quantity * rent.equipament.price * rentTime * sale;
+    var unitPrice = rent.equipament.price;
+    var partialPrice = rent.equipament.price * rentTime * sale;
+    unitPrice = unitPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });;
+    actualPrice = actualPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    res.render('show', { title: 'Visualizar', ...req.session, rent, points, rentTime, actualPrice, unitPrice, now, id });
   }).catch((error) => {
     console.log(error);
     res.redirect('/error')
@@ -322,17 +363,21 @@ router.post('/close/:_id', function (req, res, next) {
   var month = atualDate.getMonth();
   month++;
   var year = atualDate.getFullYear();
-  var fulldate = year+"-"+month+"-"+day;
+  var fulldate = year + "-" + month + "-" + day;
   // ---------------------------------------------
   const id = req.params._id;
   const close = req.body.close;
   Rent.getById(id).then((rent) => {
     // Pontos de Fidelidade
+    console.log("Client ID");
+    console.log(rent.client.id);
+
+
     Client.getDatePointsById(rent.client.id).then((datePoints) => {
       var aux = true;
-      for(var i = 0; i < datePoints.length; i++) {
+      for (var i = 0; i < datePoints.length; i++) {
         var date = new Date(datePoints[i]);
-        if(day == date.getDate() && month == (date.getMonth() + 1) && year == date.getFullYear()) {
+        if (day == date.getDate() && month == (date.getMonth() + 1) && year == date.getFullYear()) {
           console.log("Entrou");
           aux = false;
         }
@@ -340,14 +385,20 @@ router.post('/close/:_id', function (req, res, next) {
         var msDate = date.getTime();
         const diff = Math.abs(msAtualDate - msDate);
         const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-        if(days > 180) {
+        if (days > 180) {
           datePoints.splice(i, 1);
         }
       }
-      if(aux == true) {
-      datePoints.push(fulldate);
-      console.log(datePoints);
-    }
+      if (aux == true) {
+        datePoints.push(fulldate);
+        console.log(datePoints);
+      }
+      var size = datePoints.length;
+      for (var i = 0; i < size - 1; i++) {
+        if (size == 11) {
+          datePoints.shift();
+        }
+      }
       Client.updateDatePoints(rent.client.id, datePoints);
     }).catch((error) => {
       console.log("erro aqui");
@@ -360,6 +411,7 @@ router.post('/close/:_id', function (req, res, next) {
     var renderaux = 1;
     if (rent.remainingQuantity === 0) {
       rent.status = "Aguardando pagamento";
+      rent.statusredirect = "aguardando";
       rent.quantity = close.returnQuantity;
       rent.remainingQuantity = close.returnQuantity;
       renderaux = 2;
@@ -384,6 +436,7 @@ router.post('/close/:_id', function (req, res, next) {
     console.log("Close");
     console.log(close);
     close.status = "Aguardando Pagamento";
+    close.statusredirect = "aguardando";
     close.startLocal = rent.startLocal;
     close.endLocal = rent.endLocal;
     close.year = rent.year;
@@ -391,36 +444,45 @@ router.post('/close/:_id', function (req, res, next) {
     close.day = rent.day;
     close.startHour = rent.startHour;
     close.endHour = rent.endHour;
+    close.totalTime = rent.totalTime;
+    close.startTime = rent.startTime;
+    close.endTime = rent.endTime;
     close.client = rent.client;
     close.equipament = rent.equipament;
     close.quantity = close.returnQuantity;
+    close.remainingQuantity = close.quantity;
+    close.cpf = rent.cpf;
     console.log(close.partialPrice);
-    
-    var partialPriceNumber =close.partialPrice.replace("R$","");
-    partialPriceNumber = partialPriceNumber.replace(".",""); 
-    partialPriceNumber = Number(partialPriceNumber.replace(",",".")); 
-    console.log(partialPriceNumber)
-    close.partialPrice = partialPriceNumber
+
+    var partialPriceNumber = close.partialPrice.replace("R$", "");
+    partialPriceNumber = partialPriceNumber.replace(".", "");
+    partialPriceNumber = Number(partialPriceNumber.replace(",", "."));
+    console.log(partialPriceNumber);
+    close.partialPrice = partialPriceNumber;
     close.receivedPrice = partialPriceNumber;
-    if(renderaux == 2 ){
+    close.discount = partialPriceNumber;
+    rent.partialPrice = partialPriceNumber;
+    if (renderaux == 2) {
       rent.receivedPrice = partialPriceNumber;
+      rent.partialPrice = partialPriceNumber;
+      rent.discount = partialPriceNumber;
     }
-    
+
     console.log("Novo close");
-    console.log(close);    
+    console.log(close);
 
-    Rent.update(id,rent);
+    Rent.update(id, rent);
 
-    if(renderaux == 2){
+    if (renderaux == 2) {
       console.log("Red 1");
-      
-      res.redirect('/aguardando/'+id);
+
+      res.redirect('/aguardando/' + id);
     }
-    else if(renderaux == 1){
+    else if (renderaux == 1) {
       console.log("Red 2");
-      
+
       Rent.create(close).then((closeID) => {
-        res.redirect('/aguardando/'+closeID._id);
+        res.redirect('/aguardando/' + closeID._id);
       }).catch((error) => {
         console.log(error);
         res.redirect('/error')
@@ -483,75 +545,12 @@ router.get('/dailyBalance', auth.isAuthenticated, auth.isMaster, function (req, 
           Rent.getAllByDateAndEndLocal("Shopping Contagem", date.day, date.month, date.year).then((contagemRents) => {
             let contagemProfit = contagemRents.reduce((contagemProfit, cur) => contagemProfit + cur.discount, 0);
             let contagemUnits = contagemRents.reduce((contagemUnits, cur) => contagemUnits + cur.quantity, 0);
-            totalProfit = totalProfit.toFixed(2);
-            matrizProfit = matrizProfit.toFixed(2);
-            miranteProfit = miranteProfit.toFixed(2);
-            vilaProfit = vilaProfit.toFixed(2);
-            contagemProfit = contagemProfit.toFixed(2);
-            res.render('dailyBalance', { title: 'Info', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, date });
-          }).catch((error) => {
-            console.log(error);
-            res.redirect('/error')
-          });
-        }).catch((error) => {
-          console.log(error);
-          res.redirect('/error')
-        });
-      }).catch((error) => {
-        console.log(error);
-        res.redirect('/error')
-      });
-    }).catch((error) => {
-      console.log(error);
-      res.redirect('/error')
-    });
-  }).catch((error) => {
-    console.log(error);
-    res.redirect('/error')
-  });
-});
+            contagemProfit = contagemProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            miranteProfit = miranteProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            vilaProfit = vilaProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            matrizProfit = matrizProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            totalProfit = totalProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
 
-router.get('/dailyBalance/:day::month::year', auth.isAuthenticated, auth.isMaster, function (req, res, next) {
-  var date = {
-    day: Number(req.params.day),
-    monthNumber: Number(req.params.month),
-    year: Number(req.params.year)
-  }
-  console.log(date);
-  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  var date = new Date();
-  var newdate = {
-    year: date.getFullYear(),
-    month: months[date.getMonth()],
-    monthNumber: (date.getMonth() + 1),
-    hour: date.getHours(),
-    day: Number(date.getDate())
-  }
-  console.log(newdate);
-  if (newdate.day && date.day) {
-    console.log("aqui");
-  }
-  req.session.date = date;
-  Rent.getAllByDate(date.day, date.month, date.year).then((rents) => {
-    let totalProfit = rents.reduce((totalProfit, cur) => totalProfit + cur.discount, 0);
-    let totalUnits = rents.reduce((totalUnits, cur) => totalUnits + cur.quantity, 0);
-    Rent.getAllByDateAndEndLocal("Matriz", date.day, date.month, date.year).then((matrizRents) => {
-      let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.discount, 0);
-      let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
-      Rent.getAllByDateAndEndLocal("Bem-Te-Vi", date.day, date.month, date.year).then((miranteRents) => {
-        let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.discount, 0);
-        let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
-        Rent.getAllByDateAndEndLocal("Vila Pampulha", date.day, date.month, date.year).then((vilaRents) => {
-          let vilaProfit = vilaRents.reduce((vilaProfit, cur) => vilaProfit + cur.discount, 0);
-          let vilaUnits = vilaRents.reduce((vilaUnits, cur) => vilaUnits + cur.quantity, 0);
-          Rent.getAllByDateAndEndLocal("Shopping Contagem", date.day, date.month, date.year).then((contagemRents) => {
-            let contagemProfit = contagemRents.reduce((contagemProfit, cur) => contagemProfit + cur.discount, 0);
-            let contagemUnits = contagemRents.reduce((contagemUnits, cur) => contagemUnits + cur.quantity, 0);
-            totalProfit = totalProfit.toFixed(2);
-            matrizProfit = matrizProfit.toFixed(2);
-            miranteProfit = miranteProfit.toFixed(2);
-            vilaProfit = vilaProfit.toFixed(2);
-            contagemProfit = contagemProfit.toFixed(2);
             res.render('dailyBalance', { title: 'Info', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, date });
           }).catch((error) => {
             console.log(error);
@@ -621,11 +620,12 @@ router.get('/dailyBalance/previous', auth.isAuthenticated, auth.isMaster, functi
           Rent.getAllByDateAndStartLocal("Shopping Contagem", date.day, date.month, date.year).then((contagemRents) => {
             let contagemProfit = contagemRents.reduce((contagemProfit, cur) => contagemProfit + cur.discount, 0);
             let contagemUnits = contagemRents.reduce((contagemUnits, cur) => contagemUnits + cur.quantity, 0);
-            totalProfit = totalProfit.toFixed(2);
-            matrizProfit = matrizProfit.toFixed(2);
-            miranteProfit = miranteProfit.toFixed(2);
-            vilaProfit = vilaProfit.toFixed(2);
-            contagemProfit = contagemProfit.toFixed(2);
+            contagemProfit = contagemProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            miranteProfit = miranteProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            vilaProfit = vilaProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            matrizProfit = matrizProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            totalProfit = totalProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+
             res.render('dailyBalancePrevious', { title: 'Info', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, date });
           }).catch((error) => {
             console.log(error);
@@ -650,7 +650,6 @@ router.get('/dailyBalance/previous', auth.isAuthenticated, auth.isMaster, functi
 });
 
 router.get('/dailyBalance/next', auth.isAuthenticated, auth.isMaster, function (req, res, next) {
-  const id = req.params._id;
   var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   var date = req.session.date;
   var date_at = new Date();
@@ -700,31 +699,35 @@ router.get('/dailyBalance/next', auth.isAuthenticated, auth.isMaster, function (
   }
 
   if (date_at.day == date.day && date_at.monthNumber == date.monthNumber && date_at.year == date.year) {
-    console.log("aqui");
-    res.redirect('/monthlyBalance');
+    res.redirect('/dailyBalance');
   }
+  else {
 
-  Rent.getAllByDate(date.day, date.month, date.year).then((rents) => {
-    let totalProfit = rents.reduce((totalProfit, cur) => totalProfit + cur.discount, 0);
-    let totalUnits = rents.reduce((totalUnits, cur) => totalUnits + cur.quantity, 0);
-    Rent.getAllByDateAndStartLocal("Matriz", date.day, date.month, date.year).then((matrizRents) => {
-      let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.discount, 0);
-      let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
-      Rent.getAllByDateAndStartLocal("Bem-Te-Vi", date.day, date.month, date.year).then((miranteRents) => {
-        let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.discount, 0);
-        let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
-        Rent.getAllByDateAndStartLocal("Vila Pampulha", date.day, date.month, date.year).then((vilaRents) => {
-          let vilaProfit = vilaRents.reduce((vilaProfit, cur) => vilaProfit + cur.discount, 0);
-          let vilaUnits = vilaRents.reduce((vilaUnits, cur) => vilaUnits + cur.quantity, 0);
-          Rent.getAllByDateAndStartLocal("Shopping Contagem", date.day, date.month, date.year).then((contagemRents) => {
-            let contagemProfit = contagemRents.reduce((contagemProfit, cur) => contagemProfit + cur.discount, 0);
-            let contagemUnits = contagemRents.reduce((contagemUnits, cur) => contagemUnits + cur.quantity, 0);
-            totalProfit = totalProfit.toFixed(2);
-            matrizProfit = matrizProfit.toFixed(2);
-            miranteProfit = miranteProfit.toFixed(2);
-            vilaProfit = vilaProfit.toFixed(2);
-            contagemProfit = contagemProfit.toFixed(2);
-            res.render('dailyBalancePrevious', { title: 'Info', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, date });
+    Rent.getAllByDate(date.day, date.month, date.year).then((rents) => {
+      let totalProfit = rents.reduce((totalProfit, cur) => totalProfit + cur.discount, 0);
+      let totalUnits = rents.reduce((totalUnits, cur) => totalUnits + cur.quantity, 0);
+      Rent.getAllByDateAndStartLocal("Matriz", date.day, date.month, date.year).then((matrizRents) => {
+        let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.discount, 0);
+        let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
+        Rent.getAllByDateAndStartLocal("Bem-Te-Vi", date.day, date.month, date.year).then((miranteRents) => {
+          let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.discount, 0);
+          let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
+          Rent.getAllByDateAndStartLocal("Vila Pampulha", date.day, date.month, date.year).then((vilaRents) => {
+            let vilaProfit = vilaRents.reduce((vilaProfit, cur) => vilaProfit + cur.discount, 0);
+            let vilaUnits = vilaRents.reduce((vilaUnits, cur) => vilaUnits + cur.quantity, 0);
+            Rent.getAllByDateAndStartLocal("Shopping Contagem", date.day, date.month, date.year).then((contagemRents) => {
+              let contagemProfit = contagemRents.reduce((contagemProfit, cur) => contagemProfit + cur.discount, 0);
+              let contagemUnits = contagemRents.reduce((contagemUnits, cur) => contagemUnits + cur.quantity, 0);
+              contagemProfit = contagemProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+              miranteProfit = miranteProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+              vilaProfit = vilaProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+              matrizProfit = matrizProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+              totalProfit = totalProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+              res.render('dailyBalancePrevious', { title: 'Info', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, date });
+            }).catch((error) => {
+              console.log(error);
+              res.redirect('/error')
+            });
           }).catch((error) => {
             console.log(error);
             res.redirect('/error')
@@ -741,10 +744,7 @@ router.get('/dailyBalance/next', auth.isAuthenticated, auth.isMaster, function (
       console.log(error);
       res.redirect('/error')
     });
-  }).catch((error) => {
-    console.log(error);
-    res.redirect('/error')
-  });
+  }
 });
 
 /* GET daily Report */
@@ -755,8 +755,7 @@ router.get('/dailyReport', auth.isAuthenticated, auth.isMaster, function (req, r
   Rent.getAllByDateAndEndLocal(daily.endLocal, date.day, date.month, date.year).then((rents) => {
     rents.forEach(rent => {
       if (rent.discount != null) {
-        var aux = rent.discount;
-        rent.discount = aux.toFixed(2);
+        rent.discountR$ = rent.discount.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
       }
     });
     res.render('dailyReport', { title: 'Relatório Diário', ...req.session, rents, date });
@@ -779,8 +778,7 @@ router.post('/dailyReport', auth.isAuthenticated, auth.isMaster, function (req, 
   Rent.getAllByDateAndEndLocal(endLocal, date.day, date.month, date.year).then((rents) => {
     rents.forEach(rent => {
       if (rent.discount != null) {
-        var aux = rent.discount;
-        rent.discount = aux.toFixed(2);
+        rent.discountR$ = rent.discount.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
       }
     });
     res.render('dailyReport', { title: 'Relatório Diário', ...req.session, rents, date });
@@ -795,12 +793,10 @@ router.get('/dailyReportDetails/:_id', auth.isAuthenticated, auth.isMaster, func
   const id = req.params._id;
   Rent.getById(id).then((rent) => {
     if (rent.receivedPrice != null) {
-      var aux = rent.receivedPrice;
-      rent.receivedPrice = aux.toFixed(2);
+      rent.receivedPriceR$ = rent.receivedPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
     }
     if (rent.discount != null) {
-      var aux = rent.discount;
-      rent.discount = aux.toFixed(2);
+      rent.discountR$ = rent.discount.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
     }
     res.render('dailyReportDetails', { title: 'Info', ...req.session, rent });
   }).catch((error) => {
@@ -835,6 +831,11 @@ router.get('/monthlyBalance', auth.isAuthenticated, auth.isMaster, function (req
           Rent.getAllByMonthAndEndLocal("Shopping Contagem", date.month, date.year).then((contagemRents) => {
             let contagemProfit = contagemRents.reduce((contagemProfit, cur) => contagemProfit + cur.discount, 0);
             let contagemUnits = contagemRents.reduce((contagemUnits, cur) => contagemUnits + cur.quantity, 0);
+            contagemProfit = contagemProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            miranteProfit = miranteProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            vilaProfit = vilaProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            matrizProfit = matrizProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            totalProfit = totalProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
             res.render('monthlyBalance', { title: 'Info', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, date });
           }).catch((error) => {
             console.log(error);
@@ -885,6 +886,11 @@ router.get('/monthlyBalance/Previous', auth.isAuthenticated, auth.isMaster, func
           Rent.getAllByMonthAndStartLocal("Shopping Contagem", date.month, date.year).then((contagemRents) => {
             let contagemProfit = contagemRents.reduce((contagemProfit, cur) => contagemProfit + cur.discount, 0);
             let contagemUnits = contagemRents.reduce((contagemUnits, cur) => contagemUnits + cur.quantity, 0);
+            contagemProfit = contagemProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            miranteProfit = miranteProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            vilaProfit = vilaProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            matrizProfit = matrizProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            totalProfit = totalProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
             res.render('monthlyBalancePrevious', { title: 'Info', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, date });
           }).catch((error) => {
             console.log(error);
@@ -931,22 +937,32 @@ router.get('/monthlyBalance/Next', auth.isAuthenticated, auth.isMaster, function
   if (date_at.monthNumber == date.monthNumber && date_at.year == date.year) {
     res.redirect('/monthlyBalance');
   }
-  Rent.getAllByMonth(date.month, date.year).then((rents) => {
-    let totalProfit = rents.reduce((totalProfit, cur) => totalProfit + cur.discount, 0);
-    let totalUnits = rents.reduce((totalUnits, cur) => totalUnits + cur.quantity, 0);
-    Rent.getAllByMonthAndStartLocal("Matriz", date.month, date.year).then((matrizRents) => {
-      let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.discount, 0);
-      let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
-      Rent.getAllByMonthAndStartLocal("Bem-Te-Vi", date.month, date.year).then((miranteRents) => {
-        let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.discount, 0);
-        let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
-        Rent.getAllByMonthAndStartLocal("Vila Pampulha", date.month, date.year).then((vilaRents) => {
-          let vilaProfit = vilaRents.reduce((vilaProfit, cur) => vilaProfit + cur.discount, 0);
-          let vilaUnits = vilaRents.reduce((vilaUnits, cur) => vilaUnits + cur.quantity, 0);
-          Rent.getAllByMonthAndStartLocal("Shopping Contagem", date.month, date.year).then((contagemRents) => {
-            let contagemProfit = contagemRents.reduce((contagemProfit, cur) => contagemProfit + cur.discount, 0);
-            let contagemUnits = contagemRents.reduce((contagemUnits, cur) => contagemUnits + cur.quantity, 0);
-            res.render('monthlyBalancePrevious', { title: 'Info', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, date });
+  else {
+    Rent.getAllByMonth(date.month, date.year).then((rents) => {
+      let totalProfit = rents.reduce((totalProfit, cur) => totalProfit + cur.discount, 0);
+      let totalUnits = rents.reduce((totalUnits, cur) => totalUnits + cur.quantity, 0);
+      Rent.getAllByMonthAndStartLocal("Matriz", date.month, date.year).then((matrizRents) => {
+        let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.discount, 0);
+        let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
+        Rent.getAllByMonthAndStartLocal("Bem-Te-Vi", date.month, date.year).then((miranteRents) => {
+          let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.discount, 0);
+          let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
+          Rent.getAllByMonthAndStartLocal("Vila Pampulha", date.month, date.year).then((vilaRents) => {
+            let vilaProfit = vilaRents.reduce((vilaProfit, cur) => vilaProfit + cur.discount, 0);
+            let vilaUnits = vilaRents.reduce((vilaUnits, cur) => vilaUnits + cur.quantity, 0);
+            Rent.getAllByMonthAndStartLocal("Shopping Contagem", date.month, date.year).then((contagemRents) => {
+              let contagemProfit = contagemRents.reduce((contagemProfit, cur) => contagemProfit + cur.discount, 0);
+              let contagemUnits = contagemRents.reduce((contagemUnits, cur) => contagemUnits + cur.quantity, 0);
+              contagemProfit = contagemProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+              miranteProfit = miranteProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+              vilaProfit = vilaProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+              matrizProfit = matrizProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+              totalProfit = totalProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+              res.render('monthlyBalancePrevious', { title: 'Info', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, date });
+            }).catch((error) => {
+              console.log(error);
+              res.redirect('/error')
+            });
           }).catch((error) => {
             console.log(error);
             res.redirect('/error')
@@ -963,10 +979,7 @@ router.get('/monthlyBalance/Next', auth.isAuthenticated, auth.isMaster, function
       console.log(error);
       res.redirect('/error')
     });
-  }).catch((error) => {
-    console.log(error);
-    res.redirect('/error')
-  });
+  }
 });
 
 /* GET daily Report */
@@ -1066,6 +1079,14 @@ router.get('/equipamentBalance', auth.isAuthenticated, auth.isMaster, function (
         totalUnits += equipament.rents;
         totalProfit += equipament.value;
       });
+      equipaments.forEach(equipament => {
+        price = equipament.price;
+        price = price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+        equipament.value = equipament.value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+        equipament.priceR$ = price;
+        console.log(equipament);
+      });
+      totalProfit = totalProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
       res.render('equipamentBalance', { title: 'Balanço de Equipamentos', ...req.session, equipaments, date, totalUnits, totalProfit });
     }).catch((error) => {
       console.log(error);
@@ -1111,7 +1132,15 @@ router.get('/equipamentBalance/previous', auth.isAuthenticated, auth.isMaster, f
         totalUnits += equipament.rents;
         totalProfit += equipament.value;
       });
-      res.render('equipamentBalancePrevious', { title: 'Balanço de Equipamentos', ...req.session, equipamentstotalUnits, totalProfit });
+      equipaments.forEach(equipament => {
+        price = equipament.price;
+        price = price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+        equipament.value = equipament.value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+        equipament.priceR$ = price;
+        console.log(equipament);
+      });
+      totalProfit = totalProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+      res.render('equipamentBalancePrevious', { title: 'Balanço de Equipamentos', ...req.session, equipaments, date, totalUnits, totalProfit });
     }).catch((error) => {
       console.log(error);
       res.redirect('/error')
@@ -1146,35 +1175,57 @@ router.get('/equipamentBalance/next', auth.isAuthenticated, auth.isMaster, funct
   if (date_at.monthNumber == date.monthNumber && date_at.year == date.year) {
     res.redirect('/equipamentBalance');
   }
-
-  Equipament.getAll().then((equipaments) => {
-    Rent.getAllByMonth(date.month, date.year).then((rents) => {
-      var totalUnits = 0;
-      var totalProfit = 0;
-      equipaments.forEach(equipament => {
-        // console.log(equipament._id);
-        equipament.rents = 0;
-        equipament.value = 0;
-        // console.log(equipament);
-        rents.forEach(rent => {
-          if (equipament.name == rent.equipament.name) {
-            equipament.rents += rent.quantity;
-            equipament.value += rent.discount;
-          }
+  else {
+    Equipament.getAll().then((equipaments) => {
+      Rent.getAllByMonth(date.month, date.year).then((rents) => {
+        var totalUnits = 0;
+        var totalProfit = 0;
+        equipaments.forEach(equipament => {
+          // console.log(equipament._id);
+          equipament.rents = 0;
+          equipament.value = 0;
+          // console.log(equipament);
+          rents.forEach(rent => {
+            if (equipament.name == rent.equipament.name) {
+              equipament.rents += rent.quantity;
+              equipament.value += rent.discount;
+            }
+          });
+          totalUnits += equipament.rents;
+          totalProfit += equipament.value;
         });
-        totalUnits += equipament.rents;
-        totalProfit += equipament.value;
+        equipaments.forEach(equipament => {
+          price = equipament.price;
+          price = price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+          equipament.value = equipament.value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+          equipament.priceR$ = price;
+          console.log(equipament);
+        });
+        totalProfit = totalProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+        res.render('equipamentBalancePrevious', { title: 'Balanço de Equipamentos', ...req.session, equipaments, date, totalUnits, totalProfit });
+      }).catch((error) => {
+        console.log(error);
+        res.redirect('/error')
       });
-
-      console.log(totalUnits);
-      res.render('equipamentBalancePrevious', { title: 'Balanço de Equipamentos', ...req.session, equipaments, date, totalUnits, totalProfit });
     }).catch((error) => {
       console.log(error);
       res.redirect('/error')
     });
+  }
+});
+
+/* GET dashboardClient */
+router.get('/dashboardClient/:cpf', auth.isAuthenticated, function (req, res, next) {
+  var cpf = req.params.cpf;
+  Rent.getByCpf(cpf).then((rent) => {
+    console.log(rent);
+    console.log(rent.client);
+    console.log(rent.equipament);
+    res.render('dashboardClient', { title: 'Visualizar', ...req.session, cpf, rent });
+
   }).catch((error) => {
     console.log(error);
-    res.redirect('/error')
+    res.redirect("/error")
   });
 });
 
@@ -1202,17 +1253,37 @@ router.get('/client/:_id', auth.isAuthenticated, auth.isMaster, function (req, r
 
 
 /* GET aguardando Pagamento  */
-router.get('/aguardando/:_id', auth.isAuthenticated, function(req,res){
+router.get('/aguardando/:_id', auth.isAuthenticated, function (req, res) {
   const id = req.params._id;
-  res.render('aguardando', { title: 'Visualizar', ...req.session});
-  // Rent.getById(id).then((rent) => {
-    
-  // }).catch(error=>{
-  //   console.log(error);
-  //   res.redirect("/error")
-  // });
+
+  Rent.getById(id).then((rent) => {
+    console.log(rent);
+    // rent.partialPrice = rent.partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    console.log(rent.partialPrice);
+
+
+    res.render('aguardando', { title: 'Visualizar', ...req.session, rent, id });
+  }).catch(error => {
+    console.log(error);
+    res.redirect("/error")
+  });
 });
 
+router.post('/end/:_id', function (req, res) {
+  const id = req.params._id;
+  var end = req.body.end;
+  Rent.getById(id).then((rent) => {
+    rent.status = "Finalizado";
+    rent.payment = end.payment;
+    rent.hasDiscount = end.hasDiscount;
+    rent.justification = end.justification;
 
+    Rent.update(id, rent);
+    res.redirect('/dashboard');
+  }).catch(error => {
+    console.log(error);
+    res.redirect("/error")
+  });
+})
 
 module.exports = router;

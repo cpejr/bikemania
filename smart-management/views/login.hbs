@@ -1,45 +1,53 @@
-
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Login</title>
-    <link rel='stylesheet' href='/stylesheets/style.css'>
-    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  </head>
 
-  <body>
-    <nav class="navbar navbar-light bg-light" id="logobike"></nav>
-    <div class="texto-centro">
-      <FONT size="6" color="#FF6501" >
-        LOGIN
-      </FONT>
-    </div>
-    <div class="col-md-5 container">
-      <form action="/login" method="post">
-        <div class="cadastro">
-          <div class="texto-centro">
-            <label for="InputEmail1" ><FONT size="5" color="black" > Endereço de email</FONT></label>
-          </div>
-          <input type="text" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="Seu email" name="user[userName]">
-        </div>
+<head>
+  <title>Login</title>
+  <link rel='stylesheet' href='/stylesheets/style.css'>
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
 
-        <div class="form-group mb-0">
-          <div class="texto-centro">
-            <label for="InputPassword1" class="texto-centro"><FONT size="5" color="black" > Senha</FONT></label>
-          </div>
-          <input type="password" class="form-control" id="InputPassword1" placeholder="Senha" name = "user[password]">
-        </div>
+<body>
+  <nav class="navbar navbar-light bg-light" id="logobike"></nav>
+  <div class="texto-centro">
+    <FONT size="6" color="#FF6501">
+      LOGIN
+    </FONT>
+  </div>
+  <div class="col-md-5 container">
+    <form action="/login" method="post">
+      <div class="cadastro">
         <div class="texto-centro">
-          <label for="InputPassword1" class="texto-centro mt-0"><a href="/forgotPassword"><FONT size="2" color="black" > Esqueceu sua senha?</FONT></a></label>
+          <label for="InputEmail1">
+            <FONT size="5" color="black"> Endereço de email</FONT>
+          </label>
         </div>
+        <input type="text" class="form-control" id="InputEmail1" aria-describedby="emailHelp" placeholder="Seu email"
+          name="user[userName]">
+      </div>
 
+      <div class="form-group mb-0">
         <div class="texto-centro">
-          <button type="submit" class="botaoenviar">Entrar</button>
+          <label for="InputPassword1" class="texto-centro">
+            <FONT size="5" color="black"> Senha</FONT>
+          </label>
         </div>
+        <input type="password" class="form-control" id="InputPassword1" placeholder="Senha" name="user[password]">
+      </div>
+      <div class="texto-centro">
+        <label for="InputPassword1" class="texto-centro mt-0"><a href="/forgotPassword">
+            <FONT size="2" color="black"> Esqueceu sua senha?</FONT>
+          </a></label>
+      </div>
+
+      <div class="texto-centro">
+        <button type="submit" class="botaoenviar">Entrar</button>
+      </div>
 
 
-      </form>
-    </div>
-  </body>
+    </form>
+  </div>
+</body>
+
 </html>

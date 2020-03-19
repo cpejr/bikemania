@@ -1,7 +1,8 @@
 <nav class="navbar navbar-light bg-light" id="logobike"></nav>
   <article class="justify-content-center mx-0">
     <div class="bg-CPE-white Address-btn1">
-      <button class="btn btn-default" onclick="location.href='/home'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
+      <button class="btn btn-default" onclick="location.href='/home'"> <i class="fa fa-shield fa-rotate-90 fa-3x"
+          aria-hidden="true"></i> </button>
       <div class="acomp-header text-center">
         <h3 class="text-CPE-orange">Acompanhamento de Alugueis</h3>
         <h3 class="text-CPE-orange">{{unidade}}</h3>
@@ -21,21 +22,19 @@
         <thead class="thead-CPE-white">
           <tr>
             <th class="text-center">Nome</th>
-            <th class="text-center">Equipamento</th>
-            <th class="text-center">Quantidade</th>
+            <th class="text-center">CPF</th>
             <th class="text-center">Opções</th>
           </tr>
         </thead>
         <tbody id="table">
-          {{#each rents}}
+          {{#each clientsRunning}}
           <tr>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{client.name}}</td>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{equipament.name}}</td>
-            <td scope="row" class="text-center align-middle font-weight-bold">{{remainingQuantity}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{name}}</td>
+            <td scope="row" class="text-center align-middle font-weight-bold">{{cpf}}</td>
             <td scope="row" class="text-center">
-              <form action="/show/{{id}}" method="get">
-              <button class="btn text-white orange-button" type="submit">Ver</button>
-            </form>
+              <form action="/dashboardClient/{{cpf}}" method="get">
+                <button class="btn text-white orange-button" type="submit">Ver</button>
+              </form>
             </td>
           </tr>
           {{/each}}
