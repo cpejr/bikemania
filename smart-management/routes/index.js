@@ -807,6 +807,44 @@ router.get('/dailyReportDetails/:_id', auth.isAuthenticated, auth.isMaster, func
   });
 });
 
+router.get('/getdailyBalance/::month::year::local', function (req, res, next) {
+  var id = req.params;
+  var day = [];
+  var Profit = [];
+  var Units = [];
+  Rent.getAllByMonthAndEndLocal(id.local, id.month, id.year).then((Rents) => {
+    // console.log(Rents);
+    
+    Rents.forEach(rent => {
+      console.log(rent);
+      
+      var aux = 0;
+      for (var i = 0; i < day.length; i++) {
+        if (day[i] == rent.day) {
+          console.log(Profit[i]);
+          console.log(Units[i]);
+          console.log(rent.discount);
+          
+          
+          
+          Profit[i] += rent.discount;
+          Units[i] += rent.quantity;
+          aux = 1;
+        }
+      }
+      if (aux == 0) {
+        day.push(rent.day);
+        Profit.push(rent.discount);
+        Units.push(rent.quantity);
+      }
+    });
+    console.log(day);
+    console.log(Profit);
+    console.log(Units);
+    res.send({ day, Profit, Units });
+  });
+});
+
 /* GET dailyBalance */
 router.get('/monthlyBalance', auth.isAuthenticated, auth.isMaster, function (req, res, next) {
   var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -986,37 +1024,24 @@ router.get('/monthlyBalance/Next', auth.isAuthenticated, auth.isMaster, function
 
 /* GET daily Report */
 router.get('/monthlyReport', auth.isAuthenticated, auth.isMaster, function (req, res, next) {
-  const monthty = req.session.monthlyReport;
-  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   var year = req.session.date.year;
-  var month = req.session.date.month;
   var monthNumber = req.session.date.monthNumber;
-  Rent.getAllByMonthAndEndLocal(monthty.endLocal, month, year).then((rents) => {
-    res.render('monthlyReport', { title: 'Relatório Mensal', ...req.session, rents, monthNumber, year });
-  }).catch((error) => {
-    console.log(error);
-    res.redirect('/error')
-  });
+  var unidade = req.session.monthlyReport.endLocal;
+  console.log(unidade);
+
+  res.render('monthlyReport', { title: 'Relatório Mensal', ...req.session, unidade, monthNumber, year });
 });
 
 // POST daily Report
 router.post('/monthlyReport', auth.isAuthenticated, auth.isMaster, function (req, res, next) {
-  const endLocal = req.body.local;
-  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const unidade = req.body.local;
   var year = req.session.date.year;
-  var month = req.session.date.month;
   var monthNumber = req.session.date.monthNumber;
   var monthlyReport = {
     endLocal: req.body.local
   };
   req.session.monthlyReport = monthlyReport;
-  console.log(req.session);
-  Rent.getAllByMonthAndStartLocal(endLocal, month, year).then((rents) => {
-    res.render('monthlyReport', { title: 'Relatório Mensal', ...req.session, rents, monthNumber, year });
-  }).catch((error) => {
-    console.log(error);
-    res.redirect('/error')
-  });
+  res.render('monthlyReport', { title: 'Relatório Mensal', ...req.session, unidade, monthNumber, year });
 });
 
 /* GET daily Rent report Details  */
