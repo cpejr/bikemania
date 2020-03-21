@@ -8973,4 +8973,24 @@ ul ul a {
 .p-alert {
   margin-bottom: 0 !important; }
 
+@media (min-device-width: 200px) and (max-device-width: 768px) {
+  .row {
+    display: block !important; }
+  .signUpMargin {
+    margin-bottom: 40px; }
+  .btncadastrar {
+    margin-top: 80px;
+    width: 50%;
+    height: 50px;
+    font-size: 1.75rem; }
+  .Address-btn1 {
+    display: block !important; }
+  .col-lg-6 {
+    flex: 0 0 100%;
+    max-width: 100%; }
+  .disappear {
+    display: none; }
+  .form-control {
+    height: 3rem; } }
+
 /*# sourceMappingURL=style.css.map */
