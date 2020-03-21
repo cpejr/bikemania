@@ -77,6 +77,7 @@ class Rent {
    * @param {string} id - User Id
    * @returns {Object} - rent Document Data
    */
+  
   static getById(id) {
     return new Promise((resolve, reject) => {
         RentModel.findById(id).populate('client').populate('equipament').exec().then((result) => {
@@ -223,6 +224,8 @@ class Rent {
       });
     });
   }
+  
+
 
   static getAllByMonthAndEndLocal(endLocal, month, year) {
     return new Promise((resolve, reject) => {

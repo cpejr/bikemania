@@ -201,7 +201,6 @@ router.get('/returnName/:cpf', auth.isAuthenticated, function (req, res, next) {
   }).catch((error) => {
     console.log(error);
   });
-
 });
 
 /* GET new Rent with CPF*/
