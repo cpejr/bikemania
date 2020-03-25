@@ -312,7 +312,6 @@ router.post('/delete/:_id', auth.isAuthenticated, function (req, res, next) {
 router.get('/partialPrice/:_id', function (req, res) {
   var id = req.params;
   console.log(id);
-
   Rent.getById(id).then((rent) => {
     var date = new Date();
     var size = rent.client.datePoints;
@@ -328,7 +327,6 @@ router.get('/partialPrice/:_id', function (req, res) {
     console.log(error);
   });
 });
-
 
 /* GET actualPrice Rent */
 router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
@@ -1293,8 +1291,6 @@ router.get('/client/:_id', auth.isAuthenticated, auth.isMaster, function (req, r
   });
 });
 
-
-
 /* GET aguardando Pagamento  */
 router.get('/aguardando/:_id', auth.isAuthenticated, function (req, res) {
   const id = req.params._id;
@@ -1306,6 +1302,26 @@ router.get('/aguardando/:_id', auth.isAuthenticated, function (req, res) {
 
 
     res.render('aguardando', { title: 'Visualizar', ...req.session, rent, id });
+  }).catch(error => {
+    console.log(error);
+    res.redirect("/error")
+  });
+});
+
+router.get('/aguardandoTotal/:cpf::endlocal', auth.isAuthenticated, function (req, res, next) {
+  var cpf = req.params.cpf;
+  var endLocal = req.params.endLocal;
+  Rent.getAllByStatusAguardando(cpf, endLocal).then((toPay) => {
+    console.log("AQUI");
+    console.log(toPay);
+    console.log(req.params);
+    var toPaySize = toPay.length;
+    var pendingPayment = 0;
+      for(var i=0; i < toPaySize; i++){
+        pendingPayment += toPay[i].partialPrice;
+      } 
+
+    res.render('aguardandoTotal', { title: 'PagamentoTotal', ...req.session, toPay, cpf, endLocal, pendingPayment });
   }).catch(error => {
     console.log(error);
     res.redirect("/error")
