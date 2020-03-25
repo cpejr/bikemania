@@ -237,5 +237,25 @@ class Rent {
     });
   }
 
+  static getAllByStatusAguardando(cpf, endLocal) {
+    return new Promise((resolve, reject) => {
+      RentModel.find({cpf: cpf, endLocal: endLocal, status: "Aguardando pagamento" }).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  static getAllByStatusRodando(cpf, endLocal) {
+    return new Promise((resolve, reject) => {
+      RentModel.find({cpf: cpf, endLocal: endLocal, status: "Rodando" }).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+  
 }
   module.exports = Rent;
