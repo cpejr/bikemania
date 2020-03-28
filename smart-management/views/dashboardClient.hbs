@@ -47,9 +47,23 @@
       </table>
     </section>
   </article>
-  <div class="pay">
-    <input class="form-control" id="input" name="aguardandoTotal[pendingPayment]">
-    <form action="/aguardandoTotal/{{cpf}}:{{unidade}}" method="get">
+  <div class="texto-centro mb-3">
+    <FONT face="Segoe UI Symbol" color="#fd7e14">
+      <h3 id="titulo">Pagamento Pendente</h3>
+    </FONT>
+  </div>
+  <div class="col-lg-6 ">
+    <form action="/pagamentoTotal/:{{cpf}}:{{unidade}}" method="post">
+      <div class="cadastro">
+        <div class="texto-centro mt-3">
+          <input class="form-control" id="input" value="{{pendingPayment}}">
+          <select id="productCode" class="drowdownoptions form-control" name="end[payment]" required="required">
+            <option value="Crédito">Crédito</option>
+            <option value="Débito">Débito</option>
+            <option value="Dinheiro">Dinheiro</option>
+          </select>
+        </div>
+      </div>
       <button id="btnencerrar" class="btn text-white orange-button" type="submit">Pagamento</button>
     </form>
   </div>

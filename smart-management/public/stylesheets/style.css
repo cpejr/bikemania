@@ -8640,7 +8640,6 @@ td {
   background-color: #3CB1FE;
   border-radius: 5px;
   justify-content: flex-end;
-  font-size: 90%;
   align-items: center  !important;
   border: 10px; }
 
@@ -9010,7 +9009,15 @@ ul ul a {
     text-align: center; }
   #balanceTop {
     font-size: 23px;
-    text-align: center; } }
+    text-align: center; }
+  #btnaguardando {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 180px;
+    height: 40px;
+    font-size: 23px; } }
 
 @media (min-device-width: 401px) and (max-device-width: 599px) {
   #title {
@@ -9092,7 +9099,7 @@ ul ul a {
   .cadastroPg {
     font-size: 30px; }
   #box {
-    font-size: 22px; }
+    font-size: 30px; }
   .row {
     justify-content: center; }
   #balance {
@@ -9110,7 +9117,15 @@ ul ul a {
     width: 250px;
     height: 40px;
     font-size: 20px;
-    margin-bottom: 10px; } }
+    margin-bottom: 10px; }
+  #btnaguardando {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 210px;
+    height: 50px;
+    font-size: 26px; } }
 
 @media (min-device-width: 230px) and (max-device-width: 400px) {
   #title {
@@ -9193,7 +9208,7 @@ ul ul a {
   .cadastroPg {
     font-size: 38px; }
   #box {
-    font-size: 23px; }
+    font-size: 38px; }
   .row {
     justify-content: center; }
   #balance {
@@ -9211,29 +9226,17 @@ ul ul a {
     width: 240px;
     height: 40px;
     font-size: 20px;
-    margin-bottom: 10px; } }
+    margin-bottom: 10px; }
+  #btnaguardando {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+    height: 60px;
+    font-size: 28px; } }
 
 .p-alert {
   margin-bottom: 0 !important; }
-
-@media (min-device-width: 200px) and (max-device-width: 768px) {
-  .row {
-    display: block !important; }
-  .signUpMargin {
-    margin-bottom: 40px; }
-  .btncadastrar {
-    margin-top: 80px;
-    width: 50%;
-    height: 50px;
-    font-size: 1.75rem; }
-  .Address-btn1 {
-    display: block !important; }
-  .col-lg-6 {
-    flex: 0 0 100%;
-    max-width: 100%; }
-  .disappear {
-    display: none; }
-  .form-control {
-    height: 3rem; } }
 
 /*# sourceMappingURL=style.css.map */

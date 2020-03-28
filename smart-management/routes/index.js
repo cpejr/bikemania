@@ -1241,14 +1241,45 @@ router.get('/equipamentBalance/next', auth.isAuthenticated, auth.isMaster, funct
 });
 
 /* GET dashboardClient */
+// router.get('/dashboardClient/:cpf', auth.isAuthenticated, function (req, res, next) {
+//   var cpf = req.params.cpf;
+//   Rent.getByCpf(cpf).then((rent) => {
+//     console.log(rent);
+//     console.log(rent.client);
+//     console.log(rent.equipament);
+//     res.render('dashboardClient', { title: 'Visualizar', ...req.session, cpf, rent });
+
+//   }).catch((error) => {
+//     console.log(error);
+//     res.redirect("/error")
+//   });
+// });
+
 router.get('/dashboardClient/:cpf', auth.isAuthenticated, function (req, res, next) {
   var cpf = req.params.cpf;
+  var endLocal = req.session.unidade;
   Rent.getByCpf(cpf).then((rent) => {
     console.log(rent);
     console.log(rent.client);
     console.log(rent.equipament);
-    res.render('dashboardClient', { title: 'Visualizar', ...req.session, cpf, rent });
+      Rent.getAllByStatusAguardando(cpf, endLocal).then((toPay) => {
+        console.log("AQUI");
+        console.log(toPay);
+        var toPaySize = toPay.length;
+        console.log(toPaySize);
+        var pendingPayment = 0;
+          for(var i=0; i < toPaySize; i++){
+            pendingPayment += toPay[i].partialPrice;
+          } 
+        pendingPayment = pendingPayment.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+        console.log(pendingPayment);
 
+      res.render('dashboardClient', { title: 'Visualizar', ...req.session, cpf, rent, pendingPayment });
+
+    }).catch((error) => {
+      console.log(error);
+      res.redirect("/error")
+    });
   }).catch((error) => {
     console.log(error);
     res.redirect("/error")
@@ -1308,20 +1339,19 @@ router.get('/aguardando/:_id', auth.isAuthenticated, function (req, res) {
   });
 });
 
-router.get('/aguardandoTotal/:cpf::endlocal', auth.isAuthenticated, function (req, res, next) {
+router.post('/pagamentoTotal/::cpf::endLocal', auth.isAuthenticated, function (req, res, next) {
   var cpf = req.params.cpf;
   var endLocal = req.params.endLocal;
-  Rent.getAllByStatusAguardando(cpf, endLocal).then((toPay) => {
-    console.log("AQUI");
-    console.log(toPay);
-    console.log(req.params);
-    var toPaySize = toPay.length;
-    var pendingPayment = 0;
-      for(var i=0; i < toPaySize; i++){
-        pendingPayment += toPay[i].partialPrice;
-      } 
+  var end = req.body.end;
 
-    res.render('aguardandoTotal', { title: 'PagamentoTotal', ...req.session, toPay, cpf, endLocal, pendingPayment });
+  Rent.getAllByStatusAguardando(cpf, endLocal).then((toPay) => {
+    toPay.forEach(pay => {
+      pay.status = "Finalizado";
+      pay.payment = end.payment
+      Rent.update(pay._id, pay);
+    });
+
+    res.redirect('/dashboard');
   }).catch(error => {
     console.log(error);
     res.redirect("/error")
