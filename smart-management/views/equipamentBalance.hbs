@@ -3,7 +3,7 @@
   <button class="btn btn-default" onclick="location.href='/home'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
   <div class="texto-centro mb-3">
     <button class="col-xs-12 col-sm-12 col-md-2 btnrelatorio3" type="submit" onclick="location.href='/equipamentBalance/previous'">Mês Anterior</button>
-    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE" >
+    <FONT id="titulo2" size="6" face="Segoe UI Symbol" color="#3CB1FE" >
       Relatório de Equipamentos  -  {{date.monthNumber}}/{{date.year}}
     </FONT>
   </div>
@@ -12,27 +12,27 @@
 <table class="table table-hover mt-3">
   <thead>
     <tr>
-      <th scope="col">Nome</th>
-      <th scope="col">Preço</th>
-      <th scope="col">Faturamento</th>
-      <th scope="col">Quantidade de aluguéis</th>
+      <th id="balanceTop" scope="col">Nome</th>
+      <th id="balanceTop" scope="col">Preço</th>
+      <th id="balanceTop" scope="col">Faturamento</th>
+      <th id="balanceTop" scope="col">Quantidade de aluguéis</th>
     </tr>
   </thead>
   <tbody>
     {{#each equipaments}}
         <tr>
-            <td scope="row">{{name}}</td>
-            <td scope="row">{{priceR$}}</td>
-            <td scope="row">{{value}}</td>
-            <td scope="row">{{rents}}</td>
+            <td id="balance" scope="row">{{name}}</td>
+            <td id="balance" scope="row">{{priceR$}}</td>
+            <td id="balance" scope="row">{{value}}</td>
+            <td id="balance" scope="row">{{rents}}</td>
         </tr>
     {{/each}}
 
     <tr>
-      <td scope="row"></td>
-      <td scope="row">Total</td>
-      <td scope="row">{{totalProfit}}</td>
-      <td scope="row">{{totalUnits}}</td>
+      <td id="balance" scope="row"></td>
+      <td id="balance" scope="row">Total</td>
+      <td id="balance" scope="row">{{totalProfit}}</td>
+      <td id="balance" scope="row">{{totalUnits}}</td>
     </tr>
   </tbody>
 </table>
