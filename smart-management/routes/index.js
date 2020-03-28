@@ -315,7 +315,6 @@ router.get('/partialPrice/:_id', function (req, res) {
   Rent.getById(id).then((rent) => {
     var date = new Date();
     var size = rent.client.datePoints;
-    var loyaltyPoints = size.length;
     var now = date.getTime();
     var rentTime = Math.trunc((now - rent.startTime) / 60000);
     var price = rent.equipament.price;
@@ -1289,16 +1288,31 @@ router.get('/dashboardClient/:cpf', auth.isAuthenticated, function (req, res, ne
 /* GET dashboardClientFunc */
 router.get('/dashboardClientFunc/:cpf', auth.isAuthenticated, function (req, res, next) {
   var cpf = req.params.cpf;
+  var endLocal = req.session.unidade;
   Rent.getByCpf(cpf).then((rent) => {
     console.log(rent);
     console.log(rent.client);
     console.log(rent.equipament);
+      Rent.getAllByStatusAguardando(cpf, endLocal).then((toPay) => {
+        console.log("AQUI");
+        console.log(toPay);
+        var toPaySize = toPay.length;
+        console.log(toPaySize);
+        var pendingPayment = 0;
+          for(var i=0; i < toPaySize; i++){
+            pendingPayment += toPay[i].partialPrice;
+          } 
+        pendingPayment = pendingPayment.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+        console.log(pendingPayment);
     res.render('dashboardClientFunc', { title: 'VisualizarAluguel', ...req.session, cpf, rent });
-
   }).catch((error) => {
     console.log(error);
     res.redirect("/error")
   });
+}).catch((error) => {
+  console.log(error);
+  res.redirect("/error")
+});
 });
 
 /* GET show Rent */
@@ -1327,12 +1341,12 @@ router.get('/aguardando/:_id', auth.isAuthenticated, function (req, res) {
   const id = req.params._id;
 
   Rent.getById(id).then((rent) => {
-    console.log(rent);
-    // rent.partialPrice = rent.partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-    console.log(rent.partialPrice);
-
-
-    res.render('aguardando', { title: 'Visualizar', ...req.session, rent, id });
+    var partialPrice = rent.partialPrice;
+    if(partialPrice != null){
+      partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    }
+    partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    res.render('aguardando', { title: 'Visualizar', ...req.session,partialPrice, rent, id });
   }).catch(error => {
     console.log(error);
     res.redirect("/error")
@@ -1347,7 +1361,7 @@ router.post('/pagamentoTotal/::cpf::endLocal', auth.isAuthenticated, function (r
   Rent.getAllByStatusAguardando(cpf, endLocal).then((toPay) => {
     toPay.forEach(pay => {
       pay.status = "Finalizado";
-      pay.payment = end.payment
+      pay.payment = end.payment;
       Rent.update(pay._id, pay);
     });
 
