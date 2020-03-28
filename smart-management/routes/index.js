@@ -1327,12 +1327,9 @@ router.get('/aguardando/:_id', auth.isAuthenticated, function (req, res) {
   const id = req.params._id;
 
   Rent.getById(id).then((rent) => {
-    console.log(rent);
-    // rent.partialPrice = rent.partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-    console.log(rent.partialPrice);
-
-
-    res.render('aguardando', { title: 'Visualizar', ...req.session, rent, id });
+    var partialPrice = rent.partialPrice;
+    partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    res.render('aguardando', { title: 'Visualizar', ...req.session,partialPrice, rent, id });
   }).catch(error => {
     console.log(error);
     res.redirect("/error")
