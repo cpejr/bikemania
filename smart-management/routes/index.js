@@ -410,7 +410,7 @@ router.post('/close/:_id', function (req, res, next) {
     rent.remainingQuantity -= close.returnQuantity;
     var renderaux = 1;
     if (rent.remainingQuantity === 0) {
-      rent.status = "Aguardando pagamento";
+      rent.status = "Aguardando Pagamento";
       rent.statusredirect = "aguardando";
       rent.quantity = close.returnQuantity;
       rent.remainingQuantity = close.returnQuantity;
