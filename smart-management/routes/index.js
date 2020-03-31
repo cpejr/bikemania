@@ -1289,12 +1289,29 @@ router.get('/dashboardClient/:cpf', auth.isAuthenticated, function (req, res, ne
 /* GET dashboardClientFunc */
 router.get('/dashboardClientFunc/:cpf', auth.isAuthenticated, function (req, res, next) {
   var cpf = req.params.cpf;
+  var endLocal = req.session.unidade;
   Rent.getByCpf(cpf).then((rent) => {
     console.log(rent);
     console.log(rent.client);
     console.log(rent.equipament);
-    res.render('dashboardClientFunc', { title: 'VisualizarAluguel', ...req.session, cpf, rent });
+      Rent.getAllByStatusAguardando(cpf, endLocal).then((toPay) => {
+        console.log("AQUI");
+        console.log(toPay);
+        var toPaySize = toPay.length;
+        console.log(toPaySize);
+        var pendingPayment = 0;
+          for(var i=0; i < toPaySize; i++){
+            pendingPayment += toPay[i].partialPrice;
+          } 
+        pendingPayment = pendingPayment.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+        console.log(pendingPayment);
 
+      res.render('dashboardClientFunc', { title: 'Visualizar', ...req.session, cpf, rent, pendingPayment });
+
+    }).catch((error) => {
+      console.log(error);
+      res.redirect("/error")
+    });
   }).catch((error) => {
     console.log(error);
     res.redirect("/error")
