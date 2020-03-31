@@ -315,7 +315,6 @@ router.get('/partialPrice/:_id', function (req, res) {
   Rent.getById(id).then((rent) => {
     var date = new Date();
     var size = rent.client.datePoints;
-    var loyaltyPoints = size.length;
     var now = date.getTime();
     var rentTime = Math.trunc((now - rent.startTime) / 60000);
     var price = rent.equipament.price;
@@ -411,7 +410,7 @@ router.post('/close/:_id', function (req, res, next) {
     rent.remainingQuantity -= close.returnQuantity;
     var renderaux = 1;
     if (rent.remainingQuantity === 0) {
-      rent.status = "Aguardando pagamento";
+      rent.status = "Aguardando Pagamento";
       rent.statusredirect = "aguardando";
       rent.quantity = close.returnQuantity;
       rent.remainingQuantity = close.returnQuantity;
@@ -1316,6 +1315,10 @@ router.get('/dashboardClientFunc/:cpf', auth.isAuthenticated, function (req, res
     console.log(error);
     res.redirect("/error")
   });
+}).catch((error) => {
+  console.log(error);
+  res.redirect("/error")
+});
 });
 
 /* GET show Rent */
@@ -1344,12 +1347,12 @@ router.get('/aguardando/:_id', auth.isAuthenticated, function (req, res) {
   const id = req.params._id;
 
   Rent.getById(id).then((rent) => {
-    console.log(rent);
-    // rent.partialPrice = rent.partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-    console.log(rent.partialPrice);
-
-
-    res.render('aguardando', { title: 'Visualizar', ...req.session, rent, id });
+    var partialPrice = rent.partialPrice;
+    if(partialPrice != null){
+      partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    }
+    partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    res.render('aguardando', { title: 'Visualizar', ...req.session,partialPrice, rent, id });
   }).catch(error => {
     console.log(error);
     res.redirect("/error")
@@ -1364,7 +1367,7 @@ router.post('/pagamentoTotal/::cpf::endLocal', auth.isAuthenticated, function (r
   Rent.getAllByStatusAguardando(cpf, endLocal).then((toPay) => {
     toPay.forEach(pay => {
       pay.status = "Finalizado";
-      pay.payment = end.payment
+      pay.payment = end.payment;
       Rent.update(pay._id, pay);
     });
 
