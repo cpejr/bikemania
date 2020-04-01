@@ -101,12 +101,23 @@ router.post('/dashboardContagem', auth.isAuthenticated, function (req, res, next
 router.get('/dashboard', auth.isAuthenticated, function (req, res, next) {
   var unity = req.session.unidade;
   console.log(unity);
-  
-  Rent.getAllByStartLocal(unity).then((rents) => {
+  Rent.getAllByStartLocalRodando(unity).then((rentsAguardando) => {
+  Rent.getAllByStartLocalAguardando(unity).then((rents) => {
     Rent.getAllByEndLocalWaiting(unity).then((rentsWaiting) => {
       var clientsRunning = [];
-      if (rents.length > 0) {
+      if ((rents.length > 0) || (rentsAguardando > 0)){
         rents.forEach(rent => {
+          var aux = true;
+          for (var i = 0; i < clientsRunning.length; i++) {
+            if (rent.client.cpf == clientsRunning[i].cpf) {
+              aux = false;
+            }
+          }
+          if (aux == true) {
+            clientsRunning.push(rent.client);
+          }
+        });
+        rentsAguardando.forEach(rent => {
           var aux = true;
           for (var i = 0; i < clientsRunning.length; i++) {
             if (rent.client.cpf == clientsRunning[i].cpf) {
@@ -140,6 +151,10 @@ router.get('/dashboard', auth.isAuthenticated, function (req, res, next) {
         res.render('dashboard', { title: 'Dashboard', ...req.session, clientsRunning });
       }
 
+      }).catch((error) => {
+        console.log(error);
+        res.redirect('/error')
+      });
     }).catch((error) => {
       console.log(error);
       res.redirect('/error')
@@ -148,6 +163,7 @@ router.get('/dashboard', auth.isAuthenticated, function (req, res, next) {
     console.log(error);
     res.redirect('/error')
   });
+
 });
 
 /* GET logout */
@@ -1257,43 +1273,54 @@ router.get('/equipamentBalance/next', auth.isAuthenticated, auth.isMaster, funct
 router.get('/dashboardClient/:cpf', auth.isAuthenticated, function (req, res, next) {
   var cpf = req.params.cpf;
   var endLocal = req.session.unidade;
-  Rent.getByCpf(cpf).then((rent) => {
-    console.log(rent);
-    console.log(rent.client);
-    console.log(rent.equipament);
-      Rent.getAllByStatusAguardando(cpf, endLocal).then((toPay) => {
-        console.log("AQUI");
-        console.log(toPay);
-        var toPaySize = toPay.length;
-        console.log(toPaySize);
-        var pendingPayment = 0;
-          for(var i=0; i < toPaySize; i++){
-            pendingPayment += toPay[i].partialPrice;
-          } 
-        pendingPayment = pendingPayment.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-        console.log(pendingPayment);
 
-      res.render('dashboardClient', { title: 'Visualizar', ...req.session, cpf, rent, pendingPayment });
+    Rent.getByCpfAguardando(cpf).then((rentsWaiting) => {
+  //     console.log("-------------------------------------------------------");
+  //     console.log(rentsWaiting);
+  Rent.getByCpfRodando(cpf).then((rent) => {
+      console.log(rent);
 
+        Rent.getAllByStatusAguardando(cpf, endLocal).then((toPay) => {
+          console.log("AQUI");
+          console.log(toPay);
+          var toPaySize = toPay.length;
+          console.log(toPaySize);
+          var pendingPayment = 0;
+            for(var i=0; i < toPaySize; i++){
+              pendingPayment += toPay[i].partialPrice;
+            } 
+          pendingPayment = pendingPayment.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+          console.log(pendingPayment);
+
+        res.render('dashboardClient', { title: 'Visualizar', ...req.session, cpf, rent,  rentsWaiting, pendingPayment });
+
+      }).catch((error) => {
+        console.log(error);
+        res.redirect("/error")
+      });
+  
     }).catch((error) => {
       console.log(error);
-      res.redirect("/error")
+      res.redirect("/error") 
     });
+
   }).catch((error) => {
     console.log(error);
     res.redirect("/error")
   });
+
 });
 
 /* GET dashboardClientFunc */
 router.get('/dashboardClientFunc/:cpf', auth.isAuthenticated, function (req, res, next) {
   var cpf = req.params.cpf;
   var endLocal = req.session.unidade;
-  Rent.getByCpf(cpf).then((rent) => {
+  Rent.getByCpfAguardando(cpf).then((rentsWaiting) => {
+  Rent.getByCpfRodando(cpf).then((rent) => {
     console.log(rent);
     console.log(rent.client);
     console.log(rent.equipament);
-      Rent.getAllByStatusAguardando(cpf, endLocal).then((toPay) => {
+      Rent.getAllByStatusAguardando (cpf, endLocal).then((toPay) => {
         console.log("AQUI");
         console.log(toPay);
         var toPaySize = toPay.length;
@@ -1304,11 +1331,15 @@ router.get('/dashboardClientFunc/:cpf', auth.isAuthenticated, function (req, res
           } 
         pendingPayment = pendingPayment.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
         console.log(pendingPayment);
-    res.render('dashboardClientFunc', { title: 'VisualizarAluguel', ...req.session, cpf, rent });
+    res.render('dashboardClientFunc', { title: 'VisualizarAluguel', ...req.session, cpf, rent, rentsWaiting });
   }).catch((error) => {
     console.log(error);
     res.redirect("/error")
   });
+}).catch((error) => {
+  console.log(error);
+  res.redirect("/error")
+});
 }).catch((error) => {
   console.log(error);
   res.redirect("/error")
