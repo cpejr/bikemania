@@ -1,10 +1,12 @@
 <nav class="navbar navbar-light bg-light" id="logobike"></nav>
 <div class="pl-lg-5 pr-lg-5">
-  <button class="btn btn-default" onclick="location.href='/home'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
+  <button class="btn btn-default" onclick="location.href='/home'"> <i class="fa fa-shield fa-rotate-90 fa-3x"
+      aria-hidden="true"></i> </button>
   <div class="texto-centro mb-3">
-    <button class="col-xs-12 col-sm-12 col-md-2 btnrelatorio3" type="submit" onclick="location.href='/equipamentBalance/previous'">Mês Anterior</button>
-    <FONT id="titulo2" size="6" face="Segoe UI Symbol" color="#3CB1FE" >
-      Relatório de Equipamentos  -  {{date.monthNumber}}/{{date.year}}
+    <button class="col-xs-12 col-sm-12 col-md-2 btnrelatorio3" type="submit"
+      onclick="location.href='/equipamentBalance/previous'">Mês Anterior</button>
+    <FONT id="titulo2" size="6" face="Segoe UI Symbol" color="#3CB1FE">
+      Relatório de Equipamentos - {{date.monthNumber}}/{{date.year}}
     </FONT>
   </div>
 </div>
@@ -13,19 +15,19 @@
   <thead>
     <tr>
       <th id="balanceTop" scope="col">Nome</th>
-      <th id="balanceTop" scope="col">Preço</th>
+      <th id="balanceTop" scope="col">Preço p/ minuto</th>
       <th id="balanceTop" scope="col">Faturamento</th>
       <th id="balanceTop" scope="col">Quantidade de aluguéis</th>
     </tr>
   </thead>
   <tbody>
     {{#each equipaments}}
-        <tr>
-            <td id="balance" scope="row">{{name}}</td>
-            <td id="balance" scope="row">{{priceR$}}</td>
-            <td id="balance" scope="row">{{value}}</td>
-            <td id="balance" scope="row">{{rents}}</td>
-        </tr>
+    <tr>
+      <td id="balance" scope="row">{{name}}</td>
+      <td id="balance" scope="row">{{priceR$}}</td>
+      <td id="balance" scope="row">{{value}}</td>
+      <td id="balance" scope="row">{{rents}}</td>
+    </tr>
     {{/each}}
 
     <tr>
