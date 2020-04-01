@@ -103,7 +103,7 @@ router.get('/dashboard', auth.isAuthenticated, function (req, res, next) {
     Rent.getAllByStartLocalAguardando(unity).then((rents) => {
       Rent.getAllByEndLocalWaiting(unity).then((rentsWaiting) => {
         var clientsRunning = [];
-        if ((rents.length > 0) || (rentsAguardando > 0)) {
+        if ((rents.length > 0) || (rentsAguardando.length > 0)) {
           rents.forEach(rent => {
             var aux = true;
             for (var i = 0; i < clientsRunning.length; i++) {
@@ -140,6 +140,8 @@ router.get('/dashboard', auth.isAuthenticated, function (req, res, next) {
             }
           });
         }
+        console.log(clientsRunning);
+        
         if (req.session.logado.type == 'Master') {
           res.render('dashboardMaster', { title: 'Dashboard Master', ...req.session, clientsRunning });
         }
