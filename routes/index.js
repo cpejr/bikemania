@@ -102,54 +102,54 @@ router.get('/dashboard', auth.isAuthenticated, function (req, res, next) {
   var unity = req.session.unidade;
   console.log(unity);
   Rent.getAllByStartLocalRodando(unity).then((rentsAguardando) => {
-  Rent.getAllByStartLocalAguardando(unity).then((rents) => {
-    Rent.getAllByEndLocalWaiting(unity).then((rentsWaiting) => {
-      var clientsRunning = [];
-      if ((rents.length > 0) || (rentsAguardando > 0)){
-        rents.forEach(rent => {
-          var aux = true;
-          for (var i = 0; i < clientsRunning.length; i++) {
-            if (rent.client.cpf == clientsRunning[i].cpf) {
-              aux = false;
+    Rent.getAllByStartLocalAguardando(unity).then((rents) => {
+      Rent.getAllByEndLocalWaiting(unity).then((rentsWaiting) => {
+        var clientsRunning = [];
+        if ((rents.length > 0) || (rentsAguardando > 0)) {
+          rents.forEach(rent => {
+            var aux = true;
+            for (var i = 0; i < clientsRunning.length; i++) {
+              if (rent.client.cpf == clientsRunning[i].cpf) {
+                aux = false;
+              }
             }
-          }
-          if (aux == true) {
-            clientsRunning.push(rent.client);
-          }
-        });
-        rentsAguardando.forEach(rent => {
-          var aux = true;
-          for (var i = 0; i < clientsRunning.length; i++) {
-            if (rent.client.cpf == clientsRunning[i].cpf) {
-              aux = false;
+            if (aux == true) {
+              clientsRunning.push(rent.client);
             }
-          }
-          if (aux == true) {
-            clientsRunning.push(rent.client);
-          }
-        });
-        // console.log(clientsRunning);
-      }
-      if (rentsWaiting.length > 0) {
-        rentsWaiting.forEach(rentWaiting => {
-          var aux = true;
-          for (var i = 0; i < clientsRunning.length; i++) {
-            if (rentWaiting.client.cpf == clientsRunning[i].cpf) {
-              aux = false;
+          });
+          rentsAguardando.forEach(rent => {
+            var aux = true;
+            for (var i = 0; i < clientsRunning.length; i++) {
+              if (rent.client.cpf == clientsRunning[i].cpf) {
+                aux = false;
+              }
             }
-          }
-          if (aux == true) {
-            clientsRunning.push(rentWaiting.client);
-          }
-        });
-        console.log(clientsRunning);
-      }
-      if (req.session.logado.type == 'Master') {
-        res.render('dashboardMaster', { title: 'Dashboard Master', ...req.session, clientsRunning });
-      }
-      else {
-        res.render('dashboard', { title: 'Dashboard', ...req.session, clientsRunning });
-      }
+            if (aux == true) {
+              clientsRunning.push(rent.client);
+            }
+          });
+          // console.log(clientsRunning);
+        }
+        if (rentsWaiting.length > 0) {
+          rentsWaiting.forEach(rentWaiting => {
+            var aux = true;
+            for (var i = 0; i < clientsRunning.length; i++) {
+              if (rentWaiting.client.cpf == clientsRunning[i].cpf) {
+                aux = false;
+              }
+            }
+            if (aux == true) {
+              clientsRunning.push(rentWaiting.client);
+            }
+          });
+          console.log(clientsRunning);
+        }
+        if (req.session.logado.type == 'Master') {
+          res.render('dashboardMaster', { title: 'Dashboard Master', ...req.session, clientsRunning });
+        }
+        else {
+          res.render('dashboard', { title: 'Dashboard', ...req.session, clientsRunning });
+        }
 
       }).catch((error) => {
         console.log(error);
@@ -828,19 +828,19 @@ router.get('/getdailyBalance/::month::year::local', function (req, res, next) {
   var Units = [];
   Rent.getAllByMonthAndEndLocal(id.local, id.month, id.year).then((Rents) => {
     // console.log(Rents);
-    
+
     Rents.forEach(rent => {
       console.log(rent);
-      
+
       var aux = 0;
       for (var i = 0; i < day.length; i++) {
         if (day[i] == rent.day) {
           console.log(Profit[i]);
           console.log(Units[i]);
           console.log(rent.discount);
-          
-          
-          
+
+
+
           Profit[i] += rent.discount;
           Units[i] += rent.quantity;
           aux = 1;
@@ -1256,52 +1256,39 @@ router.get('/equipamentBalance/next', auth.isAuthenticated, auth.isMaster, funct
 });
 
 /* GET dashboardClient */
-// router.get('/dashboardClient/:cpf', auth.isAuthenticated, function (req, res, next) {
-//   var cpf = req.params.cpf;
-//   Rent.getByCpf(cpf).then((rent) => {
-//     console.log(rent);
-//     console.log(rent.client);
-//     console.log(rent.equipament);
-//     res.render('dashboardClient', { title: 'Visualizar', ...req.session, cpf, rent });
-
-//   }).catch((error) => {
-//     console.log(error);
-//     res.redirect("/error")
-//   });
-// });
 
 router.get('/dashboardClient/:cpf', auth.isAuthenticated, function (req, res, next) {
   var cpf = req.params.cpf;
   var endLocal = req.session.unidade;
 
-    Rent.getByCpfAguardando(cpf).then((rentsWaiting) => {
-  //     console.log("-------------------------------------------------------");
-  //     console.log(rentsWaiting);
-  Rent.getByCpfRodando(cpf).then((rent) => {
+  Rent.getByCpfAguardando(cpf).then((rentsWaiting) => {
+    //     console.log("-------------------------------------------------------");
+    //     console.log(rentsWaiting);
+    Rent.getByCpfRodando(cpf).then((rent) => {
       console.log(rent);
 
-        Rent.getAllByStatusAguardando(cpf, endLocal).then((toPay) => {
-          console.log("AQUI");
-          console.log(toPay);
-          var toPaySize = toPay.length;
-          console.log(toPaySize);
-          var pendingPayment = 0;
-            for(var i=0; i < toPaySize; i++){
-              pendingPayment += toPay[i].partialPrice;
-            } 
-          pendingPayment = pendingPayment.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-          console.log(pendingPayment);
+      Rent.getAllByStatusAguardando(cpf, endLocal).then((toPay) => {
+        console.log("AQUI");
+        console.log(toPay);
+        var toPaySize = toPay.length;
+        console.log(toPaySize);
+        var pendingPayment = 0;
+        for (var i = 0; i < toPaySize; i++) {
+          pendingPayment += toPay[i].partialPrice;
+        }
+        pendingPayment = pendingPayment.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+        console.log(pendingPayment);
 
-        res.render('dashboardClient', { title: 'Visualizar', ...req.session, cpf, rent,  rentsWaiting, pendingPayment });
+        res.render('dashboardClient', { title: 'Visualizar', ...req.session, cpf, rent, rentsWaiting, pendingPayment });
 
       }).catch((error) => {
         console.log(error);
         res.redirect("/error")
       });
-  
+
     }).catch((error) => {
       console.log(error);
-      res.redirect("/error") 
+      res.redirect("/error")
     });
 
   }).catch((error) => {
@@ -1316,24 +1303,28 @@ router.get('/dashboardClientFunc/:cpf', auth.isAuthenticated, function (req, res
   var cpf = req.params.cpf;
   var endLocal = req.session.unidade;
   Rent.getByCpfAguardando(cpf).then((rentsWaiting) => {
-  Rent.getByCpfRodando(cpf).then((rent) => {
-    console.log(rent);
-    console.log(rent.client);
-    console.log(rent.equipament);
-      Rent.getAllByStatusAguardando (cpf, endLocal).then((toPay) => {
+    Rent.getByCpfRodando(cpf).then((rent) => {
+      console.log(rent);
+      console.log(rent.client);
+      console.log(rent.equipament);
+      Rent.getAllByStatusAguardando(cpf, endLocal).then((toPay) => {
         console.log("AQUI");
         console.log(toPay);
         var toPaySize = toPay.length;
         console.log(toPaySize);
         var pendingPayment = 0;
-          for(var i=0; i < toPaySize; i++){
-            pendingPayment += toPay[i].partialPrice;
-          } 
+        for (var i = 0; i < toPaySize; i++) {
+          pendingPayment += toPay[i].partialPrice;
+        }
         pendingPayment = pendingPayment.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
         console.log(pendingPayment);
 
-      res.render('dashboardClientFunc', { title: 'Visualizar', ...req.session, cpf, rent, pendingPayment });
+        res.render('dashboardClientFunc', { title: 'Visualizar', ...req.session, cpf, rent, pendingPayment });
 
+      }).catch((error) => {
+        console.log(error);
+        res.redirect("/error")
+      });
     }).catch((error) => {
       console.log(error);
       res.redirect("/error")
@@ -1342,15 +1333,8 @@ router.get('/dashboardClientFunc/:cpf', auth.isAuthenticated, function (req, res
     console.log(error);
     res.redirect("/error")
   });
-}).catch((error) => {
-  console.log(error);
-  res.redirect("/error")
 });
-}).catch((error) => {
-  console.log(error);
-  res.redirect("/error")
-});
-});
+
 
 /* GET show Rent */
 router.get('/clientList', auth.isAuthenticated, auth.isMaster, function (req, res, next) {
@@ -1379,11 +1363,11 @@ router.get('/aguardando/:_id', auth.isAuthenticated, function (req, res) {
 
   Rent.getById(id).then((rent) => {
     var partialPrice = rent.partialPrice;
-    if(partialPrice != null){
+    if (partialPrice != null) {
       partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
     }
     partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-    res.render('aguardando', { title: 'Visualizar', ...req.session,partialPrice, rent, id });
+    res.render('aguardando', { title: 'Visualizar', ...req.session, partialPrice, rent, id });
   }).catch(error => {
     console.log(error);
     res.redirect("/error")
