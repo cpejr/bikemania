@@ -136,7 +136,7 @@ class Rent {
 
  static getAllByStartLocal(value) {
   return new Promise((resolve, reject) => {
-    RentModel.find({ startLocal: value , status:"Rodando"}).populate('client').populate('equipament').exec().then((result) => {
+    RentModel.find({ startLocal: value}).populate('client').populate('equipament').exec().then((result) => {
       resolve(result);
     }).catch((err) => {
       reject(err);
@@ -144,9 +144,29 @@ class Rent {
     });
   }
 
+  static getAllByStartLocalRodando(value) {
+    return new Promise((resolve, reject) => {
+      RentModel.find({ startLocal: value, status: "Rodando"}).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+      });
+    }
+
+  static getAllByStartLocalAguardando(value) {
+    return new Promise((resolve, reject) => {
+      RentModel.find({ startLocal: value , status:"Aguardando pagamento"}).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+      });
+    }
+
   static getAllByEndLocalWaiting(value) {
     return new Promise((resolve, reject) => {
-      RentModel.find({ endLocal: value , status:"Aguardando Pagamento" }).populate('client').populate('equipament').exec().then((result) => {
+      RentModel.find({ endLocal: value , status:"Aguardando pagamento" }).populate('client').populate('equipament').exec().then((result) => {
         resolve(result);
       }).catch((err) => {
         reject(err);
@@ -225,6 +245,26 @@ class Rent {
     });
   }
   
+  static getByCpfRodando(cpf) {
+    return new Promise((resolve, reject) => {
+    RentModel.find({cpf: cpf, status:"Rodando"}).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+  
+  static getByCpfAguardando(cpf) {
+    return new Promise((resolve, reject) => {
+    RentModel.find({cpf: cpf, status:"Aguardando pagamento"}).populate('client').populate('equipament').exec().then((result) => {
+        resolve(result);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
   static getAllByMonthAndEndLocal(endLocal, month, year) {
     return new Promise((resolve, reject) => {
       RentModel.find({endLocal: endLocal, month: month, year: year, status: "Finalizado" }).populate('client').populate('equipament').exec().then((result) => {
