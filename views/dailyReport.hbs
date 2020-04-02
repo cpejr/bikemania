@@ -1,0 +1,35 @@
+<nav class="navbar navbar-light bg-light" id="logobike"></nav>
+<div class="pl-lg-5 pr-lg-5">
+  <button class="btn btn-default" onclick="location.href='/dailyBalance'"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
+  <div class="texto-centro mb-3">
+    <FONT id="titulo" size="6" face="Segoe UI Symbol" color="#3CB1FE" >
+      Relatório Diário - {{date.day}}/{{date.monthNumber}}/{{date.year}}
+    </FONT>
+  </div>
+</div>
+
+<table class="table table-hover mt-3">
+  <thead>
+    <tr>
+      <th scope="col" id="balanceTop">Cliente</th>
+      <th scope="col" id="balanceTop">Valor</th>
+      <th scope="col" id="balanceTop">Desconto</th>
+      <th scope="col" id="balanceTop">Status</th>
+      <th scope="col" id="balanceTop">Dados</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each rents}}
+    <tr>
+      <td id="balance">{{client.name}}</td>
+      <td id="balance">{{discountR$}}</td>
+      <td id="balance">{{hasDiscount}}</td>
+      <td id="balance">{{atualization}}</td>
+      <td scope="row" class="text-center">
+        <form action="/dailyReportDetails/{{id}}" method="get">
+          <button class="btn text-white orange-button" type="submit">Ver</button>
+        </form>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

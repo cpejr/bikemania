@@ -1,0 +1,41 @@
+<nav class="navbar navbar-light bg-light" id="logobike"></nav>
+<div class="pl-lg-5 pr-lg-5">
+  <form action="/dailyReport" method="get">
+    <input type="hidden" class="form-control" name="local">
+    <button class="btn btn-default" type="submit"> <i class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i>
+    </button>
+  </form>
+  <div class="texto-centro mb-3">
+    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE">
+      Resumo do Aluguel
+    </FONT>
+  </div>
+
+  <div class="columns">
+    <h3 class="pagamento"><b>Nome do cliente:</b> {{rent.client.name}}</h3>
+    <h3 class="pagamento"><b>CPF:</b> {{rent.client.cpf}}</h3>
+    <h3 class="pagamento"><b>Local da saída: </b> {{rent.startLocal}}</h3>
+    <h3 class="pagamento"><b>Local de devolução: </b> {{rent.endLocal}}</h3>
+    <h3 class="pagamento"><b>Hora de saída:</b> {{rent.startHour}}</h3>
+    <h3 class="pagamento"><b>Hora de devolução:</b> {{rent.endHour}}</h3>
+    <h3 class="pagamento"><b>Tempo de aluguel:</b> {{rent.totalTime}} min.</h3>
+    <h3 class="pagamento"><b>Equipamento:</b> {{rent.equipament.name}}</h3>
+    <h3 class="pagamento"><b>Quantidade:</b> {{rent.quantity}}</h3>
+    <h3 class="pagamento"><b>Preço total: </b> {{rent.receivedPriceR$}}</h3>
+    <h3 class="pagamento"><b>Forma de pagamento: </b> {{rent.payment}}</h3>
+    <h3 class="pagamento"><b>Possui desconto: </b> {{rent.hasDiscount}}</h3>
+    <h3 class="pagamento"><b>Justificativa: </b> {{rent.justification}}</h3>
+    <form action="/dailyReport/edit/{{rent._id}}" method="post">
+  </div>
+  <div class="texto-centro mt-3">
+    <label>
+      <FONT size="4" color="black">Valor Real</FONT>
+    </label>
+    <input type="number" class="form-control col-2 offset-md-5" step="0.01" name="price" value="{{rent.discount}}">
+  </div>
+  <div class="btntest mt-3 texto-centro ">
+    <button type="submit" class="btn_encerrar offset-md-3">Atualizar</button> </div>
+  </form>
+
+</div>
+</div>

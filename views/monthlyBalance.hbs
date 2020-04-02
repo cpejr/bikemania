@@ -1,0 +1,69 @@
+<nav class="navbar navbar-light bg-light" id="logobike"></nav>
+<div class="pl-lg-5 pr-lg-5">
+  <button class="btn btn-default" onclick="location.href='/home'"> <i class="fa fa-shield fa-rotate-90 fa-3x"
+      aria-hidden="true"></i> </button>
+  <div class="texto-centro mb-3">
+    <button class="col-xs-12 col-sm-12 col-md-2 btnrelatorio3" type="submit"
+      onclick="location.href='/monthlyBalance/previous'">Mês Anterior</button>
+    <FONT size="6" face="Segoe UI Symbol" color="#3CB1FE">
+      Relatório Mensal - {{date.monthNumber}}/{{date.year}}
+    </FONT>
+  </div>
+</div>
+
+<div class="row">
+  <form action="/monthlyReport" method="post">
+    <input type="hidden" class="form-control" name="local" value="Matriz">
+    <button class="btn text-white orange-button m-2" type="submit">Matriz</button>
+  </form>
+  <form action="/monthlyReport" method="post">
+    <input type="hidden" class="form-control" name="local" value="Bem-Te-Vi">
+    <button class="btn text-white orange-button m-2" type="submit">Bem-Te-Vi</button>
+  </form>
+  <form action="/monthlyReport" method="post">
+    <input type="hidden" class="form-control" name="local" value="Shopping Contagem">
+    <button class="btn text-white orange-button m-2" type="submit">Shopping Contagem</button>
+  </form>
+  <form action="/monthlyReport" method="post">
+    <input type="hidden" class="form-control" name="local" value="Vila Pampulha">
+    <button class="btn text-white orange-button m-2" type="submit">Vila Pampulha</button>
+  </form>
+</div>
+
+
+<table class="table table-hover mt-3">
+  <thead>
+    <tr>
+      <th scope="col">Loja</th>
+      <th scope="col">Quantidade de aluguéis</th>
+      <th scope="col">Faturamento</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="balance">Matriz</td>
+      <td id="balance">{{matrizUnits}}</td>
+      <td id="balance">{{matrizProfit}}</td>
+    </tr>
+    <tr>
+      <td id="balance">Bem-Te-Vi</td>
+      <td id="balance">{{miranteUnits}}</td>
+      <td id="balance">{{miranteProfit}}</td>
+    </tr>
+    <tr>
+      <td id="balance">Shopping Contagem</td>
+      <td id="balance">{{contagemUnits}}</td>
+      <td id="balance">{{contagemProfit}}</td>
+    </tr>
+    <tr>
+      <td id="balance">Vila Pampulha</td>
+      <td id="balance">{{vilaUnits}}</td>
+      <td id="balance">{{vilaProfit}}</td>
+    </tr>
+    <tr>
+      <td id="balance">Total</td>
+      <td id="balance">{{totalUnits}}</td>
+      <td id="balance">{{totalProfit}}</td>
+    </tr>
+  </tbody>
+</table>
