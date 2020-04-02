@@ -8951,7 +8951,7 @@ ul ul a {
   #yellow-beach-btn {
     font-size: 24px;
     width: 140px;
-    height: 50px; }
+    height: 60px; }
   .btn {
     font-size: 18px;
     width: auto;
@@ -9018,9 +9018,7 @@ ul ul a {
     width: 160px;
     height: 50px;
     margin-right: 10px;
-    font-size: 20px; }
-  .logout {
-    text-align: left; } }
+    font-size: 20px; } }
 
 @media (min-device-width: 401px) and (max-device-width: 599px) {
   #title {
@@ -9032,9 +9030,9 @@ ul ul a {
   #tabela {
     font-size: 25px; }
   #yellow-beach-btn {
-    font-size: 25px;
+    font-size: 30px;
     width: 160px;
-    height: 60px; }
+    height: 70px; }
   .btn {
     font-size: 23px;
     width: auto;
@@ -9113,7 +9111,7 @@ ul ul a {
     font-size: 25px;
     text-align: center; }
   .btnrelatorio3 {
-    width: 200px;
+    width: 190px;
     height: 35px;
     font-size: 21px;
     margin-bottom: 10px; }
@@ -9140,10 +9138,7 @@ ul ul a {
     width: 200px;
     height: 60px;
     margin-right: 10px;
-    font-size: 25px; }
-  .logout {
-    text-align: center;
-    margin-bottom: 20px; } }
+    font-size: 25px; } }
 
 @media (min-device-width: 230px) and (max-device-width: 400px) {
   #title {
@@ -9155,9 +9150,9 @@ ul ul a {
   #tabela {
     font-size: 29px; }
   #yellow-beach-btn {
-    font-size: 30px;
+    font-size: 34px;
     width: 170px;
-    height: 70px; }
+    height: 80px; }
   .text-center {
     font-size: 28px; }
   .btn {
@@ -9263,10 +9258,7 @@ ul ul a {
     width: 250px;
     height: 70px;
     margin-right: 10px;
-    font-size: 30px; }
-  .logout {
-    text-align: center;
-    margin-bottom: 20px; } }
+    font-size: 30px; } }
 
 .p-alert {
   margin-bottom: 0 !important; }
