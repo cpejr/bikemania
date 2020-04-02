@@ -37,7 +37,6 @@
             <td scope="row" class="text-center align-middle font-weight-bold">{{remainingQuantity}}</td>
             <td scope="row" class="text-center align-middle font-weight-bold">{{status}}</td>
             <td scope="row" class="text-center">
-
               <form action="/{{statusredirect}}/{{id}}" method="get">
                 <button class="btn text-white orange-button" id="showbutton" type="submit">Ver</button>
               </form>
@@ -48,14 +47,13 @@
             </td>
           </tr>
           {{/each}}
-          {{#each rentsWaiting}}
+          {{#each toPay}}
           <tr>
             <td scope="row" class="text-center align-middle font-weight-bold">{{client.name}}</td>
             <td scope="row" class="text-center align-middle font-weight-bold">{{equipament.name}}</td>
             <td scope="row" class="text-center align-middle font-weight-bold">{{remainingQuantity}}</td>
             <td scope="row" class="text-center align-middle font-weight-bold">{{status}}</td>
             <td scope="row" class="text-center">
-
               <form action="/{{statusredirect}}/{{id}}" method="get">
                 <button class="btn text-white orange-button" id="showbutton" type="submit">Ver</button>
               </form>
