@@ -156,7 +156,7 @@ class Rent {
 
   static getAllByStartLocalAguardando(value) {
     return new Promise((resolve, reject) => {
-      RentModel.find({ startLocal: value , status:"Aguardando pagamento"}).populate('client').populate('equipament').exec().then((result) => {
+      RentModel.find({ startLocal: value , status:"Aguardando Pagamento"}).populate('client').populate('equipament').exec().then((result) => {
         resolve(result);
       }).catch((err) => {
         reject(err);
@@ -166,7 +166,7 @@ class Rent {
 
   static getAllByEndLocalWaiting(value) {
     return new Promise((resolve, reject) => {
-      RentModel.find({ endLocal: value , status:"Aguardando pagamento" }).populate('client').populate('equipament').exec().then((result) => {
+      RentModel.find({ endLocal: value , status:"Aguardando Pagamento" }).populate('client').populate('equipament').exec().then((result) => {
         resolve(result);
       }).catch((err) => {
         reject(err);
@@ -257,7 +257,7 @@ class Rent {
   
   static getByCpfAguardando(cpf) {
     return new Promise((resolve, reject) => {
-    RentModel.find({cpf: cpf, status:"Aguardando pagamento"}).populate('client').populate('equipament').exec().then((result) => {
+    RentModel.find({cpf: cpf, status:"Aguardando Pagamento"}).populate('client').populate('equipament').exec().then((result) => {
         resolve(result);
       }).catch((err) => {
         reject(err);
@@ -287,7 +287,7 @@ class Rent {
 
   static getAllByStatusRodando(cpf, endLocal) {
     return new Promise((resolve, reject) => {
-      RentModel.find({cpf: cpf, endLocal: endLocal, status: "Rodando" }).populate('client').populate('equipament').exec().then((result) => {
+      RentModel.find({cpf: cpf, startLocal: endLocal, status: "Rodando" }).populate('client').populate('equipament').exec().then((result) => {
         resolve(result);
       }).catch((err) => {
         reject(err);
