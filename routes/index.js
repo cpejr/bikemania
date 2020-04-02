@@ -722,38 +722,50 @@ router.get("/dailyBalance", auth.isAuthenticated, auth.isMaster, function (req, 
 
 router.get("/dailyBalance/previous", auth.isAuthenticated, auth.isMaster, function (req, res, next) {
   var date = req.session.date;
-
+  var months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
   if (date.day > 1) {
     date.day -= 1;
   } else if (
     date.day < 2 &&
-    (date.monthNumber == 0 ||
-      date.monthNumber == 1 ||
-      date.monthNumber == 3 ||
-      date.monthNumber == 5 ||
-      date.monthNumber == 7 ||
-      date.monthNumber == 8 ||
-      date.monthNumber == 10)
-  ) {
-    date.day = 31;
-    if (date.monthNumber == 0) {
-      date.monthNumber = 11;
-    } else {
-      date.monthNumber -= 1;
-      date.year -= 1;
-    }
-  } else if (
-    date.day < 2 &&
-    (date.monthNumber == 4 ||
+    (date.monthNumber == 1 ||
+      date.monthNumber == 2 ||
+      date.monthNumber == 4 ||
       date.monthNumber == 6 ||
+      date.monthNumber == 8 ||
       date.monthNumber == 9 ||
       date.monthNumber == 11)
   ) {
-    date.day = 30;
-    date.year -= 1;
+    date.day = 31;
+    if (date.monthNumber == 1) {
+      date.monthNumber = 12;
+      date.year -= 1;
+    } else {
+      date.monthNumber -= 1;
+    }
   } else if (
     date.day < 2 &&
-    date.monthNumber == 2 &&
+    (date.monthNumber == 5 ||
+      date.monthNumber == 7 ||
+      date.monthNumber == 10 ||
+      date.monthNumber == 12)
+  ) {
+    date.day = 30;
+  } else if (
+    date.day < 2 &&
+    date.monthNumber == 3 &&
     date.year % 4 == 0 &&
     (date.year % 100 != 0 || date.year % 400 == 0)
   ) {
@@ -761,12 +773,14 @@ router.get("/dailyBalance/previous", auth.isAuthenticated, auth.isMaster, functi
     date.monthNumber -= 1;
   } else if (
     date.day < 2 &&
-    date.monthNumber == 2 &&
+    date.monthNumber == 3 &&
     !(date.year % 4 == 0 && (date.year % 100 != 0 || date.year % 400 == 0))
   ) {
     date.day = 28;
     date.monthNumber -= 1;
   }
+
+  date.month = months[date.monthNumber -1];
 
   Rent.getAllByDate(date.day, date.month, date.year)
     .then(rents => {
@@ -930,27 +944,27 @@ router.get("/dailyBalance/next", auth.isAuthenticated, auth.isMaster, function (
     date.day += 1;
   } else if (
     date.day < 31 &&
-    (date.monthNumber == 0 ||
-      date.monthNumber == 2 ||
-      date.monthNumber == 4 ||
-      date.monthNumber == 6 ||
+    (date.monthNumber == 1 ||
+      date.monthNumber == 3 ||
+      date.monthNumber == 5 ||
       date.monthNumber == 7 ||
-      date.monthNumber == 9 ||
-      date.monthNumber == 11)
+      date.monthNumber == 8 ||
+      date.monthNumber == 10 ||
+      date.monthNumber == 12)
   ) {
     date.day += 1;
   } else if (
     date.day == 31 &&
-    (date.monthNumber == 0 ||
-      date.monthNumber == 2 ||
-      date.monthNumber == 4 ||
-      date.monthNumber == 6 ||
+    (date.monthNumber == 1 ||
+      date.monthNumber == 3 ||
+      date.monthNumber == 5 ||
       date.monthNumber == 7 ||
-      date.monthNumber == 9 ||
-      date.monthNumber == 11)
+      date.monthNumber == 8 ||
+      date.monthNumber == 10 ||
+      date.monthNumber == 12)
   ) {
     date.day = 1;
-    if (date.monthNumber == 11) {
+    if (date.monthNumber == 12) {
       date.monthNumber = 1;
       date.year += 1;
     } else {
@@ -958,18 +972,18 @@ router.get("/dailyBalance/next", auth.isAuthenticated, auth.isMaster, function (
     }
   } else if (
     date.day < 30 &&
-    (date.monthNumber == 3 ||
-      date.monthNumber == 5 ||
-      date.monthNumber == 8 ||
-      date.monthNumber == 10)
+    (date.monthNumber == 4 ||
+      date.monthNumber == 6 ||
+      date.monthNumber == 9 ||
+      date.monthNumber == 11)
   ) {
     date.day += 1;
   } else if (
     date.day == 30 &&
-    (date.monthNumber == 3 ||
-      date.monthNumber == 5 ||
-      date.monthNumber == 8 ||
-      date.monthNumber == 10)
+    (date.monthNumber == 4 ||
+      date.monthNumber == 6 ||
+      date.monthNumber == 9 ||
+      date.monthNumber == 11)
   ) {
     date.day = 1;
     date.monthNumber += 1;
