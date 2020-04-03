@@ -780,7 +780,7 @@ router.get("/dailyBalance/previous", auth.isAuthenticated, auth.isMaster, functi
     date.monthNumber -= 1;
   }
 
-  date.month = months[date.monthNumber -1];
+  date.month = months[date.monthNumber - 1];
 
   Rent.getAllByDate(date.day, date.month, date.year)
     .then(rents => {
@@ -2060,7 +2060,7 @@ router.get("/dashboardClient/:cpf", auth.isAuthenticated, function (req, res) {
       pendingPayment = pendingPayment.toLocaleString("pt-br", {
         style: "currency",
         currency: "BRL"
-      });    
+      });
       res.render("dashboardClient", {
         title: "Dashboard",
         ...req.session,
@@ -2097,10 +2097,6 @@ router.get("/dashboardClientFunc/:cpf", auth.isAuthenticated, function (req, res
           style: "currency",
           currency: "BRL"
         });
-        console.log(rent);
-        console.log(toPay);
-        
-        
         res.render("dashboardClientFunc", {
           title: "Dashboard",
           ...req.session,
@@ -2122,11 +2118,7 @@ router.get("/dashboardClientFunc/:cpf", auth.isAuthenticated, function (req, res
 });
 
 /* GET show Rent */
-router.get("/clientList", auth.isAuthenticated, auth.isMaster, function (
-  req,
-  res,
-  next
-) {
+router.get("/clientList", auth.isAuthenticated, auth.isMaster, function (req, res) {
   Client.getAll()
     .then(clients => {
       res.render("clientList", {
@@ -2142,20 +2134,16 @@ router.get("/clientList", auth.isAuthenticated, auth.isMaster, function (
 });
 
 /* GET daily Rent report Details  */
-router.get("/client/:_id", auth.isAuthenticated, auth.isMaster, function (
-  req,
-  res,
-  next
-) {
+router.get("/client/:_id", auth.isAuthenticated, auth.isMaster, function (req, res) {
   const id = req.params._id;
-  Client.getById(id)
-    .then(client => {
-      res.render("clientDetails", {
-        title: "Lista de Clientes Detalhes",
-        ...req.session,
-        client
-      });
-    })
+  Client.getById(id).then(client => {
+    client.lengthPoints = client.datePoints.length;
+    res.render("clientDetails", {
+      title: "Lista de Clientes Detalhes",
+      ...req.session,
+      client
+    });
+  })
     .catch(error => {
       console.log(error);
       res.redirect("/error");
