@@ -569,26 +569,7 @@ router.get('/dailyBalance/previous', auth.isAuthenticated, auth.isMaster, functi
     date.monthNumber -= 1;
   }
 
-  Rent.getAllByDate(date.day, date.month, date.year).then((rents) => {
-    let totalProfit = rents.reduce((totalProfit, cur) => totalProfit + cur.discount, 0);
-    let totalUnits = rents.reduce((totalUnits, cur) => totalUnits + cur.quantity, 0);
-    Rent.getAllByDateAndStartLocal("Matriz", date.day, date.month, date.year).then((matrizRents) => {
-      let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.discount, 0);
-      let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
-      Rent.getAllByDateAndStartLocal("Bem-Te-Vi", date.day, date.month, date.year).then((miranteRents) => {
-        let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.discount, 0);
-        let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
-        Rent.getAllByDateAndStartLocal("Vila Pampulha", date.day, date.month, date.year).then((vilaRents) => {
-          let vilaProfit = vilaRents.reduce((vilaProfit, cur) => vilaProfit + cur.discount, 0);
-          let vilaUnits = vilaRents.reduce((vilaUnits, cur) => vilaUnits + cur.quantity, 0);
-          Rent.getAllByDateAndStartLocal("Shopping Contagem", date.day, date.month, date.year).then((contagemRents) => {
-            let contagemProfit = contagemRents.reduce((contagemProfit, cur) => contagemProfit + cur.discount, 0);
-            let contagemUnits = contagemRents.reduce((contagemUnits, cur) => contagemUnits + cur.quantity, 0);
-            contagemProfit = contagemProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-            miranteProfit = miranteProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-            vilaProfit = vilaProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-            matrizProfit = matrizProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-            totalProfit = totalProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+  date.month = months[date.monthNumber - 1];
 
             res.render('dailyBalancePrevious', { title: 'Balanço Diário', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, date });
           }).catch((error) => {
@@ -1171,18 +1152,27 @@ router.get('/equipamentBalance/next', auth.isAuthenticated, auth.isMaster, funct
 router.get('/dashboardClient/:cpf', auth.isAuthenticated, function (req, res, next) {
   var cpf = req.params.cpf;
   var endLocal = req.session.unidade;
-
-  Rent.getByCpfAguardando(cpf).then((rentsWaiting) => {
-    Rent.getByCpfRodando(cpf).then((rent) => {
-      Rent.getAllByStatusAguardando(cpf, endLocal).then((toPay) => {
-        var toPaySize = toPay.length;
-        var pendingPayment = 0;
-        for (var i = 0; i < toPaySize; i++) {
-          pendingPayment += toPay[i].partialPrice;
-        }
-        pendingPayment = pendingPayment.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-        res.render('dashboardClient', { title: 'Dashboard', ...req.session, cpf, rent, rentsWaiting, pendingPayment });
-      }).catch((error) => {
+  Rent.getAllByStatusRodando(cpf, endLocal).then(rent => {
+    Rent.getAllByStatusAguardando(cpf, endLocal).then(toPay => {
+      var toPaySize = toPay.length;
+      var pendingPayment = 0;
+      for (var i = 0; i < toPaySize; i++) {
+        pendingPayment += toPay[i].partialPrice;
+      }
+      pendingPayment = pendingPayment.toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      });    
+      res.render("dashboardClient", {
+        title: "Dashboard",
+        ...req.session,
+        cpf,
+        rent,
+        toPay,
+        pendingPayment
+      });
+    })
+      .catch(error => {
         console.log(error);
         res.redirect("/error")
       });
@@ -1208,9 +1198,24 @@ router.get('/dashboardClientFunc/:cpf', auth.isAuthenticated, function (req, res
         for (var i = 0; i < toPaySize; i++) {
           pendingPayment += toPay[i].partialPrice;
         }
-        pendingPayment = pendingPayment.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-        res.render('dashboardClientFunc', { title: 'Dashboard', ...req.session, cpf, rent, pendingPayment });
-      }).catch((error) => {
+        pendingPayment = pendingPayment.toLocaleString("pt-br", {
+          style: "currency",
+          currency: "BRL"
+        });
+        console.log(rent);
+        console.log(toPay);
+        
+        
+        res.render("dashboardClientFunc", {
+          title: "Dashboard",
+          ...req.session,
+          cpf,
+          rent,
+          pendingPayment,
+          toPay
+        });
+      })
+      .catch(error => {
         console.log(error);
         res.redirect("/error")
       });
@@ -1226,24 +1231,44 @@ router.get('/dashboardClientFunc/:cpf', auth.isAuthenticated, function (req, res
 
 
 /* GET show Rent */
-router.get('/clientList', auth.isAuthenticated, auth.isMaster, function (req, res, next) {
-  Client.getAll().then((clients) => {
-    res.render('clientList', { title: 'Lista de Clientes', ...req.session, clients });
-  }).catch((error) => {
-    console.log(error);
-    res.redirect('/error')
-  });
+router.get("/clientList", auth.isAuthenticated, auth.isMaster, function (
+  req,
+  res,
+  next
+) {
+  Client.getAll()
+    .then(clients => {
+      res.render("clientList", {
+        title: "Lista de Clientes",
+        ...req.session,
+        clients
+      });
+    })
+    .catch(error => {
+      console.log(error);
+      res.redirect("/error");
+    });
 });
 
 /* GET daily Rent report Details  */
-router.get('/client/:_id', auth.isAuthenticated, auth.isMaster, function (req, res, next) {
+router.get("/client/:_id", auth.isAuthenticated, auth.isMaster, function (
+  req,
+  res,
+  next
+) {
   const id = req.params._id;
-  Client.getById(id).then((client) => {
-    res.render('clientDetails', { title: 'Lista de Clientes Detalhes', ...req.session, client });
-  }).catch((error) => {
-    console.log(error);
-    res.redirect('/error')
-  });
+  Client.getById(id)
+    .then(client => {
+      res.render("clientDetails", {
+        title: "Lista de Clientes Detalhes",
+        ...req.session,
+        client
+      });
+    })
+    .catch(error => {
+      console.log(error);
+      res.redirect("/error");
+    });
 });
 
 /* GET aguardando Pagamento  */
