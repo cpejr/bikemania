@@ -8939,6 +8939,10 @@ ul ul a {
   width: 100vw; }
 
 @media (min-device-width: 600px) and (max-device-width: 768px) {
+  .signUpMargin {
+    margin-bottom: 40px; }
+  #disappear {
+    display: initial; }
   #title {
     font-size: 22px;
     width: 38%; }
@@ -9026,6 +9030,10 @@ ul ul a {
     display: flex; } }
 
 @media (min-device-width: 401px) and (max-device-width: 599px) {
+  .signUpMargin {
+    margin-bottom: 40px; }
+  #disappear {
+    display: none; }
   #title {
     font-size: 25px;
     width: 38%; }
@@ -9146,6 +9154,10 @@ ul ul a {
     font-size: 25px; } }
 
 @media (min-device-width: 230px) and (max-device-width: 400px) {
+  .signUpMargin {
+    margin-bottom: 40px; }
+  #disappear {
+    display: none; }
   #title {
     font-size: 29px;
     width: 38%; }
