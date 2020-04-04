@@ -572,26 +572,26 @@ router.get('/dailyBalance/previous', auth.isAuthenticated, auth.isMaster, functi
   date.month = months[date.monthNumber - 1];
 
             res.render('dailyBalancePrevious', { title: 'Balanço Diário', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, date });
-          }).catch((error) => {
-            console.log(error);
-            res.redirect('/error')
-          });
-        }).catch((error) => {
-          console.log(error);
-          res.redirect('/error')
-        });
-      }).catch((error) => {
-        console.log(error);
-        res.redirect('/error')
-      });
-    }).catch((error) => {
-      console.log(error);
-      res.redirect('/error')
-    });
-  }).catch((error) => {
-    console.log(error);
-    res.redirect('/error')
-  });
+  //         }).catch((error) => {
+  //           console.log(error);
+  //           res.redirect('/error')
+  //         });
+  //       }).catch((error) => {
+  //         console.log(error);
+  //         res.redirect('/error')
+  //       });
+  //     }).catch((error) => {
+  //       console.log(error);
+  //       res.redirect('/error')
+  //     });
+  //   }).catch((error) => {
+  //     console.log(error);
+  //     res.redirect('/error')
+  //   });
+  // }).catch((error) => {
+  //   console.log(error);
+  //   res.redirect('/error')
+  // });
 });
 
 router.get('/dailyBalance/next', auth.isAuthenticated, auth.isMaster, function (req, res, next) {
@@ -1180,10 +1180,10 @@ router.get('/dashboardClient/:cpf', auth.isAuthenticated, function (req, res, ne
       console.log(error);
       res.redirect("/error")
     });
-  }).catch((error) => {
-    console.log(error);
-    res.redirect("/error")
-  });
+  // }).catch((error) => {
+  //   console.log(error);
+  //   res.redirect("/error")
+  // });
 });
 
 /* GET dashboardClientFunc */
