@@ -9042,12 +9042,8 @@ ul ul a {
     font-size: 20px; }
   .logout {
     text-align: center;
-<<<<<<< HEAD
     justfy-content: center;
     display: flex; } }
-=======
-    margin-bottom: 20px; } }
->>>>>>> Millena
 
 @media (min-device-width: 401px) and (max-device-width: 599px) {
   .signUpMargin {
@@ -9144,11 +9140,7 @@ ul ul a {
     font-size: 25px;
     text-align: center; }
   .btnrelatorio3 {
-<<<<<<< HEAD
-    width: 190px;
-=======
     width: 230px;
->>>>>>> Millena
     height: 35px;
     font-size: 20px;
     margin-bottom: 10px; }
@@ -9272,7 +9264,7 @@ ul ul a {
     font-size: 27px;
     text-align: center; }
   .btnrelatorio3 {
-    width: 240px;
+    width: 260px;
     height: 40px;
     font-size: 20px;
     margin-bottom: 10px; }
