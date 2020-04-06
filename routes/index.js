@@ -99,23 +99,11 @@ router.post('/dashboardContagem', auth.isAuthenticated, function (req, res, next
 /* GET Dashboard page */
 router.get('/dashboard', auth.isAuthenticated, function (req, res, next) {
   var unity = req.session.unidade;
-  Rent.getAllByStartLocalRodando(unity).then((rentsAguardando) => {
-    Rent.getAllByStartLocalAguardando(unity).then((rents) => {
+  Rent.getAllByStartLocalRodando(unity).then((rents) => {
       Rent.getAllByEndLocalWaiting(unity).then((rentsWaiting) => {
         var clientsRunning = [];
-        if ((rents.length > 0) || (rentsAguardando.length > 0)) {
+        if ((rents.length > 0)) {
           rents.forEach(rent => {
-            var aux = true;
-            for (var i = 0; i < clientsRunning.length; i++) {
-              if (rent.client.cpf == clientsRunning[i].cpf) {
-                aux = false;
-              }
-            }
-            if (aux == true) {
-              clientsRunning.push(rent.client);
-            }
-          });
-          rentsAguardando.forEach(rent => {
             var aux = true;
             for (var i = 0; i < clientsRunning.length; i++) {
               if (rent.client.cpf == clientsRunning[i].cpf) {
@@ -140,16 +128,14 @@ router.get('/dashboard', auth.isAuthenticated, function (req, res, next) {
             }
           });
         }
+        console.log(clientsRunning);
+        
         if (req.session.logado.type == 'Master') {
           res.render('dashboardMaster', { title: 'Dashboard Master', ...req.session, clientsRunning });
         }
         else {
           res.render('dashboard', { title: 'Dashboard', ...req.session, clientsRunning });
         }
-      }).catch((error) => {
-        console.log(error);
-        res.redirect('/error')
-      });
     }).catch((error) => {
       console.log(error);
       res.redirect('/error')
@@ -1163,6 +1149,10 @@ router.get('/dashboardClient/:cpf', auth.isAuthenticated, function (req, res, ne
         style: "currency",
         currency: "BRL"
       });    
+      console.log(rent);
+      console.log(toPay);
+      
+      
       res.render("dashboardClient", {
         title: "Dashboard",
         ...req.session,
