@@ -214,6 +214,8 @@ router.get('/newRent', auth.isAuthenticated, function (req, res, next) {
 /* POST new Rent */
 router.post('/newRent', auth.isAuthenticated, function (req, res, next) {
   const rent = req.body.rent;
+  const login = req.session.logado.type;
+  console.log(login);
   var arrayEquipament = rent.equipamentName;
   var arrayQuantity = rent.quantity;
   var arrayLength = arrayEquipament.length;
@@ -233,6 +235,8 @@ router.post('/newRent', auth.isAuthenticated, function (req, res, next) {
   }
   rent.startHour = hour + ":" + minutes;
   Client.getByCpf(rent.cpf).then((client) => {
+    const cpf = client.cpf;
+    console.log(cpf);
     rent.client = client;
     rent.quantity = parseInt(rent.quantity);
     client.equipamentRents = parseInt(client.equipamentRents);
@@ -263,7 +267,12 @@ router.post('/newRent', auth.isAuthenticated, function (req, res, next) {
           aluguel.remainingQuantity = numeq;
           aluguel.statusredirect = "show";
           Rent.create(aluguel).then((aluguel) => {
-            res.redirect('/dashboard');
+            if(login == "Master") {
+              res.redirect('/dashboardClient/' + cpf);
+            }
+            else if(login == "Funcionario") {
+              res.redirect('/dashboardClientFunc/' + cpf);
+            }
           }).catch((error) => {
             console.log(error);
             res.redirect('error');
@@ -311,13 +320,7 @@ router.get('/partialPrice/:_id', function (req, res) {
 /* GET actualPrice Rent */
 router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
   const id = req.params._id;
-  const login = req.session.logado.type;
-  console.log(login);
-  
   Rent.getById(id).then((rent) => {
-    const cpf = rent.client.cpf;
-    console.log(cpf);
-
     var size = rent.client.datePoints;
     var points = size.length;
     var sale = 1;
@@ -333,14 +336,6 @@ router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
     unitPrice = unitPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });;
     actualPrice = actualPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
     partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-
-    // if(login == "Master") {
-    //   res.redirect('/dashboardClient/' + cpf);
-    // }
-    // else if(login == "Funcionario") {
-    //   res.redirect('/dashboardClientFunc/' + cpf);
-    // }
-
     res.render('show', { title: 'Encerrar Aluguel', ...req.session, rent, points, rentTime, actualPrice, unitPrice, now, id });
   }).catch((error) => {
     console.log(error);
