@@ -325,7 +325,13 @@ router.get('/partialPrice/:_id', function (req, res) {
 /* GET actualPrice Rent */
 router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
   const id = req.params._id;
+  const login = req.session.logado.type;
+  console.log(login);
+  
   Rent.getById(id).then((rent) => {
+    const cpf = rent.client.cpf;
+    console.log(cpf);
+
     var size = rent.client.datePoints;
     var points = size.length;
     var sale = 1;
@@ -341,6 +347,14 @@ router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
     unitPrice = unitPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });;
     actualPrice = actualPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
     partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+
+    // if(login == "Master") {
+    //   res.redirect('/dashboardClient/' + cpf);
+    // }
+    // else if(login == "Funcionario") {
+    //   res.redirect('/dashboardClientFunc/' + cpf);
+    // }
+
     res.render('show', { title: 'Encerrar Aluguel', ...req.session, rent, points, rentTime, actualPrice, unitPrice, now, id });
   }).catch((error) => {
     console.log(error);
