@@ -9042,11 +9042,6 @@ ul ul a {
     height: 50px;
     font-size: 20px;
     margin-right: 10px; }
-  #payment {
-    width: 160px;
-    height: 50px;
-    margin-right: 10px;
-    font-size: 20px; }
   .logout {
     text-align: center;
     justfy-content: center;
@@ -9169,12 +9164,7 @@ ul ul a {
     width: 180px;
     height: 60px;
     font-size: 24px;
-    margin-right: 10px; }
-  #payment {
-    width: 200px;
-    height: 60px;
-    margin-right: 10px;
-    font-size: 25px; } }
+    margin-right: 10px; } }
 
 @media (min-device-width: 230px) and (max-device-width: 400px) {
   .signUpMargin {
@@ -9293,12 +9283,7 @@ ul ul a {
     width: 220px;
     height: 70px;
     font-size: 27px;
-    margin-right: 10px; }
-  #payment {
-    width: 250px;
-    height: 70px;
-    margin-right: 10px;
-    font-size: 30px; } }
+    margin-right: 10px; } }
 
 .p-alert {
   margin-bottom: 0 !important; }
