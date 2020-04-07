@@ -214,6 +214,7 @@ router.get('/newRent', auth.isAuthenticated, function (req, res, next) {
 /* POST new Rent */
 router.post('/newRent', auth.isAuthenticated, function (req, res, next) {
   const rent = req.body.rent;
+  const login = req.session.logado.type;
   var arrayEquipament = rent.equipamentName;
   var arrayQuantity = rent.quantity;
   var arrayLength = arrayEquipament.length;
@@ -233,6 +234,8 @@ router.post('/newRent', auth.isAuthenticated, function (req, res, next) {
   }
   rent.startHour = hour + ":" + minutes;
   Client.getByCpf(rent.cpf).then((client) => {
+    const cpf = client.cpf;
+    console.log(cpf);
     rent.client = client;
     rent.quantity = parseInt(rent.quantity);
     client.equipamentRents = parseInt(client.equipamentRents);
@@ -263,7 +266,12 @@ router.post('/newRent', auth.isAuthenticated, function (req, res, next) {
           aluguel.remainingQuantity = numeq;
           aluguel.statusredirect = "show";
           Rent.create(aluguel).then((aluguel) => {
-            res.redirect('/dashboard');
+            if(login == "Master") {
+              res.redirect('/dashboardClient/' + cpf);
+            }
+            else if(login == "Funcionario") {
+              res.redirect('/dashboardClientFunc/' + cpf);
+            }
           }).catch((error) => {
             console.log(error);
             res.redirect('error');
@@ -312,12 +320,14 @@ router.get('/partialPrice/:_id', function (req, res) {
 router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
   const id = req.params._id;
   const login = req.session.logado.type;
-  console.log(login);
-  
+  var link = "";
+  if(login == "Master"){
+    link = "dashboardClient";
+  }
+  else if(login == "Funcionario"){
+    link = "dashboardClientFunc";
+  }
   Rent.getById(id).then((rent) => {
-    const cpf = rent.client.cpf;
-    console.log(cpf);
-
     var size = rent.client.datePoints;
     var points = size.length;
     var sale = 1;
@@ -333,15 +343,7 @@ router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
     unitPrice = unitPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });;
     actualPrice = actualPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
     partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-
-    // if(login == "Master") {
-    //   res.redirect('/dashboardClient/' + cpf);
-    // }
-    // else if(login == "Funcionario") {
-    //   res.redirect('/dashboardClientFunc/' + cpf);
-    // }
-
-    res.render('show', { title: 'Encerrar Aluguel', ...req.session, rent, points, rentTime, actualPrice, unitPrice, now, id });
+    res.render('show', { title: 'Encerrar Aluguel', ...req.session, rent, points, rentTime, actualPrice, unitPrice, now, id, link});
   }).catch((error) => {
     console.log(error);
     res.redirect('/error')
@@ -540,39 +542,62 @@ router.get('/dailyBalance', auth.isAuthenticated, auth.isMaster, function (req, 
   });
 });
 
-router.get('/dailyBalance/previous', auth.isAuthenticated, auth.isMaster, function (req, res, next) {
+router.get("/dailyBalance/previous", auth.isAuthenticated, auth.isMaster, function (req, res, next) {
   var date = req.session.date;
-  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  var date = new Date();
-  var date = {
-    year: date.getFullYear(),
-    month: months[date.getMonth()],
-    monthNumber: (date.getMonth() + 1),
-    hour: date.getHours(),
-    day: date.getDate()
-  }
+  var months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
   if (date.day > 1) {
     date.day -= 1;
-  }
-  else if (date.day < 2 && (date.monthNumber == 0 || date.monthNumber == 1 || date.monthNumber == 3 || date.monthNumber == 5 || date.monthNumber == 7 || date.monthNumber == 8 || date.monthNumber == 10)) {
+  } else if (
+    date.day < 2 &&
+    (date.monthNumber == 1 ||
+      date.monthNumber == 2 ||
+      date.monthNumber == 4 ||
+      date.monthNumber == 6 ||
+      date.monthNumber == 8 ||
+      date.monthNumber == 9 ||
+      date.monthNumber == 11)
+  ) {
     date.day = 31;
-    if (date.monthNumber == 0) {
-      date.monthNumber = 11;
-    }
-    else {
-      date.monthNumber -= 1;
+    if (date.monthNumber == 1) {
+      date.monthNumber = 12;
       date.year -= 1;
+    } else {
+      date.monthNumber -= 1;
     }
-  }
-  else if (date.day < 2 && (date.monthNumber == 4 || date.monthNumber == 6 || date.monthNumber == 9 || date.monthNumber == 11)) {
+  } else if (
+    date.day < 2 &&
+    (date.monthNumber == 5 ||
+      date.monthNumber == 7 ||
+      date.monthNumber == 10 ||
+      date.monthNumber == 12)
+  ) {
     date.day = 30;
-    date.year -= 1;
-  }
-  else if (date.day < 2 && date.monthNumber == 2 && ((date.year % 4 == 0) && ((date.year % 100 != 0) || (date.year % 400 == 0)))) {
+  } else if (
+    date.day < 2 &&
+    date.monthNumber == 3 &&
+    date.year % 4 == 0 &&
+    (date.year % 100 != 0 || date.year % 400 == 0)
+  ) {
     date.day = 29;
     date.monthNumber -= 1;
-  }
-  else if (date.day < 2 && date.monthNumber == 2 && !((date.year % 4 == 0) && ((date.year % 100 != 0) || (date.year % 400 == 0)))) {
+  } else if (
+    date.day < 2 &&
+    date.monthNumber == 3 &&
+    !(date.year % 4 == 0 && (date.year % 100 != 0 || date.year % 400 == 0))
+  ) {
     date.day = 28;
     date.monthNumber -= 1;
   }
@@ -599,27 +624,140 @@ router.get('/dailyBalance/previous', auth.isAuthenticated, auth.isMaster, functi
     
    date.month = months[date.monthNumber - 1];
 
-            res.render('dailyBalancePrevious', { title: 'Balanço Diário', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, date });
-          }).catch((error) => {
-            console.log(error);
-            res.redirect('/error')
-          });
-        }).catch((error) => {
+  date.month = months[date.monthNumber -1];
+
+  Rent.getAllByDate(date.day, date.month, date.year)
+    .then(rents => {
+      let totalProfit = rents.reduce(
+        (totalProfit, cur) => totalProfit + cur.discount,
+        0
+      );
+      let totalUnits = rents.reduce(
+        (totalUnits, cur) => totalUnits + cur.quantity,
+        0
+      );
+      Rent.getAllByDateAndStartLocal(
+        "Matriz",
+        date.day,
+        date.month,
+        date.year
+      )
+        .then(matrizRents => {
+          let matrizProfit = matrizRents.reduce(
+            (matrizProfit, cur) => matrizProfit + cur.discount,
+            0
+          );
+          let matrizUnits = matrizRents.reduce(
+            (matrizUnits, cur) => matrizUnits + cur.quantity,
+            0
+          );
+          Rent.getAllByDateAndStartLocal(
+            "Bem-Te-Vi",
+            date.day,
+            date.month,
+            date.year
+          )
+            .then(miranteRents => {
+              let miranteProfit = miranteRents.reduce(
+                (miranteProfit, cur) => miranteProfit + cur.discount,
+                0
+              );
+              let miranteUnits = miranteRents.reduce(
+                (miranteUnits, cur) => miranteUnits + cur.quantity,
+                0
+              );
+              Rent.getAllByDateAndStartLocal(
+                "Vila Pampulha",
+                date.day,
+                date.month,
+                date.year
+              )
+                .then(vilaRents => {
+                  let vilaProfit = vilaRents.reduce(
+                    (vilaProfit, cur) => vilaProfit + cur.discount,
+                    0
+                  );
+                  let vilaUnits = vilaRents.reduce(
+                    (vilaUnits, cur) => vilaUnits + cur.quantity,
+                    0
+                  );
+                  Rent.getAllByDateAndStartLocal(
+                    "Shopping Contagem",
+                    date.day,
+                    date.month,
+                    date.year
+                  )
+                    .then(contagemRents => {
+                      let contagemProfit = contagemRents.reduce(
+                        (contagemProfit, cur) =>
+                          contagemProfit + cur.discount,
+                        0
+                      );
+                      let contagemUnits = contagemRents.reduce(
+                        (contagemUnits, cur) => contagemUnits + cur.quantity,
+                        0
+                      );
+                      contagemProfit = contagemProfit.toLocaleString(
+                        "pt-br",
+                        { style: "currency", currency: "BRL" }
+                      );
+                      miranteProfit = miranteProfit.toLocaleString("pt-br", {
+                        style: "currency",
+                        currency: "BRL"
+                      });
+                      vilaProfit = vilaProfit.toLocaleString("pt-br", {
+                        style: "currency",
+                        currency: "BRL"
+                      });
+                      matrizProfit = matrizProfit.toLocaleString("pt-br", {
+                        style: "currency",
+                        currency: "BRL"
+                      });
+                      totalProfit = totalProfit.toLocaleString("pt-br", {
+                        style: "currency",
+                        currency: "BRL"
+                      });
+
+                      res.render("dailyBalancePrevious", {
+                        title: "Balanço Diário",
+                        ...req.session,
+                        totalProfit,
+                        matrizProfit,
+                        matrizUnits,
+                        miranteProfit,
+                        miranteUnits,
+                        vilaProfit,
+                        vilaUnits,
+                        contagemProfit,
+                        contagemUnits,
+                        totalUnits,
+                        date
+                      });
+                    })
+                    .catch(error => {
+                      console.log(error);
+                      res.redirect("/error");
+                    });
+                })
+                .catch(error => {
+                  console.log(error);
+                  res.redirect("/error");
+                });
+            })
+            .catch(error => {
+              console.log(error);
+              res.redirect("/error");
+            });
+        })
+        .catch(error => {
           console.log(error);
-          res.redirect('/error')
+          res.redirect("/error");
         });
-      }).catch((error) => {
-        console.log(error);
-        res.redirect('/error')
-      });
-    }).catch((error) => {
+    })
+    .catch(error => {
       console.log(error);
-      res.redirect('/error')
+      res.redirect("/error");
     });
-  }).catch((error) => {
-    console.log(error);
-    res.redirect('/error')
-  });
 });
 
 router.get('/dailyBalance/next', auth.isAuthenticated, auth.isMaster, function (req, res, next) {
@@ -636,12 +774,12 @@ router.get('/dailyBalance/next', auth.isAuthenticated, auth.isMaster, function (
   if (date.day < 28) {
     date.day += 1;
   }
-  else if (date.day < 31 && (date.monthNumber == 0 || date.monthNumber == 2 || date.monthNumber == 4 || date.monthNumber == 6 || date.monthNumber == 7 || date.monthNumber == 9 || date.monthNumber == 11)) {
+  else if (date.day < 31 && (date.monthNumber == 1 || date.monthNumber == 3 || date.monthNumber == 5 || date.monthNumber == 7 || date.monthNumber == 8 || date.monthNumber == 10 || date.monthNumber == 12)) {
     date.day += 1;
   }
-  else if (date.day == 31 && (date.monthNumber == 0 || date.monthNumber == 2 || date.monthNumber == 4 || date.monthNumber == 6 || date.monthNumber == 7 || date.monthNumber == 9 || date.monthNumber == 11)) {
+  else if (date.day == 31 && (date.monthNumber == 1 || date.monthNumber == 3 || date.monthNumber == 5 || date.monthNumber == 7 || date.monthNumber == 8 || date.monthNumber == 10 || date.monthNumber == 12)) {
     date.day = 1;
-    if (date.monthNumber == 11) {
+    if (date.monthNumber == 12) {
       date.monthNumber = 1;
       date.year += 1;
     }
@@ -649,10 +787,10 @@ router.get('/dailyBalance/next', auth.isAuthenticated, auth.isMaster, function (
       date.monthNumber += 1;
     }
   }
-  else if (date.day < 30 && (date.monthNumber == 3 || date.monthNumber == 5 || date.monthNumber == 8 || date.monthNumber == 10)) {
+  else if (date.day < 30 && (date.monthNumber == 4 || date.monthNumber == 6 || date.monthNumber == 9 || date.monthNumber == 11)) {
     date.day += 1;
   }
-  else if (date.day == 30 && (date.monthNumber == 3 || date.monthNumber == 5 || date.monthNumber == 8 || date.monthNumber == 10)) {
+  else if (date.day == 30 && (date.monthNumber == 4 || date.monthNumber == 6 || date.monthNumber == 9 || date.monthNumber == 11)) {
     date.day = 1;
     date.monthNumber += 1;
   }
@@ -1234,10 +1372,6 @@ router.get('/dashboardClientFunc/:cpf', auth.isAuthenticated, function (req, res
           style: "currency",
           currency: "BRL"
         });
-        console.log(rent);
-        console.log(toPay);
-        
-        
         res.render("dashboardClientFunc", {
           title: "Dashboard",
           ...req.session,
@@ -1264,11 +1398,7 @@ router.get('/dashboardClientFunc/:cpf', auth.isAuthenticated, function (req, res
 
 
 /* GET show Rent */
-router.get("/clientList", auth.isAuthenticated, auth.isMaster, function (
-  req,
-  res,
-  next
-) {
+router.get("/clientList", auth.isAuthenticated, auth.isMaster, function (req,res) {
   Client.getAll()
     .then(clients => {
       res.render("clientList", {
@@ -1284,11 +1414,7 @@ router.get("/clientList", auth.isAuthenticated, auth.isMaster, function (
 });
 
 /* GET daily Rent report Details  */
-router.get("/client/:_id", auth.isAuthenticated, auth.isMaster, function (
-  req,
-  res,
-  next
-) {
+router.get("/client/:_id", auth.isAuthenticated, auth.isMaster, function (req,res) {
   const id = req.params._id;
   Client.getById(id)
     .then(client => {
@@ -1307,13 +1433,21 @@ router.get("/client/:_id", auth.isAuthenticated, auth.isMaster, function (
 /* GET aguardando Pagamento  */
 router.get('/aguardando/:_id', auth.isAuthenticated, function (req, res) {
   const id = req.params._id;
+  const login = req.session.logado.type;
+  var link = "";
+  if(login == "Master"){
+    link = "dashboardClient";
+  }
+  else if(login == "Funcionario"){
+    link = "dashboardClientFunc";
+  }
   Rent.getById(id).then((rent) => {
     var partialPrice = rent.partialPrice;
     if (partialPrice != null) {
       partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
     }
     partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-    res.render('aguardando', { title: 'Aguardando Pagamento', ...req.session, partialPrice, rent, id });
+    res.render('aguardando', { title: 'Aguardando Pagamento', ...req.session, partialPrice, rent, id, link });
   }).catch(error => {
     console.log(error);
     res.redirect("/error")

@@ -8938,7 +8938,7 @@ ul ul a {
 #content {
   width: 100vw; }
 
-@media (min-device-width: 600px) and (max-device-width: 768px) {
+@media (min-device-width: 600px) and (max-device-width: 1500px) {
   .signUpMargin {
     margin-bottom: 40px; }
   #disappear {
@@ -8988,7 +8988,8 @@ ul ul a {
     position: absolute;
     align-content: center; }
   #list {
-    font-size: 20px; }
+    font-size: 20px;
+    align-content: center; }
   #time {
     font-size: 20px; }
   #_id {
