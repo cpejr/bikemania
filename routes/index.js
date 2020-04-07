@@ -542,7 +542,15 @@ router.get('/dailyBalance', auth.isAuthenticated, auth.isMaster, function (req, 
 
 router.get('/dailyBalance/previous', auth.isAuthenticated, auth.isMaster, function (req, res, next) {
   var date = req.session.date;
-
+  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  var date = new Date();
+  var date = {
+    year: date.getFullYear(),
+    month: months[date.getMonth()],
+    monthNumber: (date.getMonth() + 1),
+    hour: date.getHours(),
+    day: date.getDate()
+  }
   if (date.day > 1) {
     date.day -= 1;
   }
@@ -568,30 +576,50 @@ router.get('/dailyBalance/previous', auth.isAuthenticated, auth.isMaster, functi
     date.day = 28;
     date.monthNumber -= 1;
   }
-
-  date.month = months[date.monthNumber - 1];
+  Rent.getAllByDate(date.day, date.month, date.year).then((rents) => {
+    let totalProfit = rents.reduce((totalProfit, cur) => totalProfit + cur.discount, 0);
+    let totalUnits = rents.reduce((totalUnits, cur) => totalUnits + cur.quantity, 0);
+    Rent.getAllByDateAndStartLocal("Matriz", date.day, date.month, date.year).then((matrizRents) => {
+      let matrizProfit = matrizRents.reduce((matrizProfit, cur) => matrizProfit + cur.discount, 0);
+      let matrizUnits = matrizRents.reduce((matrizUnits, cur) => matrizUnits + cur.quantity, 0);
+      Rent.getAllByDateAndStartLocal("Bem-Te-Vi", date.day, date.month, date.year).then((miranteRents) => {
+        let miranteProfit = miranteRents.reduce((miranteProfit, cur) => miranteProfit + cur.discount, 0);
+        let miranteUnits = miranteRents.reduce((miranteUnits, cur) => miranteUnits + cur.quantity, 0);
+        Rent.getAllByDateAndStartLocal("Vila Pampulha", date.day, date.month, date.year).then((vilaRents) => {
+          let vilaProfit = vilaRents.reduce((vilaProfit, cur) => vilaProfit + cur.discount, 0);
+          let vilaUnits = vilaRents.reduce((vilaUnits, cur) => vilaUnits + cur.quantity, 0);
+          Rent.getAllByDateAndStartLocal("Shopping Contagem", date.day, date.month, date.year).then((contagemRents) => {
+            let contagemProfit = contagemRents.reduce((contagemProfit, cur) => contagemProfit + cur.discount, 0);
+            let contagemUnits = contagemRents.reduce((contagemUnits, cur) => contagemUnits + cur.quantity, 0);
+            contagemProfit = contagemProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            miranteProfit = miranteProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            vilaProfit = vilaProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            matrizProfit = matrizProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            totalProfit = totalProfit.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    
+   date.month = months[date.monthNumber - 1];
 
             res.render('dailyBalancePrevious', { title: 'Balanço Diário', ...req.session, totalProfit, matrizProfit, matrizUnits, miranteProfit, miranteUnits, vilaProfit, vilaUnits, contagemProfit, contagemUnits, totalUnits, date });
-  //         }).catch((error) => {
-  //           console.log(error);
-  //           res.redirect('/error')
-  //         });
-  //       }).catch((error) => {
-  //         console.log(error);
-  //         res.redirect('/error')
-  //       });
-  //     }).catch((error) => {
-  //       console.log(error);
-  //       res.redirect('/error')
-  //     });
-  //   }).catch((error) => {
-  //     console.log(error);
-  //     res.redirect('/error')
-  //   });
-  // }).catch((error) => {
-  //   console.log(error);
-  //   res.redirect('/error')
-  // });
+          }).catch((error) => {
+            console.log(error);
+            res.redirect('/error')
+          });
+        }).catch((error) => {
+          console.log(error);
+          res.redirect('/error')
+        });
+      }).catch((error) => {
+        console.log(error);
+        res.redirect('/error')
+      });
+    }).catch((error) => {
+      console.log(error);
+      res.redirect('/error')
+    });
+  }).catch((error) => {
+    console.log(error);
+    res.redirect('/error')
+  });
 });
 
 router.get('/dailyBalance/next', auth.isAuthenticated, auth.isMaster, function (req, res, next) {
