@@ -4,7 +4,7 @@
 
 <nav class="navbar navbar-light bg-light" id="logobike"></nav>
 <div class="pl-lg-5 pr-lg-5">
-  <button class="btn btn-default" onclick="location.href='/dashboardClient/{{rent.client.cpf}}'"> <i
+  <button class="btn btn-default" onclick="location.href=`/{{link}}/{{rent.client.cpf}}`"> <i
       class="fa fa-shield fa-rotate-90 fa-3x" aria-hidden="true"></i> </button>
   <div class="texto-centro mb-3">
     <FONT id="titulo" size="6" face="Segoe UI Symbol" color="#3CB1FE">
@@ -50,7 +50,7 @@
         <div class="text-center mt-4">
           <button id="btnaguardando" type="submit" class="btn_encerrar text-white">Pagar agora</button> </div>
         <div class="text-center mt-4">
-      <button id="btnaguardando" type="button" class="btn_encerrar text-white" onclick="location.href='/dashboardClient/{{rent.client.cpf}}'">Pagar mais tarde</button></div>
+      <button id="btnaguardando" type="button" class="btn_encerrar text-white" onclick="location.href=`/{{link}}/{{rent.client.cpf}}`">Pagar mais tarde</button></div>
       </section>
       </form>
     </div>
