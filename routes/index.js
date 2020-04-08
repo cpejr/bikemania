@@ -319,7 +319,7 @@ router.get('/partialPrice/:_id', function (req, res) {
   var id = req.params;
   Rent.getById(id).then((rent) => {
     var date = new Date();
-    var hora = date.getHours()-3;
+    var hora = date.getHours();
     date.setHours(hora);
     var now = date.getTime();
     var rentTime = Math.trunc((now - rent.startTime) / 60000);
