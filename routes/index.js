@@ -57,8 +57,23 @@ router.post('/forgotPassword', (req, res) => {
     res.redirect('/');
     req.flash('success', 'Email enviado');
   }).catch((error) => {
-    console.log(error);
-    res.redirect('/error');
+    switch (error.code) {
+      case 'auth/invalid-email':
+        req.flash('danger', 'Email incorreto.');
+        break;
+      case 'auth/user-not-found':
+        req.flash('danger', 'Email não cadastrado.');
+        break;
+      case 'auth/network-request-failed':
+        req.flash('danger', 'Falha na internet. Verifique sua conexão de rede.');
+        break;
+      default:
+        req.flash('danger', 'Erro indefinido.');
+        console.log(error.code)
+    }
+    console.log(`Error Code: ${error.code}`);
+    console.log(`Error Message: ${error.message}`);
+    res.redirect('/forgotPassword');
   });
 });
 
