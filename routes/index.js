@@ -219,7 +219,8 @@ router.post('/newRent', auth.isAuthenticated, function (req, res, next) {
   var arrayQuantity = rent.quantity;
   var arrayLength = arrayEquipament.length;
   var date = new Date();
-  var hour = date.getHours();
+// Ajuste Fuso Horário
+  var hour = date.getHours()-3;
   var minutes = date.getMinutes();
   var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   rent.year = date.getFullYear();
@@ -235,7 +236,6 @@ router.post('/newRent', auth.isAuthenticated, function (req, res, next) {
   rent.startHour = hour + ":" + minutes;
   Client.getByCpf(rent.cpf).then((client) => {
     const cpf = client.cpf;
-    console.log(cpf);
     rent.client = client;
     rent.quantity = parseInt(rent.quantity);
     client.equipamentRents = parseInt(client.equipamentRents);
@@ -304,6 +304,8 @@ router.get('/partialPrice/:_id', function (req, res) {
   var id = req.params;
   Rent.getById(id).then((rent) => {
     var date = new Date();
+    var hora = date.getHours()-3;
+    date.setHours(hora);
     var now = date.getTime();
     var rentTime = Math.trunc((now - rent.startTime) / 60000);
     var price = rent.equipament.price;
@@ -330,20 +332,7 @@ router.get('/show/:_id', auth.isAuthenticated, function (req, res, next) {
   Rent.getById(id).then((rent) => {
     var size = rent.client.datePoints;
     var points = size.length;
-    var sale = 1;
-    var date = new Date();
-    var now = date.getTime();
-    var rentTime = Math.trunc((now - rent.startTime) / 60000);
-    if (rent.sale == "Ativado") {
-      sale = 0.5;
-    }
-    var actualPrice = rent.quantity * rent.equipament.price * rentTime * sale;
-    var unitPrice = rent.equipament.price;
-    var partialPrice = rent.equipament.price * rentTime * sale;
-    unitPrice = unitPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });;
-    actualPrice = actualPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-    partialPrice = partialPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-    res.render('show', { title: 'Encerrar Aluguel', ...req.session, rent, points, rentTime, actualPrice, unitPrice, now, id, link });
+    res.render('show', { title: 'Encerrar Aluguel', ...req.session, rent, points, id, link });
   }).catch((error) => {
     console.log(error);
     res.redirect('/error')
@@ -404,7 +393,7 @@ router.post('/close/:_id', function (req, res, next) {
       renderaux = 2;
     }
     var date = new Date();
-    var hour = date.getHours();
+    var hour = date.getHours()-3;
     var minutes = date.getMinutes();
     if (hour < "10") {
       hour = "0" + hour;
@@ -494,7 +483,6 @@ router.get('/dailyBalance', auth.isAuthenticated, auth.isMaster, function (req, 
     year: date.getFullYear(),
     month: months[date.getMonth()],
     monthNumber: (date.getMonth() + 1),
-    hour: date.getHours(),
     day: date.getDate()
   }
   req.session.date = date;
@@ -853,7 +841,6 @@ router.get('/monthlyBalance', auth.isAuthenticated, auth.isMaster, function (req
     year: date.getFullYear(),
     month: months[date.getMonth()],
     monthNumber: (date.getMonth() + 1),
-    hour: date.getHours(),
   }
   req.session.date = date;
   Rent.getAllByMonth(date.month, date.year).then((rents) => {
@@ -1078,7 +1065,6 @@ router.get('/equipamentBalance', auth.isAuthenticated, auth.isMaster, function (
     year: date.getFullYear(),
     month: months[date.getMonth()],
     monthNumber: (date.getMonth() + 1),
-    hour: date.getHours()
   }
   req.session.date = date;
   Equipament.getAll().then((equipaments) => {
