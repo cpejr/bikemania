@@ -9029,6 +9029,20 @@ ul ul a {
     font-size: "1";
     background-color: #3CB1FE;
     width: 100%;
+    height: 30px;
+    outline-color: #FF6501;
+    border-radius: 50px;
+    border: 1px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px; }
+  .btnrelatorio {
+    font: "Poppins";
+    color: "black";
+    font-size: "1";
+    background-color: #3CB1FE;
+    width: 100%;
     height: 50px;
     outline-color: #FF6501;
     border-radius: 50px;
@@ -9040,12 +9054,14 @@ ul ul a {
   #btnaguardando {
     width: 150px;
     height: 50px;
-    font-size: 20px;
+    font-size: 19px;
     margin-right: 10px; }
   .logout {
     text-align: center;
     justfy-content: center;
-    display: flex; } }
+    display: flex; }
+  #subtitulo {
+    font-size: 18px; } }
 
 @media (min-device-width: 401px) and (max-device-width: 599px) {
   .signUpMargin {
@@ -9152,6 +9168,20 @@ ul ul a {
     font-size: "1";
     background-color: #3CB1FE;
     width: 100%;
+    height: 35px;
+    outline-color: #FF6501;
+    border-radius: 50px;
+    border: 1px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px; }
+  .btnrelatorio {
+    font: "Poppins";
+    color: "black";
+    font-size: "1";
+    background-color: #3CB1FE;
+    width: 100%;
     height: 50px;
     outline-color: #FF6501;
     border-radius: 50px;
@@ -9161,10 +9191,12 @@ ul ul a {
     margin-left: 10px;
     margin-right: 10px; }
   #btnaguardando {
-    width: 180px;
+    width: 190px;
     height: 60px;
     font-size: 24px;
-    margin-right: 10px; } }
+    margin-right: 10px; }
+  #subtitulo {
+    font-size: 21px; } }
 
 @media (min-device-width: 230px) and (max-device-width: 400px) {
   .signUpMargin {
@@ -9271,6 +9303,20 @@ ul ul a {
     font-size: "1";
     background-color: #3CB1FE;
     width: 100%;
+    height: 40px;
+    outline-color: #FF6501;
+    border-radius: 50px;
+    border: 1px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px; }
+  .btnrelatorio {
+    font: "Poppins";
+    color: "black";
+    font-size: "1";
+    background-color: #3CB1FE;
+    width: 100%;
     height: 50px;
     outline-color: #FF6501;
     border-radius: 50px;
@@ -9280,10 +9326,12 @@ ul ul a {
     margin-left: 10px;
     margin-right: 10px; }
   #btnaguardando {
-    width: 220px;
+    width: 240px;
     height: 70px;
     font-size: 27px;
-    margin-right: 10px; } }
+    margin-right: 10px; }
+  #subtitulo {
+    font-size: 27px; } }
 
 .p-alert {
   margin-bottom: 0 !important; }
