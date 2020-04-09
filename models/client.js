@@ -32,12 +32,6 @@ const clientSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  points: {
-    type: Number,
-    default: 0
-  },
-
-
 }, { timestamps: true, static: false });
 const ClientModel = mongoose.model('Client', clientSchema);
 
