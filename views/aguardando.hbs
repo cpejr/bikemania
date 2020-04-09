@@ -50,19 +50,22 @@
 
         <div class="cadastroPg">
           <div class="mt-3">
-            <input id="list" type="checkbox" name="end[hasDiscount]" value="Sim"> Desconto</input>
+            <input id="list" type="checkbox" name="end[hasDiscount]" value="Sim" style="margin-left: 20%;">
+            Desconto</input>
           </div>
         </div>
-      
+
         <div class="mt-3">
-          <textarea id="box" name="end[justification]" placeholder="Detalhes do desconto" cols="100" rows="4"></textarea>
+          <textarea name="end[justification]" placeholder="Detalhes do desconto" cols="65" rows="4"
+            style="margin-left: 20%;"></textarea>
         </div>
-      <section class="row" style="margin-top: 20px;">
-        <div class="text-center mt-4">
-          <button id="btnaguardando" type="submit" class="btn_encerrar text-white">Pagar agora</button> </div>
-        <div class="text-center mt-4">
-      <button id="btnaguardando" type="button" class="btn_encerrar text-white" onclick="location.href=`/{{link}}/{{rent.client.cpf}}`">Pagar mais tarde</button></div>
-      </section>
+        <section class="row" style="margin-top: 20px;">
+          <div class="text-center mt-4">
+            <button id="btnaguardando" type="submit" class="btn_encerrar text-white">Pagar agora</button> </div>
+          <div class="text-center mt-4">
+            <button id="btnaguardando" type="button" class="btn_encerrar text-white"
+              onclick="location.href=`/{{link}}/{{rent.client.cpf}}`">Pagar mais tarde</button></div>
+        </section>
       </form>
     </div>
   </div>
