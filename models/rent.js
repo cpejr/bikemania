@@ -36,10 +36,6 @@ const rentSchema = new mongoose.Schema({
   startLocal: String,
   endLocal: String,
   payment: String,
-  sale: {
-    type: String,
-    default: "Desativado"
-  },
   discount: Number,
   justification: {
     type: String,
@@ -53,7 +49,6 @@ const rentSchema = new mongoose.Schema({
     type: String,
     default: "Não atualizado"
   }
-
 }, { timestamps: true, static: false });
 const RentModel = mongoose.model('Rent', rentSchema);
 

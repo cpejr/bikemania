@@ -369,27 +369,38 @@ router.post('/close/:_id', function (req, res, next) {
   Rent.getById(id).then((rent) => {
     // Pontos de Fidelidade
     Client.getDatePointsById(rent.client.id).then((datePoints) => {
-      var aux = true;
-      for (var i = 0; i < datePoints.length; i++) {
-        var date = new Date(datePoints[i]);
-        if (day == date.getDate() && month == (date.getMonth() + 1) && year == date.getFullYear()) {
-          aux = false;
-        }
-        var msAtualDate = atualDate.getTime();
-        var msDate = date.getTime();
-        const diff = Math.abs(msAtualDate - msDate);
-        const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-        if (days > 180) {
-          datePoints.splice(i, 1);
+      if (datePoints.length == 10) {
+        while (datePoints.length) {
+          datePoints.pop();
         }
       }
-      if (aux == true) {
-        datePoints.push(fulldate);
-      }
-      var size = datePoints.length;
-      for (var i = 0; i < size - 1; i++) {
-        if (size == 11) {
-          datePoints.shift();
+      else {
+        var aux = true;
+        for (var i = 0; i < datePoints.length; i++) {
+          var date = new Date(datePoints[i]);
+          if (
+            day == date.getDate() &&
+            month == date.getMonth() + 1 &&
+            year == date.getFullYear()
+          ) {
+            aux = false;
+          }
+          var msAtualDate = atualDate.getTime();
+          var msDate = date.getTime();
+          const diff = Math.abs(msAtualDate - msDate);
+          const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+          if (days > 180) {
+            datePoints.splice(i, 1);
+          }
+        }
+        if (aux == true) {
+          datePoints.push(fulldate);
+        }
+        var size = datePoints.length;
+        for (var i = 0; i < size - 1; i++) {
+          if (size == 11) {
+            datePoints.shift();
+          }
         }
       }
       Client.updateDatePoints(rent.client.id, datePoints);
@@ -1325,13 +1336,13 @@ router.get("/clientList", auth.isAuthenticated, auth.isMaster, function (req, re
 /* GET daily Rent report Details  */
 router.get("/client/:_id", auth.isAuthenticated, auth.isMaster, function (req, res) {
   const id = req.params._id;
-  Client.getById(id)
-    .then(client => {
-      res.render("clientDetails", {
-        title: "Lista de Clientes Detalhes",
-        ...req.session,
-        client
-      });
+  Client.getById(id).then(client => {
+    client.lengthPoints = client.datePoints.length;
+    res.render("clientDetails", {
+      title: "Lista de Clientes Detalhes",
+      ...req.session,
+      client
+    });
     })
     .catch(error => {
       console.log(error);

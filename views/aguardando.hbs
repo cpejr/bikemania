@@ -36,7 +36,7 @@
         <div class="cadastro">
           <div class="row">
             <div class="mx-3 text-center">
-              <input id="payment" class="form-control" value="{{partialPrice}}">
+              <input id="payment" class="form-control" value="{{partialPrice}}" readonly="readonly">
             </div>
             <div class="mx-3 text-center">
               <select id="payment" class="drowdownoptions form-control" name="end[payment]" required="required">
@@ -50,19 +50,22 @@
 
         <div class="cadastroPg">
           <div class="mt-3">
-            <input id="list" type="checkbox" name="end[hasDiscount]" value="Sim"> Desconto</input>
+            <input id="list" type="checkbox" name="end[hasDiscount]" value="Sim" style="margin-left: 20%;">
+            Desconto</input>
           </div>
         </div>
-      
+
         <div class="mt-3">
-          <textarea id="box" name="end[justification]" placeholder="Detalhes do desconto" cols="100" rows="4"></textarea>
+          <textarea name="end[justification]" placeholder="Detalhes do desconto" cols="65" rows="4"
+            style="margin-left: 20%;"></textarea>
         </div>
-      <section class="row" style="margin-top: 20px;">
-        <div class="text-center mt-4">
-          <button id="btnaguardando" type="submit" class="btn_encerrar text-white">Pagar agora</button> </div>
-        <div class="text-center mt-4">
-      <button id="btnaguardando" type="button" class="btn_encerrar text-white" onclick="location.href=`/{{link}}/{{rent.client.cpf}}`">Pagar mais tarde</button></div>
-      </section>
+        <section class="row" style="margin-top: 20px;">
+          <div class="text-center mt-4">
+            <button id="btnaguardando" type="submit" class="btn_encerrar text-white">Pagar agora</button> </div>
+          <div class="text-center mt-4">
+            <button id="btnaguardando" type="button" class="btn_encerrar text-white"
+              onclick="location.href=`/{{link}}/{{rent.client.cpf}}`">Pagar mais tarde</button></div>
+        </section>
       </form>
     </div>
   </div>
